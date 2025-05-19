@@ -6,6 +6,11 @@ import fs from "fs";
 dotenv.config();
 const app = express();
 
+console.log("envs vars", {
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET, 
+  REDIRECT_URI: process.env.REDIRECT_URI,
+})
 const getOAuthClient = () => {
   return new google.auth.OAuth2(
     process.env.CLIENT_ID,
@@ -14,7 +19,12 @@ const getOAuthClient = () => {
   );
 };
 
-const oauth2Client = getOAuthClient();
+const oauth2Client =  new google.auth.OAuth2(
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    process.env.REDIRECT_URI
+  );
+// const oauth2Client = getOAuthClient();
 
 const scopes = ["https://www.googleapis.com/auth/youtube.upload"];
 
@@ -22,11 +32,14 @@ app.get("/auth", (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: scopes,
+    state: JSON.stringify({user: 123}),
   });
-  res.redirect(authUrl);
+  res.status(200).json({ redirect: authUrl });
+  // res.redirect(authUrl);
 });
 
 app.get("/oauth2callback", async (req: any, res: any) => {
+  console.log("req", req.query)
   const code = req.query.code;
   console.log("code", code);
   if (!code) {
@@ -64,7 +77,7 @@ app.post("/upload", async (req: any, res: any) => {
           categoryId,
         },
         status: {
-          privacyStatus
+          privacyStatus,
         },
       },
       media: {
@@ -78,7 +91,6 @@ app.post("/upload", async (req: any, res: any) => {
     res.status(500).send("Failed to upload video");
   }
 });
-
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
