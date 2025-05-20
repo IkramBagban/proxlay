@@ -59,7 +59,7 @@ const auth = (req: any, res:any, next: any) => {
   next();
 }
 
-app.post("/get-presigned-url",  async (req: any, res) =>   {
+app.post("/get-presigned-url",  requireAuth(), async (req: any, res) =>   {
   console.log("req.body", req.body);
 
   // console.log('token,', req?.token)
@@ -89,7 +89,7 @@ app.post("/get-presigned-url",  async (req: any, res) =>   {
   res.status(200).json({ url, filePath });
 });
 
-app.get("/auth", (req, res) => {
+app.get("/auth",  (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: scopes,
