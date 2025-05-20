@@ -28,7 +28,7 @@ jobs:
           context: ./backend
           file: ./docker/Dockerfile.backend
           push: true
-          tags: ikrambagban/proxlay:${{ github.sha }}
+          tags: ikrambagban/proxlay-backend:${{ github.sha }}
       
       - name: Clone staging-ops repo, update, and push
         env:
