@@ -36,7 +36,7 @@ jobs:
         run: |
           git clone  https://github.com/IkramBagban/gitops.git
           cd gitops
-          sed -i 's|image: ikrambagban/proxylay-backend:.*|image: ikrambagban/proxylay-backend:${{ github.sha }}|' proxlay/deployment.yml
+          sed -i 's|image: ikrambagban/proxlay-backend:.*|image: ikrambagban/proxlay-backend:${{ github.sha }}|' proxlay/deployment.yml
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add proxlay/deployment.yml
