@@ -1,26 +1,48 @@
 import axios from "axios";
 import React from "react";
+import { SignedIn, SignedOut, SignInButton, useAuth, UserButton } from '@clerk/clerk-react';
 
 const App = () => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
   const fileChangeHandler = async (file: File) => {
     console.log("file", file);
-    // setSelectedFile(file)
+    setSelectedFile(file)
+    
+  };
+
+   const { getToken } = useAuth()
+  const uploadHandler = async () => {
+    console.log("import.meta.env.VITE_API_URL", import.meta.env.VITE_API_URL);
+    if (!selectedFile) {  
+      console.error("No file selected");
+      return;
+    }
+
+    const token = await getToken();
+    console.log("token", token);
+
+
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/get-presigned-url`,
       {
-        fileName: file.name,
-        fileType: file.type,
+        fileName: selectedFile.name,
+        fileType: selectedFile.type,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     console.log("response", response);
 
-    const { url } = response.data;
+    const { url, filePath } = response.data;
 
-    const uploadResponse = await axios.put(url, file, {
+    const uploadResponse = await axios.put(url, selectedFile, {
       headers: {
-        "Content-Type": file.type,
+        "Content-Type": selectedFile.type,
       },
       onUploadProgress: (progress) => {
         console.log("progress", progress);
@@ -28,12 +50,22 @@ const App = () => {
     });
 
     console.log("uploadResponse", uploadResponse);
+    if (uploadResponse.status === 200) {
+      console.log("File uploaded successfully");
+    } else {
+      console.error("File upload failed");
+    }
   };
   return (
     <div className="flex flex-col items-center mt-3 h-screen">
-      <h1 className="text-3xl font-bold">
-        Welcome to the YouTube Video Uploader
-      </h1>
+         <header>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </header>
 
       <div className="flex flex-col items-center mt-5">
         <h2 className="text-2xl font-semibold">Upload video</h2>
@@ -48,6 +80,7 @@ const App = () => {
             }
           }}
         />
+        <button onClick={uploadHandler}>Upload</button>
       </div>
     </div>
   );
