@@ -128,6 +128,16 @@ exports.Prisma.WorkspaceScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WorkspaceMemberScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  userId: 'userId',
+  role: 'role',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -137,10 +147,14 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
-
+exports.Status = exports.$Enums.Status = {
+  INVITED: 'INVITED',
+  ACTIVE: 'ACTIVE'
+};
 
 exports.Prisma.ModelName = {
-  Workspace: 'Workspace'
+  Workspace: 'Workspace',
+  WorkspaceMember: 'WorkspaceMember'
 };
 
 /**

@@ -18,6 +18,28 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type Workspace = $Result.DefaultSelection<Prisma.$WorkspacePayload>
+/**
+ * Model WorkspaceMember
+ * 
+ */
+export type WorkspaceMember = $Result.DefaultSelection<Prisma.$WorkspaceMemberPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const Status: {
+  INVITED: 'INVITED',
+  ACTIVE: 'ACTIVE'
+};
+
+export type Status = (typeof Status)[keyof typeof Status]
+
+}
+
+export type Status = $Enums.Status
+
+export const Status: typeof $Enums.Status
 
 /**
  * ##  Prisma Client ʲˢ
@@ -153,6 +175,16 @@ export class PrismaClient<
     * ```
     */
   get workspace(): Prisma.WorkspaceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workspaceMember`: Exposes CRUD operations for the **WorkspaceMember** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkspaceMembers
+    * const workspaceMembers = await prisma.workspaceMember.findMany()
+    * ```
+    */
+  get workspaceMember(): Prisma.WorkspaceMemberDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -593,7 +625,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Workspace: 'Workspace'
+    Workspace: 'Workspace',
+    WorkspaceMember: 'WorkspaceMember'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -612,7 +645,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "workspace"
+      modelProps: "workspace" | "workspaceMember"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -687,6 +720,80 @@ export namespace Prisma {
           count: {
             args: Prisma.WorkspaceCountArgs<ExtArgs>
             result: $Utils.Optional<WorkspaceCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkspaceMember: {
+        payload: Prisma.$WorkspaceMemberPayload<ExtArgs>
+        fields: Prisma.WorkspaceMemberFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkspaceMemberFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkspaceMemberFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkspaceMemberFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkspaceMemberFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>
+          }
+          findMany: {
+            args: Prisma.WorkspaceMemberFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>[]
+          }
+          create: {
+            args: Prisma.WorkspaceMemberCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>
+          }
+          createMany: {
+            args: Prisma.WorkspaceMemberCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkspaceMemberCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkspaceMemberDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>
+          }
+          update: {
+            args: Prisma.WorkspaceMemberUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkspaceMemberDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkspaceMemberUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WorkspaceMemberUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>[]
+          }
+          upsert: {
+            args: Prisma.WorkspaceMemberUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkspaceMemberPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkspaceMemberAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkspaceMember>
+          }
+          groupBy: {
+            args: Prisma.WorkspaceMemberGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkspaceMemberGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkspaceMemberCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkspaceMemberCountAggregateOutputType> | number
           }
         }
       }
@@ -775,6 +882,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     workspace?: WorkspaceOmit
+    workspaceMember?: WorkspaceMemberOmit
   }
 
   /* Types for Logging */
@@ -863,6 +971,36 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type WorkspaceCountOutputType
+   */
+
+  export type WorkspaceCountOutputType = {
+    workspaceMember: number
+  }
+
+  export type WorkspaceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspaceMember?: boolean | WorkspaceCountOutputTypeCountWorkspaceMemberArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WorkspaceCountOutputType without action
+   */
+  export type WorkspaceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceCountOutputType
+     */
+    select?: WorkspaceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WorkspaceCountOutputType without action
+   */
+  export type WorkspaceCountOutputTypeCountWorkspaceMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkspaceMemberWhereInput
+  }
 
 
   /**
@@ -1033,6 +1171,8 @@ export namespace Prisma {
     owner_id?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
+    _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workspace"]>
 
   export type WorkspaceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1060,10 +1200,18 @@ export namespace Prisma {
   }
 
   export type WorkspaceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "owner_id" | "createdAt" | "updatedAt", ExtArgs["result"]["workspace"]>
+  export type WorkspaceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
+    _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WorkspaceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type WorkspaceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $WorkspacePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Workspace"
-    objects: {}
+    objects: {
+      workspaceMember: Prisma.$WorkspaceMemberPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
@@ -1464,6 +1612,7 @@ export namespace Prisma {
    */
   export interface Prisma__WorkspaceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    workspaceMember<T extends Workspace$workspaceMemberArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$workspaceMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1515,6 +1664,10 @@ export namespace Prisma {
      */
     omit?: WorkspaceOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
+    /**
      * Filter, which Workspace to fetch.
      */
     where: WorkspaceWhereUniqueInput
@@ -1533,6 +1686,10 @@ export namespace Prisma {
      */
     omit?: WorkspaceOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
+    /**
      * Filter, which Workspace to fetch.
      */
     where: WorkspaceWhereUniqueInput
@@ -1550,6 +1707,10 @@ export namespace Prisma {
      * Omit specific fields from the Workspace
      */
     omit?: WorkspaceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
     /**
      * Filter, which Workspace to fetch.
      */
@@ -1599,6 +1760,10 @@ export namespace Prisma {
      */
     omit?: WorkspaceOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
+    /**
      * Filter, which Workspace to fetch.
      */
     where?: WorkspaceWhereInput
@@ -1647,6 +1812,10 @@ export namespace Prisma {
      */
     omit?: WorkspaceOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
+    /**
      * Filter, which Workspaces to fetch.
      */
     where?: WorkspaceWhereInput
@@ -1689,6 +1858,10 @@ export namespace Prisma {
      * Omit specific fields from the Workspace
      */
     omit?: WorkspaceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
     /**
      * The data needed to create a Workspace.
      */
@@ -1737,6 +1910,10 @@ export namespace Prisma {
      * Omit specific fields from the Workspace
      */
     omit?: WorkspaceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
     /**
      * The data needed to update a Workspace.
      */
@@ -1804,6 +1981,10 @@ export namespace Prisma {
      */
     omit?: WorkspaceOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
+    /**
      * The filter to search for the Workspace to update in case it exists.
      */
     where: WorkspaceWhereUniqueInput
@@ -1830,6 +2011,10 @@ export namespace Prisma {
      */
     omit?: WorkspaceOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
+    /**
      * Filter which Workspace to delete.
      */
     where: WorkspaceWhereUniqueInput
@@ -1850,6 +2035,30 @@ export namespace Prisma {
   }
 
   /**
+   * Workspace.workspaceMember
+   */
+  export type Workspace$workspaceMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    where?: WorkspaceMemberWhereInput
+    orderBy?: WorkspaceMemberOrderByWithRelationInput | WorkspaceMemberOrderByWithRelationInput[]
+    cursor?: WorkspaceMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkspaceMemberScalarFieldEnum | WorkspaceMemberScalarFieldEnum[]
+  }
+
+  /**
    * Workspace without action
    */
   export type WorkspaceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1861,6 +2070,1094 @@ export namespace Prisma {
      * Omit specific fields from the Workspace
      */
     omit?: WorkspaceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkspaceMember
+   */
+
+  export type AggregateWorkspaceMember = {
+    _count: WorkspaceMemberCountAggregateOutputType | null
+    _min: WorkspaceMemberMinAggregateOutputType | null
+    _max: WorkspaceMemberMaxAggregateOutputType | null
+  }
+
+  export type WorkspaceMemberMinAggregateOutputType = {
+    id: string | null
+    workspaceId: string | null
+    userId: string | null
+    role: string | null
+    status: $Enums.Status | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkspaceMemberMaxAggregateOutputType = {
+    id: string | null
+    workspaceId: string | null
+    userId: string | null
+    role: string | null
+    status: $Enums.Status | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkspaceMemberCountAggregateOutputType = {
+    id: number
+    workspaceId: number
+    userId: number
+    role: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkspaceMemberMinAggregateInputType = {
+    id?: true
+    workspaceId?: true
+    userId?: true
+    role?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkspaceMemberMaxAggregateInputType = {
+    id?: true
+    workspaceId?: true
+    userId?: true
+    role?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkspaceMemberCountAggregateInputType = {
+    id?: true
+    workspaceId?: true
+    userId?: true
+    role?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkspaceMemberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkspaceMember to aggregate.
+     */
+    where?: WorkspaceMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkspaceMembers to fetch.
+     */
+    orderBy?: WorkspaceMemberOrderByWithRelationInput | WorkspaceMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkspaceMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkspaceMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkspaceMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkspaceMembers
+    **/
+    _count?: true | WorkspaceMemberCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkspaceMemberMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkspaceMemberMaxAggregateInputType
+  }
+
+  export type GetWorkspaceMemberAggregateType<T extends WorkspaceMemberAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkspaceMember]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkspaceMember[P]>
+      : GetScalarType<T[P], AggregateWorkspaceMember[P]>
+  }
+
+
+
+
+  export type WorkspaceMemberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkspaceMemberWhereInput
+    orderBy?: WorkspaceMemberOrderByWithAggregationInput | WorkspaceMemberOrderByWithAggregationInput[]
+    by: WorkspaceMemberScalarFieldEnum[] | WorkspaceMemberScalarFieldEnum
+    having?: WorkspaceMemberScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkspaceMemberCountAggregateInputType | true
+    _min?: WorkspaceMemberMinAggregateInputType
+    _max?: WorkspaceMemberMaxAggregateInputType
+  }
+
+  export type WorkspaceMemberGroupByOutputType = {
+    id: string
+    workspaceId: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkspaceMemberCountAggregateOutputType | null
+    _min: WorkspaceMemberMinAggregateOutputType | null
+    _max: WorkspaceMemberMaxAggregateOutputType | null
+  }
+
+  type GetWorkspaceMemberGroupByPayload<T extends WorkspaceMemberGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkspaceMemberGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkspaceMemberGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkspaceMemberGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkspaceMemberGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkspaceMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workspaceId?: boolean
+    userId?: boolean
+    role?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workspaceMember"]>
+
+  export type WorkspaceMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workspaceId?: boolean
+    userId?: boolean
+    role?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workspaceMember"]>
+
+  export type WorkspaceMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workspaceId?: boolean
+    userId?: boolean
+    role?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["workspaceMember"]>
+
+  export type WorkspaceMemberSelectScalar = {
+    id?: boolean
+    workspaceId?: boolean
+    userId?: boolean
+    role?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WorkspaceMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workspaceId" | "userId" | "role" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["workspaceMember"]>
+  export type WorkspaceMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+  export type WorkspaceMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+  export type WorkspaceMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+
+  export type $WorkspaceMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkspaceMember"
+    objects: {
+      workspace: Prisma.$WorkspacePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      workspaceId: string
+      userId: string
+      role: string
+      status: $Enums.Status
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workspaceMember"]>
+    composites: {}
+  }
+
+  type WorkspaceMemberGetPayload<S extends boolean | null | undefined | WorkspaceMemberDefaultArgs> = $Result.GetResult<Prisma.$WorkspaceMemberPayload, S>
+
+  type WorkspaceMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkspaceMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkspaceMemberCountAggregateInputType | true
+    }
+
+  export interface WorkspaceMemberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkspaceMember'], meta: { name: 'WorkspaceMember' } }
+    /**
+     * Find zero or one WorkspaceMember that matches the filter.
+     * @param {WorkspaceMemberFindUniqueArgs} args - Arguments to find a WorkspaceMember
+     * @example
+     * // Get one WorkspaceMember
+     * const workspaceMember = await prisma.workspaceMember.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkspaceMemberFindUniqueArgs>(args: SelectSubset<T, WorkspaceMemberFindUniqueArgs<ExtArgs>>): Prisma__WorkspaceMemberClient<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkspaceMember that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkspaceMemberFindUniqueOrThrowArgs} args - Arguments to find a WorkspaceMember
+     * @example
+     * // Get one WorkspaceMember
+     * const workspaceMember = await prisma.workspaceMember.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkspaceMemberFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkspaceMemberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkspaceMemberClient<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkspaceMember that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkspaceMemberFindFirstArgs} args - Arguments to find a WorkspaceMember
+     * @example
+     * // Get one WorkspaceMember
+     * const workspaceMember = await prisma.workspaceMember.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkspaceMemberFindFirstArgs>(args?: SelectSubset<T, WorkspaceMemberFindFirstArgs<ExtArgs>>): Prisma__WorkspaceMemberClient<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkspaceMember that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkspaceMemberFindFirstOrThrowArgs} args - Arguments to find a WorkspaceMember
+     * @example
+     * // Get one WorkspaceMember
+     * const workspaceMember = await prisma.workspaceMember.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkspaceMemberFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkspaceMemberFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkspaceMemberClient<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkspaceMembers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkspaceMemberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkspaceMembers
+     * const workspaceMembers = await prisma.workspaceMember.findMany()
+     * 
+     * // Get first 10 WorkspaceMembers
+     * const workspaceMembers = await prisma.workspaceMember.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workspaceMemberWithIdOnly = await prisma.workspaceMember.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkspaceMemberFindManyArgs>(args?: SelectSubset<T, WorkspaceMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkspaceMember.
+     * @param {WorkspaceMemberCreateArgs} args - Arguments to create a WorkspaceMember.
+     * @example
+     * // Create one WorkspaceMember
+     * const WorkspaceMember = await prisma.workspaceMember.create({
+     *   data: {
+     *     // ... data to create a WorkspaceMember
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkspaceMemberCreateArgs>(args: SelectSubset<T, WorkspaceMemberCreateArgs<ExtArgs>>): Prisma__WorkspaceMemberClient<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkspaceMembers.
+     * @param {WorkspaceMemberCreateManyArgs} args - Arguments to create many WorkspaceMembers.
+     * @example
+     * // Create many WorkspaceMembers
+     * const workspaceMember = await prisma.workspaceMember.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkspaceMemberCreateManyArgs>(args?: SelectSubset<T, WorkspaceMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkspaceMembers and returns the data saved in the database.
+     * @param {WorkspaceMemberCreateManyAndReturnArgs} args - Arguments to create many WorkspaceMembers.
+     * @example
+     * // Create many WorkspaceMembers
+     * const workspaceMember = await prisma.workspaceMember.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkspaceMembers and only return the `id`
+     * const workspaceMemberWithIdOnly = await prisma.workspaceMember.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkspaceMemberCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkspaceMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WorkspaceMember.
+     * @param {WorkspaceMemberDeleteArgs} args - Arguments to delete one WorkspaceMember.
+     * @example
+     * // Delete one WorkspaceMember
+     * const WorkspaceMember = await prisma.workspaceMember.delete({
+     *   where: {
+     *     // ... filter to delete one WorkspaceMember
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkspaceMemberDeleteArgs>(args: SelectSubset<T, WorkspaceMemberDeleteArgs<ExtArgs>>): Prisma__WorkspaceMemberClient<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkspaceMember.
+     * @param {WorkspaceMemberUpdateArgs} args - Arguments to update one WorkspaceMember.
+     * @example
+     * // Update one WorkspaceMember
+     * const workspaceMember = await prisma.workspaceMember.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkspaceMemberUpdateArgs>(args: SelectSubset<T, WorkspaceMemberUpdateArgs<ExtArgs>>): Prisma__WorkspaceMemberClient<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkspaceMembers.
+     * @param {WorkspaceMemberDeleteManyArgs} args - Arguments to filter WorkspaceMembers to delete.
+     * @example
+     * // Delete a few WorkspaceMembers
+     * const { count } = await prisma.workspaceMember.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkspaceMemberDeleteManyArgs>(args?: SelectSubset<T, WorkspaceMemberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkspaceMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkspaceMemberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkspaceMembers
+     * const workspaceMember = await prisma.workspaceMember.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkspaceMemberUpdateManyArgs>(args: SelectSubset<T, WorkspaceMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkspaceMembers and returns the data updated in the database.
+     * @param {WorkspaceMemberUpdateManyAndReturnArgs} args - Arguments to update many WorkspaceMembers.
+     * @example
+     * // Update many WorkspaceMembers
+     * const workspaceMember = await prisma.workspaceMember.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WorkspaceMembers and only return the `id`
+     * const workspaceMemberWithIdOnly = await prisma.workspaceMember.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WorkspaceMemberUpdateManyAndReturnArgs>(args: SelectSubset<T, WorkspaceMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WorkspaceMember.
+     * @param {WorkspaceMemberUpsertArgs} args - Arguments to update or create a WorkspaceMember.
+     * @example
+     * // Update or create a WorkspaceMember
+     * const workspaceMember = await prisma.workspaceMember.upsert({
+     *   create: {
+     *     // ... data to create a WorkspaceMember
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkspaceMember we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkspaceMemberUpsertArgs>(args: SelectSubset<T, WorkspaceMemberUpsertArgs<ExtArgs>>): Prisma__WorkspaceMemberClient<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WorkspaceMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkspaceMemberCountArgs} args - Arguments to filter WorkspaceMembers to count.
+     * @example
+     * // Count the number of WorkspaceMembers
+     * const count = await prisma.workspaceMember.count({
+     *   where: {
+     *     // ... the filter for the WorkspaceMembers we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkspaceMemberCountArgs>(
+      args?: Subset<T, WorkspaceMemberCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkspaceMemberCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkspaceMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkspaceMemberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkspaceMemberAggregateArgs>(args: Subset<T, WorkspaceMemberAggregateArgs>): Prisma.PrismaPromise<GetWorkspaceMemberAggregateType<T>>
+
+    /**
+     * Group by WorkspaceMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkspaceMemberGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkspaceMemberGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkspaceMemberGroupByArgs['orderBy'] }
+        : { orderBy?: WorkspaceMemberGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkspaceMemberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkspaceMemberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkspaceMember model
+   */
+  readonly fields: WorkspaceMemberFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkspaceMember.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkspaceMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    workspace<T extends WorkspaceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkspaceDefaultArgs<ExtArgs>>): Prisma__WorkspaceClient<$Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkspaceMember model
+   */
+  interface WorkspaceMemberFieldRefs {
+    readonly id: FieldRef<"WorkspaceMember", 'String'>
+    readonly workspaceId: FieldRef<"WorkspaceMember", 'String'>
+    readonly userId: FieldRef<"WorkspaceMember", 'String'>
+    readonly role: FieldRef<"WorkspaceMember", 'String'>
+    readonly status: FieldRef<"WorkspaceMember", 'Status'>
+    readonly createdAt: FieldRef<"WorkspaceMember", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkspaceMember", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkspaceMember findUnique
+   */
+  export type WorkspaceMemberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkspaceMember to fetch.
+     */
+    where: WorkspaceMemberWhereUniqueInput
+  }
+
+  /**
+   * WorkspaceMember findUniqueOrThrow
+   */
+  export type WorkspaceMemberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkspaceMember to fetch.
+     */
+    where: WorkspaceMemberWhereUniqueInput
+  }
+
+  /**
+   * WorkspaceMember findFirst
+   */
+  export type WorkspaceMemberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkspaceMember to fetch.
+     */
+    where?: WorkspaceMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkspaceMembers to fetch.
+     */
+    orderBy?: WorkspaceMemberOrderByWithRelationInput | WorkspaceMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkspaceMembers.
+     */
+    cursor?: WorkspaceMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkspaceMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkspaceMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkspaceMembers.
+     */
+    distinct?: WorkspaceMemberScalarFieldEnum | WorkspaceMemberScalarFieldEnum[]
+  }
+
+  /**
+   * WorkspaceMember findFirstOrThrow
+   */
+  export type WorkspaceMemberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkspaceMember to fetch.
+     */
+    where?: WorkspaceMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkspaceMembers to fetch.
+     */
+    orderBy?: WorkspaceMemberOrderByWithRelationInput | WorkspaceMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkspaceMembers.
+     */
+    cursor?: WorkspaceMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkspaceMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkspaceMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkspaceMembers.
+     */
+    distinct?: WorkspaceMemberScalarFieldEnum | WorkspaceMemberScalarFieldEnum[]
+  }
+
+  /**
+   * WorkspaceMember findMany
+   */
+  export type WorkspaceMemberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkspaceMembers to fetch.
+     */
+    where?: WorkspaceMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkspaceMembers to fetch.
+     */
+    orderBy?: WorkspaceMemberOrderByWithRelationInput | WorkspaceMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkspaceMembers.
+     */
+    cursor?: WorkspaceMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkspaceMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkspaceMembers.
+     */
+    skip?: number
+    distinct?: WorkspaceMemberScalarFieldEnum | WorkspaceMemberScalarFieldEnum[]
+  }
+
+  /**
+   * WorkspaceMember create
+   */
+  export type WorkspaceMemberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkspaceMember.
+     */
+    data: XOR<WorkspaceMemberCreateInput, WorkspaceMemberUncheckedCreateInput>
+  }
+
+  /**
+   * WorkspaceMember createMany
+   */
+  export type WorkspaceMemberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkspaceMembers.
+     */
+    data: WorkspaceMemberCreateManyInput | WorkspaceMemberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkspaceMember createManyAndReturn
+   */
+  export type WorkspaceMemberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * The data used to create many WorkspaceMembers.
+     */
+    data: WorkspaceMemberCreateManyInput | WorkspaceMemberCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkspaceMember update
+   */
+  export type WorkspaceMemberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkspaceMember.
+     */
+    data: XOR<WorkspaceMemberUpdateInput, WorkspaceMemberUncheckedUpdateInput>
+    /**
+     * Choose, which WorkspaceMember to update.
+     */
+    where: WorkspaceMemberWhereUniqueInput
+  }
+
+  /**
+   * WorkspaceMember updateMany
+   */
+  export type WorkspaceMemberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkspaceMembers.
+     */
+    data: XOR<WorkspaceMemberUpdateManyMutationInput, WorkspaceMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkspaceMembers to update
+     */
+    where?: WorkspaceMemberWhereInput
+    /**
+     * Limit how many WorkspaceMembers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkspaceMember updateManyAndReturn
+   */
+  export type WorkspaceMemberUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * The data used to update WorkspaceMembers.
+     */
+    data: XOR<WorkspaceMemberUpdateManyMutationInput, WorkspaceMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkspaceMembers to update
+     */
+    where?: WorkspaceMemberWhereInput
+    /**
+     * Limit how many WorkspaceMembers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WorkspaceMember upsert
+   */
+  export type WorkspaceMemberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkspaceMember to update in case it exists.
+     */
+    where: WorkspaceMemberWhereUniqueInput
+    /**
+     * In case the WorkspaceMember found by the `where` argument doesn't exist, create a new WorkspaceMember with this data.
+     */
+    create: XOR<WorkspaceMemberCreateInput, WorkspaceMemberUncheckedCreateInput>
+    /**
+     * In case the WorkspaceMember was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkspaceMemberUpdateInput, WorkspaceMemberUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkspaceMember delete
+   */
+  export type WorkspaceMemberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    /**
+     * Filter which WorkspaceMember to delete.
+     */
+    where: WorkspaceMemberWhereUniqueInput
+  }
+
+  /**
+   * WorkspaceMember deleteMany
+   */
+  export type WorkspaceMemberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkspaceMembers to delete
+     */
+    where?: WorkspaceMemberWhereInput
+    /**
+     * Limit how many WorkspaceMembers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkspaceMember without action
+   */
+  export type WorkspaceMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
   }
 
 
@@ -1887,6 +3184,19 @@ export namespace Prisma {
   };
 
   export type WorkspaceScalarFieldEnum = (typeof WorkspaceScalarFieldEnum)[keyof typeof WorkspaceScalarFieldEnum]
+
+
+  export const WorkspaceMemberScalarFieldEnum: {
+    id: 'id',
+    workspaceId: 'workspaceId',
+    userId: 'userId',
+    role: 'role',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkspaceMemberScalarFieldEnum = (typeof WorkspaceMemberScalarFieldEnum)[keyof typeof WorkspaceMemberScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -1939,6 +3249,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Status'
+   */
+  export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
+    
+
+
+  /**
+   * Reference to a field of type 'Status[]'
+   */
+  export type ListEnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1964,6 +3288,7 @@ export namespace Prisma {
     owner_id?: StringFilter<"Workspace"> | string
     createdAt?: DateTimeFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
+    workspaceMember?: WorkspaceMemberListRelationFilter
   }
 
   export type WorkspaceOrderByWithRelationInput = {
@@ -1972,6 +3297,7 @@ export namespace Prisma {
     owner_id?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    workspaceMember?: WorkspaceMemberOrderByRelationAggregateInput
   }
 
   export type WorkspaceWhereUniqueInput = Prisma.AtLeast<{
@@ -1983,6 +3309,7 @@ export namespace Prisma {
     owner_id?: StringFilter<"Workspace"> | string
     createdAt?: DateTimeFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
+    workspaceMember?: WorkspaceMemberListRelationFilter
   }, "id">
 
   export type WorkspaceOrderByWithAggregationInput = {
@@ -2007,12 +3334,79 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Workspace"> | Date | string
   }
 
+  export type WorkspaceMemberWhereInput = {
+    AND?: WorkspaceMemberWhereInput | WorkspaceMemberWhereInput[]
+    OR?: WorkspaceMemberWhereInput[]
+    NOT?: WorkspaceMemberWhereInput | WorkspaceMemberWhereInput[]
+    id?: StringFilter<"WorkspaceMember"> | string
+    workspaceId?: StringFilter<"WorkspaceMember"> | string
+    userId?: StringFilter<"WorkspaceMember"> | string
+    role?: StringFilter<"WorkspaceMember"> | string
+    status?: EnumStatusFilter<"WorkspaceMember"> | $Enums.Status
+    createdAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
+    workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
+  }
+
+  export type WorkspaceMemberOrderByWithRelationInput = {
+    id?: SortOrder
+    workspaceId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workspace?: WorkspaceOrderByWithRelationInput
+  }
+
+  export type WorkspaceMemberWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    workspaceId_userId?: WorkspaceMemberWorkspaceIdUserIdCompoundUniqueInput
+    AND?: WorkspaceMemberWhereInput | WorkspaceMemberWhereInput[]
+    OR?: WorkspaceMemberWhereInput[]
+    NOT?: WorkspaceMemberWhereInput | WorkspaceMemberWhereInput[]
+    workspaceId?: StringFilter<"WorkspaceMember"> | string
+    userId?: StringFilter<"WorkspaceMember"> | string
+    role?: StringFilter<"WorkspaceMember"> | string
+    status?: EnumStatusFilter<"WorkspaceMember"> | $Enums.Status
+    createdAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
+    workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
+  }, "id" | "workspaceId_userId">
+
+  export type WorkspaceMemberOrderByWithAggregationInput = {
+    id?: SortOrder
+    workspaceId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkspaceMemberCountOrderByAggregateInput
+    _max?: WorkspaceMemberMaxOrderByAggregateInput
+    _min?: WorkspaceMemberMinOrderByAggregateInput
+  }
+
+  export type WorkspaceMemberScalarWhereWithAggregatesInput = {
+    AND?: WorkspaceMemberScalarWhereWithAggregatesInput | WorkspaceMemberScalarWhereWithAggregatesInput[]
+    OR?: WorkspaceMemberScalarWhereWithAggregatesInput[]
+    NOT?: WorkspaceMemberScalarWhereWithAggregatesInput | WorkspaceMemberScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkspaceMember"> | string
+    workspaceId?: StringWithAggregatesFilter<"WorkspaceMember"> | string
+    userId?: StringWithAggregatesFilter<"WorkspaceMember"> | string
+    role?: StringWithAggregatesFilter<"WorkspaceMember"> | string
+    status?: EnumStatusWithAggregatesFilter<"WorkspaceMember"> | $Enums.Status
+    createdAt?: DateTimeWithAggregatesFilter<"WorkspaceMember"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkspaceMember"> | Date | string
+  }
+
   export type WorkspaceCreateInput = {
     id?: string
     name: string
     owner_id: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUncheckedCreateInput = {
@@ -2021,6 +3415,7 @@ export namespace Prisma {
     owner_id: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUpdateInput = {
@@ -2029,6 +3424,7 @@ export namespace Prisma {
     owner_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceUncheckedUpdateInput = {
@@ -2037,6 +3433,7 @@ export namespace Prisma {
     owner_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceCreateManyInput = {
@@ -2059,6 +3456,75 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     owner_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceMemberCreateInput = {
+    id?: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workspace: WorkspaceCreateNestedOneWithoutWorkspaceMemberInput
+  }
+
+  export type WorkspaceMemberUncheckedCreateInput = {
+    id?: string
+    workspaceId: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceMemberUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspace?: WorkspaceUpdateOneRequiredWithoutWorkspaceMemberNestedInput
+  }
+
+  export type WorkspaceMemberUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workspaceId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceMemberCreateManyInput = {
+    id?: string
+    workspaceId: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceMemberUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceMemberUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workspaceId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2087,6 +3553,16 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type WorkspaceMemberListRelationFilter = {
+    every?: WorkspaceMemberWhereInput
+    some?: WorkspaceMemberWhereInput
+    none?: WorkspaceMemberWhereInput
+  }
+
+  export type WorkspaceMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type WorkspaceCountOrderByAggregateInput = {
@@ -2145,12 +3621,129 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
+  export type WorkspaceScalarRelationFilter = {
+    is?: WorkspaceWhereInput
+    isNot?: WorkspaceWhereInput
+  }
+
+  export type WorkspaceMemberWorkspaceIdUserIdCompoundUniqueInput = {
+    workspaceId: string
+    userId: string
+  }
+
+  export type WorkspaceMemberCountOrderByAggregateInput = {
+    id?: SortOrder
+    workspaceId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkspaceMemberMaxOrderByAggregateInput = {
+    id?: SortOrder
+    workspaceId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkspaceMemberMinOrderByAggregateInput = {
+    id?: SortOrder
+    workspaceId?: SortOrder
+    userId?: SortOrder
+    role?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
+  export type WorkspaceMemberCreateNestedManyWithoutWorkspaceInput = {
+    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
+    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
+    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+  }
+
+  export type WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput = {
+    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
+    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
+    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput = {
+    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
+    upsert?: WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput[]
+    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
+    set?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    disconnect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    delete?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    update?: WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput[]
+    updateMany?: WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput | WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput[]
+    deleteMany?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
+  }
+
+  export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
+    upsert?: WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput[]
+    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
+    set?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    disconnect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    delete?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    update?: WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput[]
+    updateMany?: WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput | WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput[]
+    deleteMany?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
+  }
+
+  export type WorkspaceCreateNestedOneWithoutWorkspaceMemberInput = {
+    create?: XOR<WorkspaceCreateWithoutWorkspaceMemberInput, WorkspaceUncheckedCreateWithoutWorkspaceMemberInput>
+    connectOrCreate?: WorkspaceCreateOrConnectWithoutWorkspaceMemberInput
+    connect?: WorkspaceWhereUniqueInput
+  }
+
+  export type EnumStatusFieldUpdateOperationsInput = {
+    set?: $Enums.Status
+  }
+
+  export type WorkspaceUpdateOneRequiredWithoutWorkspaceMemberNestedInput = {
+    create?: XOR<WorkspaceCreateWithoutWorkspaceMemberInput, WorkspaceUncheckedCreateWithoutWorkspaceMemberInput>
+    connectOrCreate?: WorkspaceCreateOrConnectWithoutWorkspaceMemberInput
+    upsert?: WorkspaceUpsertWithoutWorkspaceMemberInput
+    connect?: WorkspaceWhereUniqueInput
+    update?: XOR<XOR<WorkspaceUpdateToOneWithWhereWithoutWorkspaceMemberInput, WorkspaceUpdateWithoutWorkspaceMemberInput>, WorkspaceUncheckedUpdateWithoutWorkspaceMemberInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2218,6 +3811,164 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
+  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
+  export type WorkspaceMemberCreateWithoutWorkspaceInput = {
+    id?: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceMemberUncheckedCreateWithoutWorkspaceInput = {
+    id?: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceMemberCreateOrConnectWithoutWorkspaceInput = {
+    where: WorkspaceMemberWhereUniqueInput
+    create: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>
+  }
+
+  export type WorkspaceMemberCreateManyWorkspaceInputEnvelope = {
+    data: WorkspaceMemberCreateManyWorkspaceInput | WorkspaceMemberCreateManyWorkspaceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput = {
+    where: WorkspaceMemberWhereUniqueInput
+    update: XOR<WorkspaceMemberUpdateWithoutWorkspaceInput, WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
+    create: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>
+  }
+
+  export type WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput = {
+    where: WorkspaceMemberWhereUniqueInput
+    data: XOR<WorkspaceMemberUpdateWithoutWorkspaceInput, WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
+  }
+
+  export type WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput = {
+    where: WorkspaceMemberScalarWhereInput
+    data: XOR<WorkspaceMemberUpdateManyMutationInput, WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput>
+  }
+
+  export type WorkspaceMemberScalarWhereInput = {
+    AND?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
+    OR?: WorkspaceMemberScalarWhereInput[]
+    NOT?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
+    id?: StringFilter<"WorkspaceMember"> | string
+    workspaceId?: StringFilter<"WorkspaceMember"> | string
+    userId?: StringFilter<"WorkspaceMember"> | string
+    role?: StringFilter<"WorkspaceMember"> | string
+    status?: EnumStatusFilter<"WorkspaceMember"> | $Enums.Status
+    createdAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
+  }
+
+  export type WorkspaceCreateWithoutWorkspaceMemberInput = {
+    id?: string
+    name: string
+    owner_id: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceUncheckedCreateWithoutWorkspaceMemberInput = {
+    id?: string
+    name: string
+    owner_id: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceCreateOrConnectWithoutWorkspaceMemberInput = {
+    where: WorkspaceWhereUniqueInput
+    create: XOR<WorkspaceCreateWithoutWorkspaceMemberInput, WorkspaceUncheckedCreateWithoutWorkspaceMemberInput>
+  }
+
+  export type WorkspaceUpsertWithoutWorkspaceMemberInput = {
+    update: XOR<WorkspaceUpdateWithoutWorkspaceMemberInput, WorkspaceUncheckedUpdateWithoutWorkspaceMemberInput>
+    create: XOR<WorkspaceCreateWithoutWorkspaceMemberInput, WorkspaceUncheckedCreateWithoutWorkspaceMemberInput>
+    where?: WorkspaceWhereInput
+  }
+
+  export type WorkspaceUpdateToOneWithWhereWithoutWorkspaceMemberInput = {
+    where?: WorkspaceWhereInput
+    data: XOR<WorkspaceUpdateWithoutWorkspaceMemberInput, WorkspaceUncheckedUpdateWithoutWorkspaceMemberInput>
+  }
+
+  export type WorkspaceUpdateWithoutWorkspaceMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    owner_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceUncheckedUpdateWithoutWorkspaceMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    owner_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceMemberCreateManyWorkspaceInput = {
+    id?: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceMemberUpdateWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

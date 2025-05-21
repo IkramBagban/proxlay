@@ -16,8 +16,8 @@ const Header = () => {
           <NavLink to="/" className="hover:text-gray-400">
             Home
           </NavLink>
-          <NavLink to="/spaces" className="hover:text-gray-400">
-            spaces
+          <NavLink to="/workspace" className="hover:text-gray-400">
+            Workspace
           </NavLink>
           <NavLink to="/upload" className="hover:text-gray-400">
             Upload
