@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 import { clerkClient, requireAuth, getAuth } from "@clerk/express";
-import workspaceRoutes from "./routes/workspace.route";
+import workspaceRoutes from "./routes/v1/workspace.route";
 
 dotenv.config();
 const app = express();
@@ -50,7 +50,8 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/workspace", requireAuth(), workspaceRoutes);
+app.use("/api/v1/workspace", requireAuth(), workspaceRoutes);
+
 app.post("/get-presigned-url", requireAuth(), async (req: any, res) => {
   console.log("req.body", req.body);
 

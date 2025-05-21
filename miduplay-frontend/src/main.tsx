@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import Header from "./components/common/Header.tsx";
 import { BrowserRouter } from "react-router";
 import RootRouter from "./routes/index.tsx";
+import { Toaster } from "react-hot-toast";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -19,6 +20,7 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Header />
         <RootRouter />
+        <Toaster />
         {/* <App /> */}
       </BrowserRouter>
     </ClerkProvider>

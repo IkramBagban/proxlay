@@ -1,6 +1,6 @@
 import App from "@/App";
-import SpacesPage from "@/app/spaces/page";
-import YoutubeSpace from "@/app/spaces/youtube/page";
+import SpacesPage from "@/app/workspace/page";
+import YoutubeSpace from "@/app/platforms/youtube/page";
 import UploadVideo from "@/app/upload/page";
 import React from "react";
 import { Route, Routes } from "react-router";
