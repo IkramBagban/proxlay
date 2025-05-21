@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { PlusCircle, FolderKanban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { CreateWorkspace } from "@/components/workspace/create-workspace";
 import { useAuth } from "@clerk/clerk-react";
 import axiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
+import { useFetch } from "@/hooks/useFetch";
 
 interface Workspace {
   id: string;
@@ -32,10 +33,10 @@ const initialWorkspaces: Workspace[] = [
 
 const WorkspacePage = () => {
   const [meta, setMeta] = React.useState<{ name: string }>({ name: "" });
-  const [workspaces, setWorkspaces] = React.useState<Workspace[]>(initialWorkspaces);
   const [open, setOpen] = React.useState(false);
 
   const { getToken } = useAuth();
+  const {data: workspaces} = useFetch("/workspace", true);
 
   const metaChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMeta({ ...meta, [e.target.name]: e.target.value });
@@ -66,7 +67,7 @@ const WorkspacePage = () => {
       });
 
       toast.success("Workspace created successfully");
-      setWorkspaces((prev) => [...prev, response.data]);
+      // setWorkspaces((prev) => [...prev, response.data]);
     } catch (error) {
       console.error("Workspace creation failed:", error);
       toast.error("Failed to create workspace");
@@ -93,7 +94,7 @@ const WorkspacePage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {workspaces.map((ws) => (
+        {(workspaces || []).map((ws) => (
           <NavLink key={ws.id} to={`/workspace/${ws.id}`}>
             <Card className="hover:shadow-md transition-shadow cursor-pointer">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -32,3 +32,25 @@ export const createWorkspace = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getWorkspaces = async (req: Request, res: Response) => {
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  try {
+    const workspaces = await prismaClient.workspace.findMany({
+      where: {
+        owner_id: userId,
+      },
+    });
+
+    res.status(200).json(workspaces);
+  } catch (error) {
+    console.error("Error fetching workspaces:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
