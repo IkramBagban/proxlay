@@ -3,20 +3,24 @@ import express from "express";
 import { google } from "googleapis";
 import path from "path";
 import fs from "fs";
-import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { v4 as uuidv4 } from 'uuid';
-import cors from "cors"
-import { clerkMiddleware } from '@clerk/express'
-import { clerkClient, requireAuth, getAuth } from '@clerk/express'
-
+import { v4 as uuidv4 } from "uuid";
+import cors from "cors";
+import { clerkMiddleware } from "@clerk/express";
+import { clerkClient, requireAuth, getAuth } from "@clerk/express";
+import workspaceRoutes from "./routes/workspace.route";
 
 dotenv.config();
 const app = express();
 
-app.use(cors())
-app.use(express.json())
-app.use(clerkMiddleware())
+app.use(cors());
+app.use(express.json());
+app.use(clerkMiddleware());
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION!,
@@ -42,46 +46,33 @@ const oauth2Client = new google.auth.OAuth2(
 
 const scopes = ["https://www.googleapis.com/auth/youtube.upload"];
 
-const auth = (req: any, res:any, next: any) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).send("Authorization header missing");
-  }
-  if (!authHeader.startsWith("Bearer ")) {
-    return res.status(401).send("Invalid authorization header format");
-  }
-  const token = authHeader.split(" ")[1];
-  if (!token) {
-    return res.status(401).send("Token missing");
-  }
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
-  req.token = token;
-  next();
-}
-
-app.post("/get-presigned-url",  requireAuth(), async (req: any, res) =>   {
+app.use("/workspace", requireAuth(), workspaceRoutes);
+app.post("/get-presigned-url", requireAuth(), async (req: any, res) => {
   console.log("req.body", req.body);
 
   // console.log('token,', req?.token)
-    const auth = getAuth(req)
-    console.log('auth ', auth)
-    const userId = auth?.userId
-    console.log("userId", userId);
+  const auth = getAuth(req);
+  console.log("auth ", auth);
+  const userId = auth?.userId;
+  console.log("userId", userId);
 
   // @ts-ignore
-  const user = await clerkClient.users.getUser(userId)
-    console.log("user", user);
-
+  const user = await clerkClient.users.getUser(userId);
+  console.log("user", user);
 
   const { fileName, fileType } = req.body;
 
-    const bucketName = process.env.AWS_BUCKET_NAME!;
+  const bucketName = process.env.AWS_BUCKET_NAME!;
   const filePath = `${userId}/youtube/${fileName}`;
   // const filePath = `${fileName}`;
   const params = {
     Bucket: bucketName,
     Key: filePath,
-    ContentType: fileType
+    ContentType: fileType,
   };
 
   const command = new PutObjectCommand(params);
@@ -89,7 +80,7 @@ app.post("/get-presigned-url",  requireAuth(), async (req: any, res) =>   {
   res.status(200).json({ url, filePath });
 });
 
-app.get("/auth",  (req, res) => {
+app.get("/auth", (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: scopes,

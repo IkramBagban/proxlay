@@ -16,4 +16,4 @@ const getPrismaInstance = () => {
   }
   return global.prisma;
 };
-export const prisma = getPrismaInstance();
+export const prismaClient = getPrismaInstance();
