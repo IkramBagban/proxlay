@@ -23,6 +23,7 @@ model Workspace {
 
   workspaceMember WorkspaceMember[]
   VideoMetaData   VideoMetaData[]
+  YoutubeLinkedAccount YoutubeLinkedAccount[]
 }
 
 enum Status {
@@ -47,9 +48,9 @@ model WorkspaceMember {
 }
 
 model VideoMetaData {
-  id            String   @id @default(cuid())
-  key           String // this would be the key in S3
-  fileName      String
+  id       String @id @default(cuid())
+  key      String // this would be the key in S3
+  fileName String
 
   title         String
   tags          String[]
@@ -60,11 +61,27 @@ model VideoMetaData {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  workspaceId   String
-  uploaderId    String
-  workspace     Workspace @relation(fields: [workspaceId], references: [id])
-
+  workspaceId String
+  uploaderId  String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  
 
   @@index([workspaceId])
   @@index([uploaderId])
+}
+
+model YoutubeLinkedAccount {
+  id           String   @id @default(cuid())
+  userId       String // refrenced to clerk user id
+  workspaceId  String
+  accessToken  String
+  refreshToken String
+  expiryDate    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  workspace Workspace @relation (fields: [workspaceId], references: [id])
+
+  @@unique([userId])
+  @@index([workspaceId])
 }

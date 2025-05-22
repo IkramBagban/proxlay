@@ -153,6 +153,17 @@ exports.Prisma.VideoMetaDataScalarFieldEnum = {
   uploaderId: 'uploaderId'
 };
 
+exports.Prisma.YoutubeLinkedAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  workspaceId: 'workspaceId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiryDate: 'expiryDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -170,7 +181,8 @@ exports.Status = exports.$Enums.Status = {
 exports.Prisma.ModelName = {
   Workspace: 'Workspace',
   WorkspaceMember: 'WorkspaceMember',
-  VideoMetaData: 'VideoMetaData'
+  VideoMetaData: 'VideoMetaData',
+  YoutubeLinkedAccount: 'YoutubeLinkedAccount'
 };
 
 /**

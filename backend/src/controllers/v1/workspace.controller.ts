@@ -5,7 +5,7 @@ import { prismaClient } from "../../lib/db";
 import { Status } from "../../generated/prisma";
 
 export const createWorkspace = async (req: Request, res: Response) => {
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body);
   const { name } = req.body;
   const { userId } = getAuth(req);
 
@@ -58,7 +58,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
 
 export const getWorkspaces = async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
-  console.log("userId", userId);
+  // console.log("userId", userId);
 
   if (!userId) {
     res.status(401).json({ error: "Unauthorized" });
@@ -110,7 +110,7 @@ export const getWorkspaceMembers = async (req: Request, res: Response) => {
     const users = await clerkClient.users.getUserList({
       userId: userIds,
     });
-    console.log("users", users?.data);
+    // console.log("users", users?.data);
 
     const userMap = new Map(
       // @ts-ignore

@@ -21,8 +21,9 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  workspaceMember WorkspaceMember[]
-  VideoMetaData   VideoMetaData[]
+  workspaceMember      WorkspaceMember[]
+  VideoMetaData        VideoMetaData[]
+  YoutubeLinkedAccount YoutubeLinkedAccount[]
 }
 
 enum Status {
@@ -66,4 +67,20 @@ model VideoMetaData {
 
   @@index([workspaceId])
   @@index([uploaderId])
+}
+
+model YoutubeLinkedAccount {
+  id           String   @id @default(cuid())
+  userId       String // referenced to clerk user id
+  workspaceId  String
+  accessToken  String
+  refreshToken String
+  expiryDate   DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+
+  @@unique([userId])
+  @@index([workspaceId])
 }

@@ -28,6 +28,11 @@ export type WorkspaceMember = $Result.DefaultSelection<Prisma.$WorkspaceMemberPa
  * 
  */
 export type VideoMetaData = $Result.DefaultSelection<Prisma.$VideoMetaDataPayload>
+/**
+ * Model YoutubeLinkedAccount
+ * 
+ */
+export type YoutubeLinkedAccount = $Result.DefaultSelection<Prisma.$YoutubeLinkedAccountPayload>
 
 /**
  * Enums
@@ -200,6 +205,16 @@ export class PrismaClient<
     * ```
     */
   get videoMetaData(): Prisma.VideoMetaDataDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.youtubeLinkedAccount`: Exposes CRUD operations for the **YoutubeLinkedAccount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more YoutubeLinkedAccounts
+    * const youtubeLinkedAccounts = await prisma.youtubeLinkedAccount.findMany()
+    * ```
+    */
+  get youtubeLinkedAccount(): Prisma.YoutubeLinkedAccountDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -642,7 +657,8 @@ export namespace Prisma {
   export const ModelName: {
     Workspace: 'Workspace',
     WorkspaceMember: 'WorkspaceMember',
-    VideoMetaData: 'VideoMetaData'
+    VideoMetaData: 'VideoMetaData',
+    YoutubeLinkedAccount: 'YoutubeLinkedAccount'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -661,7 +677,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "workspace" | "workspaceMember" | "videoMetaData"
+      modelProps: "workspace" | "workspaceMember" | "videoMetaData" | "youtubeLinkedAccount"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -887,6 +903,80 @@ export namespace Prisma {
           }
         }
       }
+      YoutubeLinkedAccount: {
+        payload: Prisma.$YoutubeLinkedAccountPayload<ExtArgs>
+        fields: Prisma.YoutubeLinkedAccountFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.YoutubeLinkedAccountFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.YoutubeLinkedAccountFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>
+          }
+          findFirst: {
+            args: Prisma.YoutubeLinkedAccountFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.YoutubeLinkedAccountFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>
+          }
+          findMany: {
+            args: Prisma.YoutubeLinkedAccountFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>[]
+          }
+          create: {
+            args: Prisma.YoutubeLinkedAccountCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>
+          }
+          createMany: {
+            args: Prisma.YoutubeLinkedAccountCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.YoutubeLinkedAccountCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>[]
+          }
+          delete: {
+            args: Prisma.YoutubeLinkedAccountDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>
+          }
+          update: {
+            args: Prisma.YoutubeLinkedAccountUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>
+          }
+          deleteMany: {
+            args: Prisma.YoutubeLinkedAccountDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.YoutubeLinkedAccountUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.YoutubeLinkedAccountUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>[]
+          }
+          upsert: {
+            args: Prisma.YoutubeLinkedAccountUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$YoutubeLinkedAccountPayload>
+          }
+          aggregate: {
+            args: Prisma.YoutubeLinkedAccountAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateYoutubeLinkedAccount>
+          }
+          groupBy: {
+            args: Prisma.YoutubeLinkedAccountGroupByArgs<ExtArgs>
+            result: $Utils.Optional<YoutubeLinkedAccountGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.YoutubeLinkedAccountCountArgs<ExtArgs>
+            result: $Utils.Optional<YoutubeLinkedAccountCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -974,6 +1064,7 @@ export namespace Prisma {
     workspace?: WorkspaceOmit
     workspaceMember?: WorkspaceMemberOmit
     videoMetaData?: VideoMetaDataOmit
+    youtubeLinkedAccount?: YoutubeLinkedAccountOmit
   }
 
   /* Types for Logging */
@@ -1070,11 +1161,13 @@ export namespace Prisma {
   export type WorkspaceCountOutputType = {
     workspaceMember: number
     VideoMetaData: number
+    YoutubeLinkedAccount: number
   }
 
   export type WorkspaceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workspaceMember?: boolean | WorkspaceCountOutputTypeCountWorkspaceMemberArgs
     VideoMetaData?: boolean | WorkspaceCountOutputTypeCountVideoMetaDataArgs
+    YoutubeLinkedAccount?: boolean | WorkspaceCountOutputTypeCountYoutubeLinkedAccountArgs
   }
 
   // Custom InputTypes
@@ -1100,6 +1193,13 @@ export namespace Prisma {
    */
   export type WorkspaceCountOutputTypeCountVideoMetaDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: VideoMetaDataWhereInput
+  }
+
+  /**
+   * WorkspaceCountOutputType without action
+   */
+  export type WorkspaceCountOutputTypeCountYoutubeLinkedAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: YoutubeLinkedAccountWhereInput
   }
 
 
@@ -1273,6 +1373,7 @@ export namespace Prisma {
     updatedAt?: boolean
     workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
     VideoMetaData?: boolean | Workspace$VideoMetaDataArgs<ExtArgs>
+    YoutubeLinkedAccount?: boolean | Workspace$YoutubeLinkedAccountArgs<ExtArgs>
     _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workspace"]>
 
@@ -1304,6 +1405,7 @@ export namespace Prisma {
   export type WorkspaceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
     VideoMetaData?: boolean | Workspace$VideoMetaDataArgs<ExtArgs>
+    YoutubeLinkedAccount?: boolean | Workspace$YoutubeLinkedAccountArgs<ExtArgs>
     _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WorkspaceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1314,6 +1416,7 @@ export namespace Prisma {
     objects: {
       workspaceMember: Prisma.$WorkspaceMemberPayload<ExtArgs>[]
       VideoMetaData: Prisma.$VideoMetaDataPayload<ExtArgs>[]
+      YoutubeLinkedAccount: Prisma.$YoutubeLinkedAccountPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1717,6 +1820,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     workspaceMember<T extends Workspace$workspaceMemberArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$workspaceMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     VideoMetaData<T extends Workspace$VideoMetaDataArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$VideoMetaDataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    YoutubeLinkedAccount<T extends Workspace$YoutubeLinkedAccountArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$YoutubeLinkedAccountArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2184,6 +2288,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: VideoMetaDataScalarFieldEnum | VideoMetaDataScalarFieldEnum[]
+  }
+
+  /**
+   * Workspace.YoutubeLinkedAccount
+   */
+  export type Workspace$YoutubeLinkedAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    where?: YoutubeLinkedAccountWhereInput
+    orderBy?: YoutubeLinkedAccountOrderByWithRelationInput | YoutubeLinkedAccountOrderByWithRelationInput[]
+    cursor?: YoutubeLinkedAccountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: YoutubeLinkedAccountScalarFieldEnum | YoutubeLinkedAccountScalarFieldEnum[]
   }
 
   /**
@@ -4435,6 +4563,1103 @@ export namespace Prisma {
 
 
   /**
+   * Model YoutubeLinkedAccount
+   */
+
+  export type AggregateYoutubeLinkedAccount = {
+    _count: YoutubeLinkedAccountCountAggregateOutputType | null
+    _min: YoutubeLinkedAccountMinAggregateOutputType | null
+    _max: YoutubeLinkedAccountMaxAggregateOutputType | null
+  }
+
+  export type YoutubeLinkedAccountMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    workspaceId: string | null
+    accessToken: string | null
+    refreshToken: string | null
+    expiryDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type YoutubeLinkedAccountMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    workspaceId: string | null
+    accessToken: string | null
+    refreshToken: string | null
+    expiryDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type YoutubeLinkedAccountCountAggregateOutputType = {
+    id: number
+    userId: number
+    workspaceId: number
+    accessToken: number
+    refreshToken: number
+    expiryDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type YoutubeLinkedAccountMinAggregateInputType = {
+    id?: true
+    userId?: true
+    workspaceId?: true
+    accessToken?: true
+    refreshToken?: true
+    expiryDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type YoutubeLinkedAccountMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    workspaceId?: true
+    accessToken?: true
+    refreshToken?: true
+    expiryDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type YoutubeLinkedAccountCountAggregateInputType = {
+    id?: true
+    userId?: true
+    workspaceId?: true
+    accessToken?: true
+    refreshToken?: true
+    expiryDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type YoutubeLinkedAccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which YoutubeLinkedAccount to aggregate.
+     */
+    where?: YoutubeLinkedAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of YoutubeLinkedAccounts to fetch.
+     */
+    orderBy?: YoutubeLinkedAccountOrderByWithRelationInput | YoutubeLinkedAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: YoutubeLinkedAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` YoutubeLinkedAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` YoutubeLinkedAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned YoutubeLinkedAccounts
+    **/
+    _count?: true | YoutubeLinkedAccountCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: YoutubeLinkedAccountMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: YoutubeLinkedAccountMaxAggregateInputType
+  }
+
+  export type GetYoutubeLinkedAccountAggregateType<T extends YoutubeLinkedAccountAggregateArgs> = {
+        [P in keyof T & keyof AggregateYoutubeLinkedAccount]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateYoutubeLinkedAccount[P]>
+      : GetScalarType<T[P], AggregateYoutubeLinkedAccount[P]>
+  }
+
+
+
+
+  export type YoutubeLinkedAccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: YoutubeLinkedAccountWhereInput
+    orderBy?: YoutubeLinkedAccountOrderByWithAggregationInput | YoutubeLinkedAccountOrderByWithAggregationInput[]
+    by: YoutubeLinkedAccountScalarFieldEnum[] | YoutubeLinkedAccountScalarFieldEnum
+    having?: YoutubeLinkedAccountScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: YoutubeLinkedAccountCountAggregateInputType | true
+    _min?: YoutubeLinkedAccountMinAggregateInputType
+    _max?: YoutubeLinkedAccountMaxAggregateInputType
+  }
+
+  export type YoutubeLinkedAccountGroupByOutputType = {
+    id: string
+    userId: string
+    workspaceId: string
+    accessToken: string
+    refreshToken: string
+    expiryDate: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: YoutubeLinkedAccountCountAggregateOutputType | null
+    _min: YoutubeLinkedAccountMinAggregateOutputType | null
+    _max: YoutubeLinkedAccountMaxAggregateOutputType | null
+  }
+
+  type GetYoutubeLinkedAccountGroupByPayload<T extends YoutubeLinkedAccountGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<YoutubeLinkedAccountGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof YoutubeLinkedAccountGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], YoutubeLinkedAccountGroupByOutputType[P]>
+            : GetScalarType<T[P], YoutubeLinkedAccountGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type YoutubeLinkedAccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    workspaceId?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
+    expiryDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["youtubeLinkedAccount"]>
+
+  export type YoutubeLinkedAccountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    workspaceId?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
+    expiryDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["youtubeLinkedAccount"]>
+
+  export type YoutubeLinkedAccountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    workspaceId?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
+    expiryDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["youtubeLinkedAccount"]>
+
+  export type YoutubeLinkedAccountSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    workspaceId?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
+    expiryDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type YoutubeLinkedAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "workspaceId" | "accessToken" | "refreshToken" | "expiryDate" | "createdAt" | "updatedAt", ExtArgs["result"]["youtubeLinkedAccount"]>
+  export type YoutubeLinkedAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+  export type YoutubeLinkedAccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+  export type YoutubeLinkedAccountIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+
+  export type $YoutubeLinkedAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "YoutubeLinkedAccount"
+    objects: {
+      workspace: Prisma.$WorkspacePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      workspaceId: string
+      accessToken: string
+      refreshToken: string
+      expiryDate: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["youtubeLinkedAccount"]>
+    composites: {}
+  }
+
+  type YoutubeLinkedAccountGetPayload<S extends boolean | null | undefined | YoutubeLinkedAccountDefaultArgs> = $Result.GetResult<Prisma.$YoutubeLinkedAccountPayload, S>
+
+  type YoutubeLinkedAccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<YoutubeLinkedAccountFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: YoutubeLinkedAccountCountAggregateInputType | true
+    }
+
+  export interface YoutubeLinkedAccountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['YoutubeLinkedAccount'], meta: { name: 'YoutubeLinkedAccount' } }
+    /**
+     * Find zero or one YoutubeLinkedAccount that matches the filter.
+     * @param {YoutubeLinkedAccountFindUniqueArgs} args - Arguments to find a YoutubeLinkedAccount
+     * @example
+     * // Get one YoutubeLinkedAccount
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends YoutubeLinkedAccountFindUniqueArgs>(args: SelectSubset<T, YoutubeLinkedAccountFindUniqueArgs<ExtArgs>>): Prisma__YoutubeLinkedAccountClient<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one YoutubeLinkedAccount that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {YoutubeLinkedAccountFindUniqueOrThrowArgs} args - Arguments to find a YoutubeLinkedAccount
+     * @example
+     * // Get one YoutubeLinkedAccount
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends YoutubeLinkedAccountFindUniqueOrThrowArgs>(args: SelectSubset<T, YoutubeLinkedAccountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__YoutubeLinkedAccountClient<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first YoutubeLinkedAccount that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {YoutubeLinkedAccountFindFirstArgs} args - Arguments to find a YoutubeLinkedAccount
+     * @example
+     * // Get one YoutubeLinkedAccount
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends YoutubeLinkedAccountFindFirstArgs>(args?: SelectSubset<T, YoutubeLinkedAccountFindFirstArgs<ExtArgs>>): Prisma__YoutubeLinkedAccountClient<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first YoutubeLinkedAccount that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {YoutubeLinkedAccountFindFirstOrThrowArgs} args - Arguments to find a YoutubeLinkedAccount
+     * @example
+     * // Get one YoutubeLinkedAccount
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends YoutubeLinkedAccountFindFirstOrThrowArgs>(args?: SelectSubset<T, YoutubeLinkedAccountFindFirstOrThrowArgs<ExtArgs>>): Prisma__YoutubeLinkedAccountClient<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more YoutubeLinkedAccounts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {YoutubeLinkedAccountFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all YoutubeLinkedAccounts
+     * const youtubeLinkedAccounts = await prisma.youtubeLinkedAccount.findMany()
+     * 
+     * // Get first 10 YoutubeLinkedAccounts
+     * const youtubeLinkedAccounts = await prisma.youtubeLinkedAccount.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const youtubeLinkedAccountWithIdOnly = await prisma.youtubeLinkedAccount.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends YoutubeLinkedAccountFindManyArgs>(args?: SelectSubset<T, YoutubeLinkedAccountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a YoutubeLinkedAccount.
+     * @param {YoutubeLinkedAccountCreateArgs} args - Arguments to create a YoutubeLinkedAccount.
+     * @example
+     * // Create one YoutubeLinkedAccount
+     * const YoutubeLinkedAccount = await prisma.youtubeLinkedAccount.create({
+     *   data: {
+     *     // ... data to create a YoutubeLinkedAccount
+     *   }
+     * })
+     * 
+     */
+    create<T extends YoutubeLinkedAccountCreateArgs>(args: SelectSubset<T, YoutubeLinkedAccountCreateArgs<ExtArgs>>): Prisma__YoutubeLinkedAccountClient<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many YoutubeLinkedAccounts.
+     * @param {YoutubeLinkedAccountCreateManyArgs} args - Arguments to create many YoutubeLinkedAccounts.
+     * @example
+     * // Create many YoutubeLinkedAccounts
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends YoutubeLinkedAccountCreateManyArgs>(args?: SelectSubset<T, YoutubeLinkedAccountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many YoutubeLinkedAccounts and returns the data saved in the database.
+     * @param {YoutubeLinkedAccountCreateManyAndReturnArgs} args - Arguments to create many YoutubeLinkedAccounts.
+     * @example
+     * // Create many YoutubeLinkedAccounts
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many YoutubeLinkedAccounts and only return the `id`
+     * const youtubeLinkedAccountWithIdOnly = await prisma.youtubeLinkedAccount.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends YoutubeLinkedAccountCreateManyAndReturnArgs>(args?: SelectSubset<T, YoutubeLinkedAccountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a YoutubeLinkedAccount.
+     * @param {YoutubeLinkedAccountDeleteArgs} args - Arguments to delete one YoutubeLinkedAccount.
+     * @example
+     * // Delete one YoutubeLinkedAccount
+     * const YoutubeLinkedAccount = await prisma.youtubeLinkedAccount.delete({
+     *   where: {
+     *     // ... filter to delete one YoutubeLinkedAccount
+     *   }
+     * })
+     * 
+     */
+    delete<T extends YoutubeLinkedAccountDeleteArgs>(args: SelectSubset<T, YoutubeLinkedAccountDeleteArgs<ExtArgs>>): Prisma__YoutubeLinkedAccountClient<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one YoutubeLinkedAccount.
+     * @param {YoutubeLinkedAccountUpdateArgs} args - Arguments to update one YoutubeLinkedAccount.
+     * @example
+     * // Update one YoutubeLinkedAccount
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends YoutubeLinkedAccountUpdateArgs>(args: SelectSubset<T, YoutubeLinkedAccountUpdateArgs<ExtArgs>>): Prisma__YoutubeLinkedAccountClient<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more YoutubeLinkedAccounts.
+     * @param {YoutubeLinkedAccountDeleteManyArgs} args - Arguments to filter YoutubeLinkedAccounts to delete.
+     * @example
+     * // Delete a few YoutubeLinkedAccounts
+     * const { count } = await prisma.youtubeLinkedAccount.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends YoutubeLinkedAccountDeleteManyArgs>(args?: SelectSubset<T, YoutubeLinkedAccountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more YoutubeLinkedAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {YoutubeLinkedAccountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many YoutubeLinkedAccounts
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends YoutubeLinkedAccountUpdateManyArgs>(args: SelectSubset<T, YoutubeLinkedAccountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more YoutubeLinkedAccounts and returns the data updated in the database.
+     * @param {YoutubeLinkedAccountUpdateManyAndReturnArgs} args - Arguments to update many YoutubeLinkedAccounts.
+     * @example
+     * // Update many YoutubeLinkedAccounts
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more YoutubeLinkedAccounts and only return the `id`
+     * const youtubeLinkedAccountWithIdOnly = await prisma.youtubeLinkedAccount.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends YoutubeLinkedAccountUpdateManyAndReturnArgs>(args: SelectSubset<T, YoutubeLinkedAccountUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one YoutubeLinkedAccount.
+     * @param {YoutubeLinkedAccountUpsertArgs} args - Arguments to update or create a YoutubeLinkedAccount.
+     * @example
+     * // Update or create a YoutubeLinkedAccount
+     * const youtubeLinkedAccount = await prisma.youtubeLinkedAccount.upsert({
+     *   create: {
+     *     // ... data to create a YoutubeLinkedAccount
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the YoutubeLinkedAccount we want to update
+     *   }
+     * })
+     */
+    upsert<T extends YoutubeLinkedAccountUpsertArgs>(args: SelectSubset<T, YoutubeLinkedAccountUpsertArgs<ExtArgs>>): Prisma__YoutubeLinkedAccountClient<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of YoutubeLinkedAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {YoutubeLinkedAccountCountArgs} args - Arguments to filter YoutubeLinkedAccounts to count.
+     * @example
+     * // Count the number of YoutubeLinkedAccounts
+     * const count = await prisma.youtubeLinkedAccount.count({
+     *   where: {
+     *     // ... the filter for the YoutubeLinkedAccounts we want to count
+     *   }
+     * })
+    **/
+    count<T extends YoutubeLinkedAccountCountArgs>(
+      args?: Subset<T, YoutubeLinkedAccountCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], YoutubeLinkedAccountCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a YoutubeLinkedAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {YoutubeLinkedAccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends YoutubeLinkedAccountAggregateArgs>(args: Subset<T, YoutubeLinkedAccountAggregateArgs>): Prisma.PrismaPromise<GetYoutubeLinkedAccountAggregateType<T>>
+
+    /**
+     * Group by YoutubeLinkedAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {YoutubeLinkedAccountGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends YoutubeLinkedAccountGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: YoutubeLinkedAccountGroupByArgs['orderBy'] }
+        : { orderBy?: YoutubeLinkedAccountGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, YoutubeLinkedAccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetYoutubeLinkedAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the YoutubeLinkedAccount model
+   */
+  readonly fields: YoutubeLinkedAccountFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for YoutubeLinkedAccount.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__YoutubeLinkedAccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    workspace<T extends WorkspaceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkspaceDefaultArgs<ExtArgs>>): Prisma__WorkspaceClient<$Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the YoutubeLinkedAccount model
+   */
+  interface YoutubeLinkedAccountFieldRefs {
+    readonly id: FieldRef<"YoutubeLinkedAccount", 'String'>
+    readonly userId: FieldRef<"YoutubeLinkedAccount", 'String'>
+    readonly workspaceId: FieldRef<"YoutubeLinkedAccount", 'String'>
+    readonly accessToken: FieldRef<"YoutubeLinkedAccount", 'String'>
+    readonly refreshToken: FieldRef<"YoutubeLinkedAccount", 'String'>
+    readonly expiryDate: FieldRef<"YoutubeLinkedAccount", 'DateTime'>
+    readonly createdAt: FieldRef<"YoutubeLinkedAccount", 'DateTime'>
+    readonly updatedAt: FieldRef<"YoutubeLinkedAccount", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * YoutubeLinkedAccount findUnique
+   */
+  export type YoutubeLinkedAccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which YoutubeLinkedAccount to fetch.
+     */
+    where: YoutubeLinkedAccountWhereUniqueInput
+  }
+
+  /**
+   * YoutubeLinkedAccount findUniqueOrThrow
+   */
+  export type YoutubeLinkedAccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which YoutubeLinkedAccount to fetch.
+     */
+    where: YoutubeLinkedAccountWhereUniqueInput
+  }
+
+  /**
+   * YoutubeLinkedAccount findFirst
+   */
+  export type YoutubeLinkedAccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which YoutubeLinkedAccount to fetch.
+     */
+    where?: YoutubeLinkedAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of YoutubeLinkedAccounts to fetch.
+     */
+    orderBy?: YoutubeLinkedAccountOrderByWithRelationInput | YoutubeLinkedAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for YoutubeLinkedAccounts.
+     */
+    cursor?: YoutubeLinkedAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` YoutubeLinkedAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` YoutubeLinkedAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of YoutubeLinkedAccounts.
+     */
+    distinct?: YoutubeLinkedAccountScalarFieldEnum | YoutubeLinkedAccountScalarFieldEnum[]
+  }
+
+  /**
+   * YoutubeLinkedAccount findFirstOrThrow
+   */
+  export type YoutubeLinkedAccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which YoutubeLinkedAccount to fetch.
+     */
+    where?: YoutubeLinkedAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of YoutubeLinkedAccounts to fetch.
+     */
+    orderBy?: YoutubeLinkedAccountOrderByWithRelationInput | YoutubeLinkedAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for YoutubeLinkedAccounts.
+     */
+    cursor?: YoutubeLinkedAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` YoutubeLinkedAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` YoutubeLinkedAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of YoutubeLinkedAccounts.
+     */
+    distinct?: YoutubeLinkedAccountScalarFieldEnum | YoutubeLinkedAccountScalarFieldEnum[]
+  }
+
+  /**
+   * YoutubeLinkedAccount findMany
+   */
+  export type YoutubeLinkedAccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which YoutubeLinkedAccounts to fetch.
+     */
+    where?: YoutubeLinkedAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of YoutubeLinkedAccounts to fetch.
+     */
+    orderBy?: YoutubeLinkedAccountOrderByWithRelationInput | YoutubeLinkedAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing YoutubeLinkedAccounts.
+     */
+    cursor?: YoutubeLinkedAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` YoutubeLinkedAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` YoutubeLinkedAccounts.
+     */
+    skip?: number
+    distinct?: YoutubeLinkedAccountScalarFieldEnum | YoutubeLinkedAccountScalarFieldEnum[]
+  }
+
+  /**
+   * YoutubeLinkedAccount create
+   */
+  export type YoutubeLinkedAccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to create a YoutubeLinkedAccount.
+     */
+    data: XOR<YoutubeLinkedAccountCreateInput, YoutubeLinkedAccountUncheckedCreateInput>
+  }
+
+  /**
+   * YoutubeLinkedAccount createMany
+   */
+  export type YoutubeLinkedAccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many YoutubeLinkedAccounts.
+     */
+    data: YoutubeLinkedAccountCreateManyInput | YoutubeLinkedAccountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * YoutubeLinkedAccount createManyAndReturn
+   */
+  export type YoutubeLinkedAccountCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * The data used to create many YoutubeLinkedAccounts.
+     */
+    data: YoutubeLinkedAccountCreateManyInput | YoutubeLinkedAccountCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * YoutubeLinkedAccount update
+   */
+  export type YoutubeLinkedAccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to update a YoutubeLinkedAccount.
+     */
+    data: XOR<YoutubeLinkedAccountUpdateInput, YoutubeLinkedAccountUncheckedUpdateInput>
+    /**
+     * Choose, which YoutubeLinkedAccount to update.
+     */
+    where: YoutubeLinkedAccountWhereUniqueInput
+  }
+
+  /**
+   * YoutubeLinkedAccount updateMany
+   */
+  export type YoutubeLinkedAccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update YoutubeLinkedAccounts.
+     */
+    data: XOR<YoutubeLinkedAccountUpdateManyMutationInput, YoutubeLinkedAccountUncheckedUpdateManyInput>
+    /**
+     * Filter which YoutubeLinkedAccounts to update
+     */
+    where?: YoutubeLinkedAccountWhereInput
+    /**
+     * Limit how many YoutubeLinkedAccounts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * YoutubeLinkedAccount updateManyAndReturn
+   */
+  export type YoutubeLinkedAccountUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * The data used to update YoutubeLinkedAccounts.
+     */
+    data: XOR<YoutubeLinkedAccountUpdateManyMutationInput, YoutubeLinkedAccountUncheckedUpdateManyInput>
+    /**
+     * Filter which YoutubeLinkedAccounts to update
+     */
+    where?: YoutubeLinkedAccountWhereInput
+    /**
+     * Limit how many YoutubeLinkedAccounts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * YoutubeLinkedAccount upsert
+   */
+  export type YoutubeLinkedAccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * The filter to search for the YoutubeLinkedAccount to update in case it exists.
+     */
+    where: YoutubeLinkedAccountWhereUniqueInput
+    /**
+     * In case the YoutubeLinkedAccount found by the `where` argument doesn't exist, create a new YoutubeLinkedAccount with this data.
+     */
+    create: XOR<YoutubeLinkedAccountCreateInput, YoutubeLinkedAccountUncheckedCreateInput>
+    /**
+     * In case the YoutubeLinkedAccount was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<YoutubeLinkedAccountUpdateInput, YoutubeLinkedAccountUncheckedUpdateInput>
+  }
+
+  /**
+   * YoutubeLinkedAccount delete
+   */
+  export type YoutubeLinkedAccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+    /**
+     * Filter which YoutubeLinkedAccount to delete.
+     */
+    where: YoutubeLinkedAccountWhereUniqueInput
+  }
+
+  /**
+   * YoutubeLinkedAccount deleteMany
+   */
+  export type YoutubeLinkedAccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which YoutubeLinkedAccounts to delete
+     */
+    where?: YoutubeLinkedAccountWhereInput
+    /**
+     * Limit how many YoutubeLinkedAccounts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * YoutubeLinkedAccount without action
+   */
+  export type YoutubeLinkedAccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the YoutubeLinkedAccount
+     */
+    select?: YoutubeLinkedAccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the YoutubeLinkedAccount
+     */
+    omit?: YoutubeLinkedAccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: YoutubeLinkedAccountInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -4488,6 +5713,20 @@ export namespace Prisma {
   };
 
   export type VideoMetaDataScalarFieldEnum = (typeof VideoMetaDataScalarFieldEnum)[keyof typeof VideoMetaDataScalarFieldEnum]
+
+
+  export const YoutubeLinkedAccountScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    workspaceId: 'workspaceId',
+    accessToken: 'accessToken',
+    refreshToken: 'refreshToken',
+    expiryDate: 'expiryDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type YoutubeLinkedAccountScalarFieldEnum = (typeof YoutubeLinkedAccountScalarFieldEnum)[keyof typeof YoutubeLinkedAccountScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -4581,6 +5820,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
     workspaceMember?: WorkspaceMemberListRelationFilter
     VideoMetaData?: VideoMetaDataListRelationFilter
+    YoutubeLinkedAccount?: YoutubeLinkedAccountListRelationFilter
   }
 
   export type WorkspaceOrderByWithRelationInput = {
@@ -4591,6 +5831,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     workspaceMember?: WorkspaceMemberOrderByRelationAggregateInput
     VideoMetaData?: VideoMetaDataOrderByRelationAggregateInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountOrderByRelationAggregateInput
   }
 
   export type WorkspaceWhereUniqueInput = Prisma.AtLeast<{
@@ -4604,6 +5845,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
     workspaceMember?: WorkspaceMemberListRelationFilter
     VideoMetaData?: VideoMetaDataListRelationFilter
+    YoutubeLinkedAccount?: YoutubeLinkedAccountListRelationFilter
   }, "id">
 
   export type WorkspaceOrderByWithAggregationInput = {
@@ -4784,6 +6026,76 @@ export namespace Prisma {
     uploaderId?: StringWithAggregatesFilter<"VideoMetaData"> | string
   }
 
+  export type YoutubeLinkedAccountWhereInput = {
+    AND?: YoutubeLinkedAccountWhereInput | YoutubeLinkedAccountWhereInput[]
+    OR?: YoutubeLinkedAccountWhereInput[]
+    NOT?: YoutubeLinkedAccountWhereInput | YoutubeLinkedAccountWhereInput[]
+    id?: StringFilter<"YoutubeLinkedAccount"> | string
+    userId?: StringFilter<"YoutubeLinkedAccount"> | string
+    workspaceId?: StringFilter<"YoutubeLinkedAccount"> | string
+    accessToken?: StringFilter<"YoutubeLinkedAccount"> | string
+    refreshToken?: StringFilter<"YoutubeLinkedAccount"> | string
+    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    createdAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
+  }
+
+  export type YoutubeLinkedAccountOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    workspaceId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiryDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workspace?: WorkspaceOrderByWithRelationInput
+  }
+
+  export type YoutubeLinkedAccountWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: YoutubeLinkedAccountWhereInput | YoutubeLinkedAccountWhereInput[]
+    OR?: YoutubeLinkedAccountWhereInput[]
+    NOT?: YoutubeLinkedAccountWhereInput | YoutubeLinkedAccountWhereInput[]
+    workspaceId?: StringFilter<"YoutubeLinkedAccount"> | string
+    accessToken?: StringFilter<"YoutubeLinkedAccount"> | string
+    refreshToken?: StringFilter<"YoutubeLinkedAccount"> | string
+    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    createdAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
+  }, "id" | "userId">
+
+  export type YoutubeLinkedAccountOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    workspaceId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiryDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: YoutubeLinkedAccountCountOrderByAggregateInput
+    _max?: YoutubeLinkedAccountMaxOrderByAggregateInput
+    _min?: YoutubeLinkedAccountMinOrderByAggregateInput
+  }
+
+  export type YoutubeLinkedAccountScalarWhereWithAggregatesInput = {
+    AND?: YoutubeLinkedAccountScalarWhereWithAggregatesInput | YoutubeLinkedAccountScalarWhereWithAggregatesInput[]
+    OR?: YoutubeLinkedAccountScalarWhereWithAggregatesInput[]
+    NOT?: YoutubeLinkedAccountScalarWhereWithAggregatesInput | YoutubeLinkedAccountScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"YoutubeLinkedAccount"> | string
+    userId?: StringWithAggregatesFilter<"YoutubeLinkedAccount"> | string
+    workspaceId?: StringWithAggregatesFilter<"YoutubeLinkedAccount"> | string
+    accessToken?: StringWithAggregatesFilter<"YoutubeLinkedAccount"> | string
+    refreshToken?: StringWithAggregatesFilter<"YoutubeLinkedAccount"> | string
+    expiryDate?: DateTimeWithAggregatesFilter<"YoutubeLinkedAccount"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"YoutubeLinkedAccount"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"YoutubeLinkedAccount"> | Date | string
+  }
+
   export type WorkspaceCreateInput = {
     id?: string
     name: string
@@ -4792,6 +6104,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
     VideoMetaData?: VideoMetaDataCreateNestedManyWithoutWorkspaceInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUncheckedCreateInput = {
@@ -4802,6 +6115,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
     VideoMetaData?: VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUncheckedCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUpdateInput = {
@@ -4812,6 +6126,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
     VideoMetaData?: VideoMetaDataUpdateManyWithoutWorkspaceNestedInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceUncheckedUpdateInput = {
@@ -4822,6 +6137,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
     VideoMetaData?: VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceCreateManyInput = {
@@ -5021,6 +6337,82 @@ export namespace Prisma {
     uploaderId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type YoutubeLinkedAccountCreateInput = {
+    id?: string
+    userId: string
+    accessToken: string
+    refreshToken: string
+    expiryDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workspace: WorkspaceCreateNestedOneWithoutYoutubeLinkedAccountInput
+  }
+
+  export type YoutubeLinkedAccountUncheckedCreateInput = {
+    id?: string
+    userId: string
+    workspaceId: string
+    accessToken: string
+    refreshToken: string
+    expiryDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type YoutubeLinkedAccountUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspace?: WorkspaceUpdateOneRequiredWithoutYoutubeLinkedAccountNestedInput
+  }
+
+  export type YoutubeLinkedAccountUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    workspaceId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type YoutubeLinkedAccountCreateManyInput = {
+    id?: string
+    userId: string
+    workspaceId: string
+    accessToken: string
+    refreshToken: string
+    expiryDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type YoutubeLinkedAccountUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type YoutubeLinkedAccountUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    workspaceId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -5059,11 +6451,21 @@ export namespace Prisma {
     none?: VideoMetaDataWhereInput
   }
 
+  export type YoutubeLinkedAccountListRelationFilter = {
+    every?: YoutubeLinkedAccountWhereInput
+    some?: YoutubeLinkedAccountWhereInput
+    none?: YoutubeLinkedAccountWhereInput
+  }
+
   export type WorkspaceMemberOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type VideoMetaDataOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type YoutubeLinkedAccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -5231,6 +6633,39 @@ export namespace Prisma {
     uploaderId?: SortOrder
   }
 
+  export type YoutubeLinkedAccountCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    workspaceId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiryDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type YoutubeLinkedAccountMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    workspaceId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiryDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type YoutubeLinkedAccountMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    workspaceId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiryDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type WorkspaceMemberCreateNestedManyWithoutWorkspaceInput = {
     create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
@@ -5245,6 +6680,13 @@ export namespace Prisma {
     connect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
   }
 
+  export type YoutubeLinkedAccountCreateNestedManyWithoutWorkspaceInput = {
+    create?: XOR<YoutubeLinkedAccountCreateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput> | YoutubeLinkedAccountCreateWithoutWorkspaceInput[] | YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput | YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput[]
+    createMany?: YoutubeLinkedAccountCreateManyWorkspaceInputEnvelope
+    connect?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+  }
+
   export type WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput = {
     create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
@@ -5257,6 +6699,13 @@ export namespace Prisma {
     connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
     createMany?: VideoMetaDataCreateManyWorkspaceInputEnvelope
     connect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+  }
+
+  export type YoutubeLinkedAccountUncheckedCreateNestedManyWithoutWorkspaceInput = {
+    create?: XOR<YoutubeLinkedAccountCreateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput> | YoutubeLinkedAccountCreateWithoutWorkspaceInput[] | YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput | YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput[]
+    createMany?: YoutubeLinkedAccountCreateManyWorkspaceInputEnvelope
+    connect?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5295,6 +6744,20 @@ export namespace Prisma {
     deleteMany?: VideoMetaDataScalarWhereInput | VideoMetaDataScalarWhereInput[]
   }
 
+  export type YoutubeLinkedAccountUpdateManyWithoutWorkspaceNestedInput = {
+    create?: XOR<YoutubeLinkedAccountCreateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput> | YoutubeLinkedAccountCreateWithoutWorkspaceInput[] | YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput | YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput[]
+    upsert?: YoutubeLinkedAccountUpsertWithWhereUniqueWithoutWorkspaceInput | YoutubeLinkedAccountUpsertWithWhereUniqueWithoutWorkspaceInput[]
+    createMany?: YoutubeLinkedAccountCreateManyWorkspaceInputEnvelope
+    set?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+    disconnect?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+    delete?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+    connect?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+    update?: YoutubeLinkedAccountUpdateWithWhereUniqueWithoutWorkspaceInput | YoutubeLinkedAccountUpdateWithWhereUniqueWithoutWorkspaceInput[]
+    updateMany?: YoutubeLinkedAccountUpdateManyWithWhereWithoutWorkspaceInput | YoutubeLinkedAccountUpdateManyWithWhereWithoutWorkspaceInput[]
+    deleteMany?: YoutubeLinkedAccountScalarWhereInput | YoutubeLinkedAccountScalarWhereInput[]
+  }
+
   export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput = {
     create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
@@ -5321,6 +6784,20 @@ export namespace Prisma {
     update?: VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput | VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput[]
     updateMany?: VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput | VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput[]
     deleteMany?: VideoMetaDataScalarWhereInput | VideoMetaDataScalarWhereInput[]
+  }
+
+  export type YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+    create?: XOR<YoutubeLinkedAccountCreateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput> | YoutubeLinkedAccountCreateWithoutWorkspaceInput[] | YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput | YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput[]
+    upsert?: YoutubeLinkedAccountUpsertWithWhereUniqueWithoutWorkspaceInput | YoutubeLinkedAccountUpsertWithWhereUniqueWithoutWorkspaceInput[]
+    createMany?: YoutubeLinkedAccountCreateManyWorkspaceInputEnvelope
+    set?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+    disconnect?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+    delete?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+    connect?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
+    update?: YoutubeLinkedAccountUpdateWithWhereUniqueWithoutWorkspaceInput | YoutubeLinkedAccountUpdateWithWhereUniqueWithoutWorkspaceInput[]
+    updateMany?: YoutubeLinkedAccountUpdateManyWithWhereWithoutWorkspaceInput | YoutubeLinkedAccountUpdateManyWithWhereWithoutWorkspaceInput[]
+    deleteMany?: YoutubeLinkedAccountScalarWhereInput | YoutubeLinkedAccountScalarWhereInput[]
   }
 
   export type WorkspaceCreateNestedOneWithoutWorkspaceMemberInput = {
@@ -5362,6 +6839,20 @@ export namespace Prisma {
     upsert?: WorkspaceUpsertWithoutVideoMetaDataInput
     connect?: WorkspaceWhereUniqueInput
     update?: XOR<XOR<WorkspaceUpdateToOneWithWhereWithoutVideoMetaDataInput, WorkspaceUpdateWithoutVideoMetaDataInput>, WorkspaceUncheckedUpdateWithoutVideoMetaDataInput>
+  }
+
+  export type WorkspaceCreateNestedOneWithoutYoutubeLinkedAccountInput = {
+    create?: XOR<WorkspaceCreateWithoutYoutubeLinkedAccountInput, WorkspaceUncheckedCreateWithoutYoutubeLinkedAccountInput>
+    connectOrCreate?: WorkspaceCreateOrConnectWithoutYoutubeLinkedAccountInput
+    connect?: WorkspaceWhereUniqueInput
+  }
+
+  export type WorkspaceUpdateOneRequiredWithoutYoutubeLinkedAccountNestedInput = {
+    create?: XOR<WorkspaceCreateWithoutYoutubeLinkedAccountInput, WorkspaceUncheckedCreateWithoutYoutubeLinkedAccountInput>
+    connectOrCreate?: WorkspaceCreateOrConnectWithoutYoutubeLinkedAccountInput
+    upsert?: WorkspaceUpsertWithoutYoutubeLinkedAccountInput
+    connect?: WorkspaceWhereUniqueInput
+    update?: XOR<XOR<WorkspaceUpdateToOneWithWhereWithoutYoutubeLinkedAccountInput, WorkspaceUpdateWithoutYoutubeLinkedAccountInput>, WorkspaceUncheckedUpdateWithoutYoutubeLinkedAccountInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -5514,6 +7005,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type YoutubeLinkedAccountCreateWithoutWorkspaceInput = {
+    id?: string
+    userId: string
+    accessToken: string
+    refreshToken: string
+    expiryDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput = {
+    id?: string
+    userId: string
+    accessToken: string
+    refreshToken: string
+    expiryDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput = {
+    where: YoutubeLinkedAccountWhereUniqueInput
+    create: XOR<YoutubeLinkedAccountCreateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput>
+  }
+
+  export type YoutubeLinkedAccountCreateManyWorkspaceInputEnvelope = {
+    data: YoutubeLinkedAccountCreateManyWorkspaceInput | YoutubeLinkedAccountCreateManyWorkspaceInput[]
+    skipDuplicates?: boolean
+  }
+
   export type WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput = {
     where: WorkspaceMemberWhereUniqueInput
     update: XOR<WorkspaceMemberUpdateWithoutWorkspaceInput, WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
@@ -5577,6 +7098,36 @@ export namespace Prisma {
     uploaderId?: StringFilter<"VideoMetaData"> | string
   }
 
+  export type YoutubeLinkedAccountUpsertWithWhereUniqueWithoutWorkspaceInput = {
+    where: YoutubeLinkedAccountWhereUniqueInput
+    update: XOR<YoutubeLinkedAccountUpdateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedUpdateWithoutWorkspaceInput>
+    create: XOR<YoutubeLinkedAccountCreateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput>
+  }
+
+  export type YoutubeLinkedAccountUpdateWithWhereUniqueWithoutWorkspaceInput = {
+    where: YoutubeLinkedAccountWhereUniqueInput
+    data: XOR<YoutubeLinkedAccountUpdateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedUpdateWithoutWorkspaceInput>
+  }
+
+  export type YoutubeLinkedAccountUpdateManyWithWhereWithoutWorkspaceInput = {
+    where: YoutubeLinkedAccountScalarWhereInput
+    data: XOR<YoutubeLinkedAccountUpdateManyMutationInput, YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceInput>
+  }
+
+  export type YoutubeLinkedAccountScalarWhereInput = {
+    AND?: YoutubeLinkedAccountScalarWhereInput | YoutubeLinkedAccountScalarWhereInput[]
+    OR?: YoutubeLinkedAccountScalarWhereInput[]
+    NOT?: YoutubeLinkedAccountScalarWhereInput | YoutubeLinkedAccountScalarWhereInput[]
+    id?: StringFilter<"YoutubeLinkedAccount"> | string
+    userId?: StringFilter<"YoutubeLinkedAccount"> | string
+    workspaceId?: StringFilter<"YoutubeLinkedAccount"> | string
+    accessToken?: StringFilter<"YoutubeLinkedAccount"> | string
+    refreshToken?: StringFilter<"YoutubeLinkedAccount"> | string
+    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    createdAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+  }
+
   export type WorkspaceCreateWithoutWorkspaceMemberInput = {
     id?: string
     name: string
@@ -5584,6 +7135,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     VideoMetaData?: VideoMetaDataCreateNestedManyWithoutWorkspaceInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUncheckedCreateWithoutWorkspaceMemberInput = {
@@ -5593,6 +7145,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     VideoMetaData?: VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUncheckedCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceCreateOrConnectWithoutWorkspaceMemberInput = {
@@ -5618,6 +7171,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     VideoMetaData?: VideoMetaDataUpdateManyWithoutWorkspaceNestedInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceUncheckedUpdateWithoutWorkspaceMemberInput = {
@@ -5627,6 +7181,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     VideoMetaData?: VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceCreateWithoutVideoMetaDataInput = {
@@ -5636,6 +7191,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUncheckedCreateWithoutVideoMetaDataInput = {
@@ -5645,6 +7201,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUncheckedCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceCreateOrConnectWithoutVideoMetaDataInput = {
@@ -5670,6 +7227,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceUncheckedUpdateWithoutVideoMetaDataInput = {
@@ -5679,6 +7237,63 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+    YoutubeLinkedAccount?: YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
+  }
+
+  export type WorkspaceCreateWithoutYoutubeLinkedAccountInput = {
+    id?: string
+    name: string
+    owner_id: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+    VideoMetaData?: VideoMetaDataCreateNestedManyWithoutWorkspaceInput
+  }
+
+  export type WorkspaceUncheckedCreateWithoutYoutubeLinkedAccountInput = {
+    id?: string
+    name: string
+    owner_id: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+    VideoMetaData?: VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput
+  }
+
+  export type WorkspaceCreateOrConnectWithoutYoutubeLinkedAccountInput = {
+    where: WorkspaceWhereUniqueInput
+    create: XOR<WorkspaceCreateWithoutYoutubeLinkedAccountInput, WorkspaceUncheckedCreateWithoutYoutubeLinkedAccountInput>
+  }
+
+  export type WorkspaceUpsertWithoutYoutubeLinkedAccountInput = {
+    update: XOR<WorkspaceUpdateWithoutYoutubeLinkedAccountInput, WorkspaceUncheckedUpdateWithoutYoutubeLinkedAccountInput>
+    create: XOR<WorkspaceCreateWithoutYoutubeLinkedAccountInput, WorkspaceUncheckedCreateWithoutYoutubeLinkedAccountInput>
+    where?: WorkspaceWhereInput
+  }
+
+  export type WorkspaceUpdateToOneWithWhereWithoutYoutubeLinkedAccountInput = {
+    where?: WorkspaceWhereInput
+    data: XOR<WorkspaceUpdateWithoutYoutubeLinkedAccountInput, WorkspaceUncheckedUpdateWithoutYoutubeLinkedAccountInput>
+  }
+
+  export type WorkspaceUpdateWithoutYoutubeLinkedAccountInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    owner_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+    VideoMetaData?: VideoMetaDataUpdateManyWithoutWorkspaceNestedInput
+  }
+
+  export type WorkspaceUncheckedUpdateWithoutYoutubeLinkedAccountInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    owner_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+    VideoMetaData?: VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceMemberCreateManyWorkspaceInput = {
@@ -5702,6 +7317,16 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     uploaderId: string
+  }
+
+  export type YoutubeLinkedAccountCreateManyWorkspaceInput = {
+    id?: string
+    userId: string
+    accessToken: string
+    refreshToken: string
+    expiryDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WorkspaceMemberUpdateWithoutWorkspaceInput = {
@@ -5771,6 +7396,36 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     uploaderId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type YoutubeLinkedAccountUpdateWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type YoutubeLinkedAccountUncheckedUpdateWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

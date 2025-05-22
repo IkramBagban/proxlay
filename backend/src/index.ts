@@ -30,20 +30,16 @@ const s3Client = new S3Client({
     secretAccessKey: process.env.AWS_SECRET_KEY!,
   },
 });
-const getOAuthClient = () => {
-  return new google.auth.OAuth2(
+
+export const createOAuth2Client = (tokens?: any) => {
+  const oauthClient = new google.auth.OAuth2(
     process.env.CLIENT_ID,
     process.env.CLIENT_SECRET,
     process.env.REDIRECT_URI
   );
+  if (tokens) oauthClient.setCredentials(tokens);
+  return oauthClient;
 };
-
-const oauth2Client = new google.auth.OAuth2(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  process.env.REDIRECT_URI
-);
-// const oauth2Client = getOAuthClient();
 
 const scopes = ["https://www.googleapis.com/auth/youtube.upload"];
 
@@ -67,45 +63,45 @@ app.post("/get-presigned-url", requireAuth(), async (req: any, res) => {
     ContentType: fileType,
   };
 
-    const command = new PutObjectCommand(params);
-    const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+  const command = new PutObjectCommand(params);
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
   res.status(200).json({ url, filePath });
 });
 
-const getPresignedUrl = async (params: any) => {  
- const command = new PutObjectCommand(params);
+const getPresignedUrl = async (params: any, method: "PUT" | "GET") => {
+  const command =
+    method === "PUT"
+      ? new PutObjectCommand(params)
+      : new GetObjectCommand(params);
   const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
   return url;
 };
 
-app.post("/api/v1/youtube/upload-video", requireAuth(), async (req: any, res: any) => {
-  const { fileName, fileType, workspaceId, title, description, tags, categoryId, privacyStatus } = req.body;
-  const bucketName = process.env.AWS_BUCKET_NAME!;
-  const filePath = `${workspaceId}/youtube/${fileName}`;
-  const params = {
-    Bucket: bucketName,
-    Key: filePath,
-    ContentType: fileType,
-  };
-  const presignedUrl = await getPresignedUrl(params);
-  const { userId } = getAuth(req);
+app.post(
+  "/api/v1/youtube/upload-video",
+  requireAuth(),
+  async (req: any, res: any) => {
+    const {
+      fileName,
+      fileType,
+      workspaceId,
+      title,
+      description,
+      tags,
+      categoryId,
+      privacyStatus,
+    } = req.body;
+    const bucketName = process.env.AWS_BUCKET_NAME!;
+    const filePath = `${workspaceId}/youtube/${fileName}`;
+    const params = {
+      Bucket: bucketName,
+      Key: filePath,
+      ContentType: fileType,
+    };
+    const presignedUrl = await getPresignedUrl(params, "PUT");
+    const { userId } = getAuth(req);
 
-  const payload = {
-    fileName: fileName,
-      key: filePath,
-      title: title,
-      description: description,
-      tags: tags,
-      categoryId: categoryId,
-      privacyStatus: privacyStatus || "private",
-      workspaceId: workspaceId,
-      uploaderId: userId!
-  }
-
-  console.log("payload", payload);
-
-  const metaData = await prismaClient.videoMetaData.create({
-    data: {
+    const payload = {
       fileName: fileName,
       key: filePath,
       title: title,
@@ -114,33 +110,50 @@ app.post("/api/v1/youtube/upload-video", requireAuth(), async (req: any, res: an
       categoryId: categoryId,
       privacyStatus: privacyStatus || "private",
       workspaceId: workspaceId,
-      uploaderId: userId!
-    },
+      uploaderId: userId!,
+    };
 
-    })
-    
+    console.log("payload", payload);
+
+    const metaData = await prismaClient.videoMetaData.create({
+      data: {
+        fileName: fileName,
+        key: filePath,
+        title: title,
+        description: description,
+        tags: tags,
+        categoryId: categoryId,
+        privacyStatus: privacyStatus || "private",
+        workspaceId: workspaceId,
+        uploaderId: userId!,
+      },
+    });
 
     res.status(200).json({ url: presignedUrl, key: filePath, metaData });
-  });
-
-app.get("/api/v1/youtube/videos/:workspaceId", requireAuth(), async (req: any, res: any) => {
-  const { workspaceId } = req.params;
-  const videos = await prismaClient.videoMetaData.findMany({
-    where: {
-      workspaceId: workspaceId,
-    },
-  });
-
-  if (!videos) {
-    return res.status(404).json({ message: "No videos found" });
   }
-  
-  const uploaderIds = videos.map((video) => video.uploaderId);
-  const uploaders = await clerkClient.users.getUserList({
-    userId: uploaderIds,
-  });
-  console.log("uploaders", uploaders);
- const userMap = new Map(
+);
+
+app.get(
+  "/api/v1/youtube/videos/:workspaceId",
+  requireAuth(),
+  async (req: any, res: any) => {
+    const { workspaceId } = req.params;
+    const videos = await prismaClient.videoMetaData.findMany({
+      where: {
+        workspaceId: workspaceId,
+      },
+    });
+
+    if (!videos) {
+      return res.status(404).json({ message: "No videos found" });
+    }
+
+    const uploaderIds = videos.map((video) => video.uploaderId);
+    const uploaders = await clerkClient.users.getUserList({
+      userId: uploaderIds,
+    });
+    // console.log("uploaders", uploaders);
+    const userMap = new Map(
       // @ts-ignore
       (uploaders?.data || [])?.map((user) => [
         user.id,
@@ -158,74 +171,162 @@ app.get("/api/v1/youtube/videos/:workspaceId", requireAuth(), async (req: any, r
       ...video,
       uploader: userMap.get(video.uploaderId),
     }));
-  console.log("enrichedVideos", enrichedVideos);
-  console.log("videos", videos);
-  res.status(200).json(enrichedVideos);
-});
+    // console.log("enrichedVideos", enrichedVideos);
+    // console.log("videos", videos);
+    res.status(200).json(enrichedVideos);
+  }
+);
 
-app.get("/auth", (req, res) => {
-  const authUrl = oauth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: scopes,
-    state: JSON.stringify({ user: 123 }),
-  });
-  res.status(200).json({ redirect: authUrl });
-  // res.redirect(authUrl);
-});
+app.get(
+  "/api/v1/youtube/authorize/:workspaceId",
+  requireAuth(),
+  async (req, res) => {
+    const { userId } = await getAuth(req);
+    const { workspaceId } = req.params;
+    const oauth2Client = createOAuth2Client();
+    const authUrl = oauth2Client.generateAuthUrl({
+      access_type: "offline",
+      prompt: "consent", // force consent screen
+
+      scope: scopes,
+      state: JSON.stringify({ userId: userId, workspaceId: workspaceId }),
+    });
+    res.status(200).json({ redirectUrl: authUrl });
+  }
+);
 
 app.get("/oauth2callback", async (req: any, res: any) => {
   console.log("req", req.query);
   const code = req.query.code;
+  const state = JSON.parse(req?.query?.state || "{}");
+  const { userId, workspaceId } = state;
+
   console.log("code", code);
   if (!code) {
     return res.status(400).send("Authorization code not found.");
   }
-
+  const oauth2Client = createOAuth2Client();
   try {
-    const { tokens } = await oauth2Client.getToken(code);
-    // console.log("Tokens", tokens);
+    const oauthClient = await oauth2Client.getToken({ code });
+
+    const { tokens } = oauthClient;
     oauth2Client.setCredentials(tokens);
-    res.send("Authentication successful! You can now upload videos.");
+    console.log("oauthClient", oauthClient);
+    console.log("tokens", tokens);
+    const { access_token, refresh_token, expiry_date }: any = tokens;
+
+    const response = await prismaClient.youtubeLinkedAccount.create({
+      data: {
+        accessToken: access_token,
+        refreshToken: refresh_token,
+        expiryDate: new Date(expiry_date),
+        userId: userId,
+        workspaceId: workspaceId,
+      },
+    });
+    console.log("response", response);
+    // res.send("Authentication successful! You can now upload videos.");
+    res.redirect(`${process.env.FRONTEND_URL}/workspace/${workspaceId}`);
   } catch (error) {
     console.error("Error retrieving access token", error);
     res.status(500).send("Authentication failed.");
   }
 });
 
-app.post("/upload", async (req: any, res: any) => {
-  const youtube = google.youtube({
-    version: "v3",
-    auth: oauth2Client,
-  });
+app.get(
+  "/api/v1/youtube/check-auth/:workspaceId",
+  requireAuth(),
+  async (req, res) => {
+    const { workspaceId } = req.params;
+    console.log("workspaceId===> ", workspaceId);
 
-  const { title, description, tags, categoryId, privacyStatus } = req.body;
-
-  const filePath = path.join(__dirname, "test-video.mkv");
-  try {
-    const response = await youtube.videos.insert({
-      part: ["snippet", "status"],
-      requestBody: {
-        snippet: {
-          title,
-          description,
-          tags,
-          categoryId,
-        },
-        status: {
-          privacyStatus,
-        },
-      },
-      media: {
-        body: fs.createReadStream(filePath),
-      },
+    const { userId } = getAuth(req);
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized", isAuthorized: false });
+      return;
+    }
+    const linkedAccount = await prismaClient.youtubeLinkedAccount.findFirst({
+      where: { workspaceId, userId },
     });
-    // console.log("Upload response:", response.data);
-    res.send("Video uploaded successfully! 🎥");
-  } catch (error) {
-    console.error("Error uploading video:", error);
-    res.status(500).send("Failed to upload video");
+
+    if (!linkedAccount) {
+      res.status(404).json({
+        message: "youtube account is not authorized",
+        isAuthorized: false,
+      });
+      return;
+    }
+
+    res.status(200).json({ isAuthorized: true });
   }
-});
+);
+
+app.post(
+  "/api/v1/youtube/upload-to-youtube/:workspaceId",
+  requireAuth(),
+  async (req: any, res: any) => {
+    const {
+      title,
+      description,
+      tags,
+      categoryId,
+      privacyStatus,
+
+      key,
+    } = req.body;
+    const workspaceId = req.params.workspaceId;
+    const linkedAccount = await prismaClient.youtubeLinkedAccount.findFirst({
+      where: { workspaceId },
+    });
+
+    if (!linkedAccount) return res.status(401).send("No linked account.");
+
+    const oauth2Client = createOAuth2Client({
+      access_token: linkedAccount.accessToken,
+      refresh_token: linkedAccount.refreshToken,
+      expiry_date: linkedAccount.expiryDate.getTime(),
+    });
+
+    const youtube = google.youtube({
+      version: "v3",
+      auth: oauth2Client,
+    });
+
+    const command = new GetObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME!,
+      Key: key,
+    });
+
+    const s3Object = await s3Client.send(command);
+    // console.log("s3Object", s3Object);
+    const Body = s3Object.Body!;
+    console.log("Body", Body);
+    try {
+      const response = await youtube.videos.insert({
+        part: ["snippet", "status"],
+        requestBody: {
+          snippet: {
+            title,
+            description,
+            tags,
+           categoryId: "24",
+          },
+          status: {
+            privacyStatus,
+          },
+        },
+        media: {
+          body: Body as ReadableStream,
+        },
+      });
+      console.log("Upload response:", response.data);
+      res.send("Video uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      res.status(500).send("Failed to upload video");
+    }
+  }
+);
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
