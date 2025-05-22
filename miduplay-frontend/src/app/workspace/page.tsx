@@ -9,34 +9,12 @@ import axiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
 import { useFetch } from "@/hooks/useFetch";
 
-interface Workspace {
-  id: string;
-  name: string;
-  email: string;
-  owner_id: string;
-}
-
-const initialWorkspaces: Workspace[] = [
-  {
-    id: "1",
-    name: "Ikram’s YouTube",
-    email: "ikram@gmail.com",
-    owner_id: "1",
-  },
-  {
-    id: "2",
-    name: "Amuzic Workspace",
-    email: "amuzic@gmail.com",
-    owner_id: "2",
-  },
-];
-
 const WorkspacePage = () => {
   const [meta, setMeta] = React.useState<{ name: string }>({ name: "" });
   const [open, setOpen] = React.useState(false);
 
   const { getToken } = useAuth();
-  const {data: workspaces} = useFetch("/workspace", true);
+  const { data: workspaces } = useFetch("/workspace", true);
 
   const metaChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMeta({ ...meta, [e.target.name]: e.target.value });
@@ -45,11 +23,8 @@ const WorkspacePage = () => {
   const workspaceCreateHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newWorkspace: Workspace = {
-      id: (workspaces.length + 1).toString(),
+    const newWorkspace = {
       name: meta.name.trim(),
-      email: "", // Add email if needed
-      owner_id: Math.random().toString(36).substring(2, 15),
     };
 
     if (!newWorkspace.name) {
@@ -60,11 +35,15 @@ const WorkspacePage = () => {
     try {
       const token = await getToken();
 
-      const response = await axiosClient.post("/workspace/create", newWorkspace, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosClient.post(
+        "/workspace/create",
+        newWorkspace,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast.success("Workspace created successfully");
       // setWorkspaces((prev) => [...prev, response.data]);
