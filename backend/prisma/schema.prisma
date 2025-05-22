@@ -22,24 +22,49 @@ model Workspace {
   updatedAt DateTime @updatedAt
 
   workspaceMember WorkspaceMember[]
+  VideoMetaData   VideoMetaData[]
 }
 
 enum Status {
   INVITED
   ACTIVE
 }
+
 model WorkspaceMember {
   id          String   @id @default(cuid())
-  workspaceId String 
+  workspaceId String
   userId      String // referenced to clerk user id
   role        String
   status      Status
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
   @@unique([workspaceId, userId])
   @@index([workspaceId])
   @@index([userId])
-  
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model VideoMetaData {
+  id            String   @id @default(cuid())
+  key           String // this would be the key in S3
+  fileName      String
+
+  title         String
+  tags          String[]
+  privacyStatus String
+  categoryId    String
+  description   String
+  // thumbnail     String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  workspaceId   String
+  uploaderId    String
+  workspace     Workspace @relation(fields: [workspaceId], references: [id])
+
+
+  @@index([workspaceId])
+  @@index([uploaderId])
 }

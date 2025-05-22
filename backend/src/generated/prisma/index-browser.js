@@ -138,6 +138,21 @@ exports.Prisma.WorkspaceMemberScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.VideoMetaDataScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  fileName: 'fileName',
+  title: 'title',
+  tags: 'tags',
+  privacyStatus: 'privacyStatus',
+  categoryId: 'categoryId',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  workspaceId: 'workspaceId',
+  uploaderId: 'uploaderId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -154,7 +169,8 @@ exports.Status = exports.$Enums.Status = {
 
 exports.Prisma.ModelName = {
   Workspace: 'Workspace',
-  WorkspaceMember: 'WorkspaceMember'
+  WorkspaceMember: 'WorkspaceMember',
+  VideoMetaData: 'VideoMetaData'
 };
 
 /**

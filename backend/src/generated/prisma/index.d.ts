@@ -23,6 +23,11 @@ export type Workspace = $Result.DefaultSelection<Prisma.$WorkspacePayload>
  * 
  */
 export type WorkspaceMember = $Result.DefaultSelection<Prisma.$WorkspaceMemberPayload>
+/**
+ * Model VideoMetaData
+ * 
+ */
+export type VideoMetaData = $Result.DefaultSelection<Prisma.$VideoMetaDataPayload>
 
 /**
  * Enums
@@ -185,6 +190,16 @@ export class PrismaClient<
     * ```
     */
   get workspaceMember(): Prisma.WorkspaceMemberDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.videoMetaData`: Exposes CRUD operations for the **VideoMetaData** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VideoMetaData
+    * const videoMetaData = await prisma.videoMetaData.findMany()
+    * ```
+    */
+  get videoMetaData(): Prisma.VideoMetaDataDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -626,7 +641,8 @@ export namespace Prisma {
 
   export const ModelName: {
     Workspace: 'Workspace',
-    WorkspaceMember: 'WorkspaceMember'
+    WorkspaceMember: 'WorkspaceMember',
+    VideoMetaData: 'VideoMetaData'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -645,7 +661,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "workspace" | "workspaceMember"
+      modelProps: "workspace" | "workspaceMember" | "videoMetaData"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -797,6 +813,80 @@ export namespace Prisma {
           }
         }
       }
+      VideoMetaData: {
+        payload: Prisma.$VideoMetaDataPayload<ExtArgs>
+        fields: Prisma.VideoMetaDataFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VideoMetaDataFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VideoMetaDataFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>
+          }
+          findFirst: {
+            args: Prisma.VideoMetaDataFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VideoMetaDataFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>
+          }
+          findMany: {
+            args: Prisma.VideoMetaDataFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>[]
+          }
+          create: {
+            args: Prisma.VideoMetaDataCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>
+          }
+          createMany: {
+            args: Prisma.VideoMetaDataCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VideoMetaDataCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>[]
+          }
+          delete: {
+            args: Prisma.VideoMetaDataDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>
+          }
+          update: {
+            args: Prisma.VideoMetaDataUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>
+          }
+          deleteMany: {
+            args: Prisma.VideoMetaDataDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VideoMetaDataUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VideoMetaDataUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>[]
+          }
+          upsert: {
+            args: Prisma.VideoMetaDataUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoMetaDataPayload>
+          }
+          aggregate: {
+            args: Prisma.VideoMetaDataAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVideoMetaData>
+          }
+          groupBy: {
+            args: Prisma.VideoMetaDataGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VideoMetaDataGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VideoMetaDataCountArgs<ExtArgs>
+            result: $Utils.Optional<VideoMetaDataCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -883,6 +973,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     workspace?: WorkspaceOmit
     workspaceMember?: WorkspaceMemberOmit
+    videoMetaData?: VideoMetaDataOmit
   }
 
   /* Types for Logging */
@@ -978,10 +1069,12 @@ export namespace Prisma {
 
   export type WorkspaceCountOutputType = {
     workspaceMember: number
+    VideoMetaData: number
   }
 
   export type WorkspaceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workspaceMember?: boolean | WorkspaceCountOutputTypeCountWorkspaceMemberArgs
+    VideoMetaData?: boolean | WorkspaceCountOutputTypeCountVideoMetaDataArgs
   }
 
   // Custom InputTypes
@@ -1000,6 +1093,13 @@ export namespace Prisma {
    */
   export type WorkspaceCountOutputTypeCountWorkspaceMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WorkspaceMemberWhereInput
+  }
+
+  /**
+   * WorkspaceCountOutputType without action
+   */
+  export type WorkspaceCountOutputTypeCountVideoMetaDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VideoMetaDataWhereInput
   }
 
 
@@ -1172,6 +1272,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
+    VideoMetaData?: boolean | Workspace$VideoMetaDataArgs<ExtArgs>
     _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workspace"]>
 
@@ -1202,6 +1303,7 @@ export namespace Prisma {
   export type WorkspaceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "owner_id" | "createdAt" | "updatedAt", ExtArgs["result"]["workspace"]>
   export type WorkspaceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
+    VideoMetaData?: boolean | Workspace$VideoMetaDataArgs<ExtArgs>
     _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WorkspaceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1211,6 +1313,7 @@ export namespace Prisma {
     name: "Workspace"
     objects: {
       workspaceMember: Prisma.$WorkspaceMemberPayload<ExtArgs>[]
+      VideoMetaData: Prisma.$VideoMetaDataPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1613,6 +1716,7 @@ export namespace Prisma {
   export interface Prisma__WorkspaceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     workspaceMember<T extends Workspace$workspaceMemberArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$workspaceMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    VideoMetaData<T extends Workspace$VideoMetaDataArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$VideoMetaDataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2056,6 +2160,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WorkspaceMemberScalarFieldEnum | WorkspaceMemberScalarFieldEnum[]
+  }
+
+  /**
+   * Workspace.VideoMetaData
+   */
+  export type Workspace$VideoMetaDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    where?: VideoMetaDataWhereInput
+    orderBy?: VideoMetaDataOrderByWithRelationInput | VideoMetaDataOrderByWithRelationInput[]
+    cursor?: VideoMetaDataWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VideoMetaDataScalarFieldEnum | VideoMetaDataScalarFieldEnum[]
   }
 
   /**
@@ -3162,6 +3290,1151 @@ export namespace Prisma {
 
 
   /**
+   * Model VideoMetaData
+   */
+
+  export type AggregateVideoMetaData = {
+    _count: VideoMetaDataCountAggregateOutputType | null
+    _min: VideoMetaDataMinAggregateOutputType | null
+    _max: VideoMetaDataMaxAggregateOutputType | null
+  }
+
+  export type VideoMetaDataMinAggregateOutputType = {
+    id: string | null
+    key: string | null
+    fileName: string | null
+    title: string | null
+    privacyStatus: string | null
+    categoryId: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    workspaceId: string | null
+    uploaderId: string | null
+  }
+
+  export type VideoMetaDataMaxAggregateOutputType = {
+    id: string | null
+    key: string | null
+    fileName: string | null
+    title: string | null
+    privacyStatus: string | null
+    categoryId: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    workspaceId: string | null
+    uploaderId: string | null
+  }
+
+  export type VideoMetaDataCountAggregateOutputType = {
+    id: number
+    key: number
+    fileName: number
+    title: number
+    tags: number
+    privacyStatus: number
+    categoryId: number
+    description: number
+    createdAt: number
+    updatedAt: number
+    workspaceId: number
+    uploaderId: number
+    _all: number
+  }
+
+
+  export type VideoMetaDataMinAggregateInputType = {
+    id?: true
+    key?: true
+    fileName?: true
+    title?: true
+    privacyStatus?: true
+    categoryId?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    workspaceId?: true
+    uploaderId?: true
+  }
+
+  export type VideoMetaDataMaxAggregateInputType = {
+    id?: true
+    key?: true
+    fileName?: true
+    title?: true
+    privacyStatus?: true
+    categoryId?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    workspaceId?: true
+    uploaderId?: true
+  }
+
+  export type VideoMetaDataCountAggregateInputType = {
+    id?: true
+    key?: true
+    fileName?: true
+    title?: true
+    tags?: true
+    privacyStatus?: true
+    categoryId?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    workspaceId?: true
+    uploaderId?: true
+    _all?: true
+  }
+
+  export type VideoMetaDataAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VideoMetaData to aggregate.
+     */
+    where?: VideoMetaDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VideoMetaData to fetch.
+     */
+    orderBy?: VideoMetaDataOrderByWithRelationInput | VideoMetaDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VideoMetaDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VideoMetaData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VideoMetaData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VideoMetaData
+    **/
+    _count?: true | VideoMetaDataCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VideoMetaDataMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VideoMetaDataMaxAggregateInputType
+  }
+
+  export type GetVideoMetaDataAggregateType<T extends VideoMetaDataAggregateArgs> = {
+        [P in keyof T & keyof AggregateVideoMetaData]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVideoMetaData[P]>
+      : GetScalarType<T[P], AggregateVideoMetaData[P]>
+  }
+
+
+
+
+  export type VideoMetaDataGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VideoMetaDataWhereInput
+    orderBy?: VideoMetaDataOrderByWithAggregationInput | VideoMetaDataOrderByWithAggregationInput[]
+    by: VideoMetaDataScalarFieldEnum[] | VideoMetaDataScalarFieldEnum
+    having?: VideoMetaDataScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VideoMetaDataCountAggregateInputType | true
+    _min?: VideoMetaDataMinAggregateInputType
+    _max?: VideoMetaDataMaxAggregateInputType
+  }
+
+  export type VideoMetaDataGroupByOutputType = {
+    id: string
+    key: string
+    fileName: string
+    title: string
+    tags: string[]
+    privacyStatus: string
+    categoryId: string
+    description: string
+    createdAt: Date
+    updatedAt: Date
+    workspaceId: string
+    uploaderId: string
+    _count: VideoMetaDataCountAggregateOutputType | null
+    _min: VideoMetaDataMinAggregateOutputType | null
+    _max: VideoMetaDataMaxAggregateOutputType | null
+  }
+
+  type GetVideoMetaDataGroupByPayload<T extends VideoMetaDataGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VideoMetaDataGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VideoMetaDataGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VideoMetaDataGroupByOutputType[P]>
+            : GetScalarType<T[P], VideoMetaDataGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VideoMetaDataSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    fileName?: boolean
+    title?: boolean
+    tags?: boolean
+    privacyStatus?: boolean
+    categoryId?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspaceId?: boolean
+    uploaderId?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["videoMetaData"]>
+
+  export type VideoMetaDataSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    fileName?: boolean
+    title?: boolean
+    tags?: boolean
+    privacyStatus?: boolean
+    categoryId?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspaceId?: boolean
+    uploaderId?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["videoMetaData"]>
+
+  export type VideoMetaDataSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    fileName?: boolean
+    title?: boolean
+    tags?: boolean
+    privacyStatus?: boolean
+    categoryId?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspaceId?: boolean
+    uploaderId?: boolean
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["videoMetaData"]>
+
+  export type VideoMetaDataSelectScalar = {
+    id?: boolean
+    key?: boolean
+    fileName?: boolean
+    title?: boolean
+    tags?: boolean
+    privacyStatus?: boolean
+    categoryId?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    workspaceId?: boolean
+    uploaderId?: boolean
+  }
+
+  export type VideoMetaDataOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "fileName" | "title" | "tags" | "privacyStatus" | "categoryId" | "description" | "createdAt" | "updatedAt" | "workspaceId" | "uploaderId", ExtArgs["result"]["videoMetaData"]>
+  export type VideoMetaDataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+  export type VideoMetaDataIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+  export type VideoMetaDataIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
+  }
+
+  export type $VideoMetaDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "VideoMetaData"
+    objects: {
+      workspace: Prisma.$WorkspacePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      key: string
+      fileName: string
+      title: string
+      tags: string[]
+      privacyStatus: string
+      categoryId: string
+      description: string
+      createdAt: Date
+      updatedAt: Date
+      workspaceId: string
+      uploaderId: string
+    }, ExtArgs["result"]["videoMetaData"]>
+    composites: {}
+  }
+
+  type VideoMetaDataGetPayload<S extends boolean | null | undefined | VideoMetaDataDefaultArgs> = $Result.GetResult<Prisma.$VideoMetaDataPayload, S>
+
+  type VideoMetaDataCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VideoMetaDataFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VideoMetaDataCountAggregateInputType | true
+    }
+
+  export interface VideoMetaDataDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['VideoMetaData'], meta: { name: 'VideoMetaData' } }
+    /**
+     * Find zero or one VideoMetaData that matches the filter.
+     * @param {VideoMetaDataFindUniqueArgs} args - Arguments to find a VideoMetaData
+     * @example
+     * // Get one VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VideoMetaDataFindUniqueArgs>(args: SelectSubset<T, VideoMetaDataFindUniqueArgs<ExtArgs>>): Prisma__VideoMetaDataClient<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one VideoMetaData that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VideoMetaDataFindUniqueOrThrowArgs} args - Arguments to find a VideoMetaData
+     * @example
+     * // Get one VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VideoMetaDataFindUniqueOrThrowArgs>(args: SelectSubset<T, VideoMetaDataFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VideoMetaDataClient<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VideoMetaData that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoMetaDataFindFirstArgs} args - Arguments to find a VideoMetaData
+     * @example
+     * // Get one VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VideoMetaDataFindFirstArgs>(args?: SelectSubset<T, VideoMetaDataFindFirstArgs<ExtArgs>>): Prisma__VideoMetaDataClient<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VideoMetaData that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoMetaDataFindFirstOrThrowArgs} args - Arguments to find a VideoMetaData
+     * @example
+     * // Get one VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VideoMetaDataFindFirstOrThrowArgs>(args?: SelectSubset<T, VideoMetaDataFindFirstOrThrowArgs<ExtArgs>>): Prisma__VideoMetaDataClient<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more VideoMetaData that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoMetaDataFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.findMany()
+     * 
+     * // Get first 10 VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const videoMetaDataWithIdOnly = await prisma.videoMetaData.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VideoMetaDataFindManyArgs>(args?: SelectSubset<T, VideoMetaDataFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a VideoMetaData.
+     * @param {VideoMetaDataCreateArgs} args - Arguments to create a VideoMetaData.
+     * @example
+     * // Create one VideoMetaData
+     * const VideoMetaData = await prisma.videoMetaData.create({
+     *   data: {
+     *     // ... data to create a VideoMetaData
+     *   }
+     * })
+     * 
+     */
+    create<T extends VideoMetaDataCreateArgs>(args: SelectSubset<T, VideoMetaDataCreateArgs<ExtArgs>>): Prisma__VideoMetaDataClient<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many VideoMetaData.
+     * @param {VideoMetaDataCreateManyArgs} args - Arguments to create many VideoMetaData.
+     * @example
+     * // Create many VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VideoMetaDataCreateManyArgs>(args?: SelectSubset<T, VideoMetaDataCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many VideoMetaData and returns the data saved in the database.
+     * @param {VideoMetaDataCreateManyAndReturnArgs} args - Arguments to create many VideoMetaData.
+     * @example
+     * // Create many VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many VideoMetaData and only return the `id`
+     * const videoMetaDataWithIdOnly = await prisma.videoMetaData.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VideoMetaDataCreateManyAndReturnArgs>(args?: SelectSubset<T, VideoMetaDataCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a VideoMetaData.
+     * @param {VideoMetaDataDeleteArgs} args - Arguments to delete one VideoMetaData.
+     * @example
+     * // Delete one VideoMetaData
+     * const VideoMetaData = await prisma.videoMetaData.delete({
+     *   where: {
+     *     // ... filter to delete one VideoMetaData
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VideoMetaDataDeleteArgs>(args: SelectSubset<T, VideoMetaDataDeleteArgs<ExtArgs>>): Prisma__VideoMetaDataClient<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one VideoMetaData.
+     * @param {VideoMetaDataUpdateArgs} args - Arguments to update one VideoMetaData.
+     * @example
+     * // Update one VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VideoMetaDataUpdateArgs>(args: SelectSubset<T, VideoMetaDataUpdateArgs<ExtArgs>>): Prisma__VideoMetaDataClient<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more VideoMetaData.
+     * @param {VideoMetaDataDeleteManyArgs} args - Arguments to filter VideoMetaData to delete.
+     * @example
+     * // Delete a few VideoMetaData
+     * const { count } = await prisma.videoMetaData.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VideoMetaDataDeleteManyArgs>(args?: SelectSubset<T, VideoMetaDataDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VideoMetaData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoMetaDataUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VideoMetaDataUpdateManyArgs>(args: SelectSubset<T, VideoMetaDataUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VideoMetaData and returns the data updated in the database.
+     * @param {VideoMetaDataUpdateManyAndReturnArgs} args - Arguments to update many VideoMetaData.
+     * @example
+     * // Update many VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more VideoMetaData and only return the `id`
+     * const videoMetaDataWithIdOnly = await prisma.videoMetaData.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VideoMetaDataUpdateManyAndReturnArgs>(args: SelectSubset<T, VideoMetaDataUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one VideoMetaData.
+     * @param {VideoMetaDataUpsertArgs} args - Arguments to update or create a VideoMetaData.
+     * @example
+     * // Update or create a VideoMetaData
+     * const videoMetaData = await prisma.videoMetaData.upsert({
+     *   create: {
+     *     // ... data to create a VideoMetaData
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VideoMetaData we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VideoMetaDataUpsertArgs>(args: SelectSubset<T, VideoMetaDataUpsertArgs<ExtArgs>>): Prisma__VideoMetaDataClient<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of VideoMetaData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoMetaDataCountArgs} args - Arguments to filter VideoMetaData to count.
+     * @example
+     * // Count the number of VideoMetaData
+     * const count = await prisma.videoMetaData.count({
+     *   where: {
+     *     // ... the filter for the VideoMetaData we want to count
+     *   }
+     * })
+    **/
+    count<T extends VideoMetaDataCountArgs>(
+      args?: Subset<T, VideoMetaDataCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VideoMetaDataCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VideoMetaData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoMetaDataAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VideoMetaDataAggregateArgs>(args: Subset<T, VideoMetaDataAggregateArgs>): Prisma.PrismaPromise<GetVideoMetaDataAggregateType<T>>
+
+    /**
+     * Group by VideoMetaData.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoMetaDataGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VideoMetaDataGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VideoMetaDataGroupByArgs['orderBy'] }
+        : { orderBy?: VideoMetaDataGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VideoMetaDataGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVideoMetaDataGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the VideoMetaData model
+   */
+  readonly fields: VideoMetaDataFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VideoMetaData.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VideoMetaDataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    workspace<T extends WorkspaceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkspaceDefaultArgs<ExtArgs>>): Prisma__WorkspaceClient<$Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the VideoMetaData model
+   */
+  interface VideoMetaDataFieldRefs {
+    readonly id: FieldRef<"VideoMetaData", 'String'>
+    readonly key: FieldRef<"VideoMetaData", 'String'>
+    readonly fileName: FieldRef<"VideoMetaData", 'String'>
+    readonly title: FieldRef<"VideoMetaData", 'String'>
+    readonly tags: FieldRef<"VideoMetaData", 'String[]'>
+    readonly privacyStatus: FieldRef<"VideoMetaData", 'String'>
+    readonly categoryId: FieldRef<"VideoMetaData", 'String'>
+    readonly description: FieldRef<"VideoMetaData", 'String'>
+    readonly createdAt: FieldRef<"VideoMetaData", 'DateTime'>
+    readonly updatedAt: FieldRef<"VideoMetaData", 'DateTime'>
+    readonly workspaceId: FieldRef<"VideoMetaData", 'String'>
+    readonly uploaderId: FieldRef<"VideoMetaData", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * VideoMetaData findUnique
+   */
+  export type VideoMetaDataFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * Filter, which VideoMetaData to fetch.
+     */
+    where: VideoMetaDataWhereUniqueInput
+  }
+
+  /**
+   * VideoMetaData findUniqueOrThrow
+   */
+  export type VideoMetaDataFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * Filter, which VideoMetaData to fetch.
+     */
+    where: VideoMetaDataWhereUniqueInput
+  }
+
+  /**
+   * VideoMetaData findFirst
+   */
+  export type VideoMetaDataFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * Filter, which VideoMetaData to fetch.
+     */
+    where?: VideoMetaDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VideoMetaData to fetch.
+     */
+    orderBy?: VideoMetaDataOrderByWithRelationInput | VideoMetaDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VideoMetaData.
+     */
+    cursor?: VideoMetaDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VideoMetaData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VideoMetaData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VideoMetaData.
+     */
+    distinct?: VideoMetaDataScalarFieldEnum | VideoMetaDataScalarFieldEnum[]
+  }
+
+  /**
+   * VideoMetaData findFirstOrThrow
+   */
+  export type VideoMetaDataFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * Filter, which VideoMetaData to fetch.
+     */
+    where?: VideoMetaDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VideoMetaData to fetch.
+     */
+    orderBy?: VideoMetaDataOrderByWithRelationInput | VideoMetaDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VideoMetaData.
+     */
+    cursor?: VideoMetaDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VideoMetaData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VideoMetaData.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VideoMetaData.
+     */
+    distinct?: VideoMetaDataScalarFieldEnum | VideoMetaDataScalarFieldEnum[]
+  }
+
+  /**
+   * VideoMetaData findMany
+   */
+  export type VideoMetaDataFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * Filter, which VideoMetaData to fetch.
+     */
+    where?: VideoMetaDataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VideoMetaData to fetch.
+     */
+    orderBy?: VideoMetaDataOrderByWithRelationInput | VideoMetaDataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VideoMetaData.
+     */
+    cursor?: VideoMetaDataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VideoMetaData from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VideoMetaData.
+     */
+    skip?: number
+    distinct?: VideoMetaDataScalarFieldEnum | VideoMetaDataScalarFieldEnum[]
+  }
+
+  /**
+   * VideoMetaData create
+   */
+  export type VideoMetaDataCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * The data needed to create a VideoMetaData.
+     */
+    data: XOR<VideoMetaDataCreateInput, VideoMetaDataUncheckedCreateInput>
+  }
+
+  /**
+   * VideoMetaData createMany
+   */
+  export type VideoMetaDataCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many VideoMetaData.
+     */
+    data: VideoMetaDataCreateManyInput | VideoMetaDataCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VideoMetaData createManyAndReturn
+   */
+  export type VideoMetaDataCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * The data used to create many VideoMetaData.
+     */
+    data: VideoMetaDataCreateManyInput | VideoMetaDataCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VideoMetaData update
+   */
+  export type VideoMetaDataUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * The data needed to update a VideoMetaData.
+     */
+    data: XOR<VideoMetaDataUpdateInput, VideoMetaDataUncheckedUpdateInput>
+    /**
+     * Choose, which VideoMetaData to update.
+     */
+    where: VideoMetaDataWhereUniqueInput
+  }
+
+  /**
+   * VideoMetaData updateMany
+   */
+  export type VideoMetaDataUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update VideoMetaData.
+     */
+    data: XOR<VideoMetaDataUpdateManyMutationInput, VideoMetaDataUncheckedUpdateManyInput>
+    /**
+     * Filter which VideoMetaData to update
+     */
+    where?: VideoMetaDataWhereInput
+    /**
+     * Limit how many VideoMetaData to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * VideoMetaData updateManyAndReturn
+   */
+  export type VideoMetaDataUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * The data used to update VideoMetaData.
+     */
+    data: XOR<VideoMetaDataUpdateManyMutationInput, VideoMetaDataUncheckedUpdateManyInput>
+    /**
+     * Filter which VideoMetaData to update
+     */
+    where?: VideoMetaDataWhereInput
+    /**
+     * Limit how many VideoMetaData to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VideoMetaData upsert
+   */
+  export type VideoMetaDataUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * The filter to search for the VideoMetaData to update in case it exists.
+     */
+    where: VideoMetaDataWhereUniqueInput
+    /**
+     * In case the VideoMetaData found by the `where` argument doesn't exist, create a new VideoMetaData with this data.
+     */
+    create: XOR<VideoMetaDataCreateInput, VideoMetaDataUncheckedCreateInput>
+    /**
+     * In case the VideoMetaData was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VideoMetaDataUpdateInput, VideoMetaDataUncheckedUpdateInput>
+  }
+
+  /**
+   * VideoMetaData delete
+   */
+  export type VideoMetaDataDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+    /**
+     * Filter which VideoMetaData to delete.
+     */
+    where: VideoMetaDataWhereUniqueInput
+  }
+
+  /**
+   * VideoMetaData deleteMany
+   */
+  export type VideoMetaDataDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VideoMetaData to delete
+     */
+    where?: VideoMetaDataWhereInput
+    /**
+     * Limit how many VideoMetaData to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * VideoMetaData without action
+   */
+  export type VideoMetaDataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoMetaData
+     */
+    select?: VideoMetaDataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoMetaData
+     */
+    omit?: VideoMetaDataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VideoMetaDataInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -3197,6 +4470,24 @@ export namespace Prisma {
   };
 
   export type WorkspaceMemberScalarFieldEnum = (typeof WorkspaceMemberScalarFieldEnum)[keyof typeof WorkspaceMemberScalarFieldEnum]
+
+
+  export const VideoMetaDataScalarFieldEnum: {
+    id: 'id',
+    key: 'key',
+    fileName: 'fileName',
+    title: 'title',
+    tags: 'tags',
+    privacyStatus: 'privacyStatus',
+    categoryId: 'categoryId',
+    description: 'description',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    workspaceId: 'workspaceId',
+    uploaderId: 'uploaderId'
+  };
+
+  export type VideoMetaDataScalarFieldEnum = (typeof VideoMetaDataScalarFieldEnum)[keyof typeof VideoMetaDataScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3289,6 +4580,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
     workspaceMember?: WorkspaceMemberListRelationFilter
+    VideoMetaData?: VideoMetaDataListRelationFilter
   }
 
   export type WorkspaceOrderByWithRelationInput = {
@@ -3298,6 +4590,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     workspaceMember?: WorkspaceMemberOrderByRelationAggregateInput
+    VideoMetaData?: VideoMetaDataOrderByRelationAggregateInput
   }
 
   export type WorkspaceWhereUniqueInput = Prisma.AtLeast<{
@@ -3310,6 +4603,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
     workspaceMember?: WorkspaceMemberListRelationFilter
+    VideoMetaData?: VideoMetaDataListRelationFilter
   }, "id">
 
   export type WorkspaceOrderByWithAggregationInput = {
@@ -3400,6 +4694,96 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"WorkspaceMember"> | Date | string
   }
 
+  export type VideoMetaDataWhereInput = {
+    AND?: VideoMetaDataWhereInput | VideoMetaDataWhereInput[]
+    OR?: VideoMetaDataWhereInput[]
+    NOT?: VideoMetaDataWhereInput | VideoMetaDataWhereInput[]
+    id?: StringFilter<"VideoMetaData"> | string
+    key?: StringFilter<"VideoMetaData"> | string
+    fileName?: StringFilter<"VideoMetaData"> | string
+    title?: StringFilter<"VideoMetaData"> | string
+    tags?: StringNullableListFilter<"VideoMetaData">
+    privacyStatus?: StringFilter<"VideoMetaData"> | string
+    categoryId?: StringFilter<"VideoMetaData"> | string
+    description?: StringFilter<"VideoMetaData"> | string
+    createdAt?: DateTimeFilter<"VideoMetaData"> | Date | string
+    updatedAt?: DateTimeFilter<"VideoMetaData"> | Date | string
+    workspaceId?: StringFilter<"VideoMetaData"> | string
+    uploaderId?: StringFilter<"VideoMetaData"> | string
+    workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
+  }
+
+  export type VideoMetaDataOrderByWithRelationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    fileName?: SortOrder
+    title?: SortOrder
+    tags?: SortOrder
+    privacyStatus?: SortOrder
+    categoryId?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workspaceId?: SortOrder
+    uploaderId?: SortOrder
+    workspace?: WorkspaceOrderByWithRelationInput
+  }
+
+  export type VideoMetaDataWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: VideoMetaDataWhereInput | VideoMetaDataWhereInput[]
+    OR?: VideoMetaDataWhereInput[]
+    NOT?: VideoMetaDataWhereInput | VideoMetaDataWhereInput[]
+    key?: StringFilter<"VideoMetaData"> | string
+    fileName?: StringFilter<"VideoMetaData"> | string
+    title?: StringFilter<"VideoMetaData"> | string
+    tags?: StringNullableListFilter<"VideoMetaData">
+    privacyStatus?: StringFilter<"VideoMetaData"> | string
+    categoryId?: StringFilter<"VideoMetaData"> | string
+    description?: StringFilter<"VideoMetaData"> | string
+    createdAt?: DateTimeFilter<"VideoMetaData"> | Date | string
+    updatedAt?: DateTimeFilter<"VideoMetaData"> | Date | string
+    workspaceId?: StringFilter<"VideoMetaData"> | string
+    uploaderId?: StringFilter<"VideoMetaData"> | string
+    workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
+  }, "id">
+
+  export type VideoMetaDataOrderByWithAggregationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    fileName?: SortOrder
+    title?: SortOrder
+    tags?: SortOrder
+    privacyStatus?: SortOrder
+    categoryId?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workspaceId?: SortOrder
+    uploaderId?: SortOrder
+    _count?: VideoMetaDataCountOrderByAggregateInput
+    _max?: VideoMetaDataMaxOrderByAggregateInput
+    _min?: VideoMetaDataMinOrderByAggregateInput
+  }
+
+  export type VideoMetaDataScalarWhereWithAggregatesInput = {
+    AND?: VideoMetaDataScalarWhereWithAggregatesInput | VideoMetaDataScalarWhereWithAggregatesInput[]
+    OR?: VideoMetaDataScalarWhereWithAggregatesInput[]
+    NOT?: VideoMetaDataScalarWhereWithAggregatesInput | VideoMetaDataScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"VideoMetaData"> | string
+    key?: StringWithAggregatesFilter<"VideoMetaData"> | string
+    fileName?: StringWithAggregatesFilter<"VideoMetaData"> | string
+    title?: StringWithAggregatesFilter<"VideoMetaData"> | string
+    tags?: StringNullableListFilter<"VideoMetaData">
+    privacyStatus?: StringWithAggregatesFilter<"VideoMetaData"> | string
+    categoryId?: StringWithAggregatesFilter<"VideoMetaData"> | string
+    description?: StringWithAggregatesFilter<"VideoMetaData"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"VideoMetaData"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"VideoMetaData"> | Date | string
+    workspaceId?: StringWithAggregatesFilter<"VideoMetaData"> | string
+    uploaderId?: StringWithAggregatesFilter<"VideoMetaData"> | string
+  }
+
   export type WorkspaceCreateInput = {
     id?: string
     name: string
@@ -3407,6 +4791,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+    VideoMetaData?: VideoMetaDataCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUncheckedCreateInput = {
@@ -3416,6 +4801,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+    VideoMetaData?: VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUpdateInput = {
@@ -3425,6 +4811,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+    VideoMetaData?: VideoMetaDataUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceUncheckedUpdateInput = {
@@ -3434,6 +4821,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+    VideoMetaData?: VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceCreateManyInput = {
@@ -3529,6 +4917,110 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type VideoMetaDataCreateInput = {
+    id?: string
+    key: string
+    fileName: string
+    title: string
+    tags?: VideoMetaDataCreatetagsInput | string[]
+    privacyStatus: string
+    categoryId: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    uploaderId: string
+    workspace: WorkspaceCreateNestedOneWithoutVideoMetaDataInput
+  }
+
+  export type VideoMetaDataUncheckedCreateInput = {
+    id?: string
+    key: string
+    fileName: string
+    title: string
+    tags?: VideoMetaDataCreatetagsInput | string[]
+    privacyStatus: string
+    categoryId: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workspaceId: string
+    uploaderId: string
+  }
+
+  export type VideoMetaDataUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    tags?: VideoMetaDataUpdatetagsInput | string[]
+    privacyStatus?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    uploaderId?: StringFieldUpdateOperationsInput | string
+    workspace?: WorkspaceUpdateOneRequiredWithoutVideoMetaDataNestedInput
+  }
+
+  export type VideoMetaDataUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    tags?: VideoMetaDataUpdatetagsInput | string[]
+    privacyStatus?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspaceId?: StringFieldUpdateOperationsInput | string
+    uploaderId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type VideoMetaDataCreateManyInput = {
+    id?: string
+    key: string
+    fileName: string
+    title: string
+    tags?: VideoMetaDataCreatetagsInput | string[]
+    privacyStatus: string
+    categoryId: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workspaceId: string
+    uploaderId: string
+  }
+
+  export type VideoMetaDataUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    tags?: VideoMetaDataUpdatetagsInput | string[]
+    privacyStatus?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    uploaderId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type VideoMetaDataUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    tags?: VideoMetaDataUpdatetagsInput | string[]
+    privacyStatus?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspaceId?: StringFieldUpdateOperationsInput | string
+    uploaderId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -3561,7 +5053,17 @@ export namespace Prisma {
     none?: WorkspaceMemberWhereInput
   }
 
+  export type VideoMetaDataListRelationFilter = {
+    every?: VideoMetaDataWhereInput
+    some?: VideoMetaDataWhereInput
+    none?: VideoMetaDataWhereInput
+  }
+
   export type WorkspaceMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type VideoMetaDataOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -3678,6 +5180,57 @@ export namespace Prisma {
     _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type VideoMetaDataCountOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    fileName?: SortOrder
+    title?: SortOrder
+    tags?: SortOrder
+    privacyStatus?: SortOrder
+    categoryId?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workspaceId?: SortOrder
+    uploaderId?: SortOrder
+  }
+
+  export type VideoMetaDataMaxOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    fileName?: SortOrder
+    title?: SortOrder
+    privacyStatus?: SortOrder
+    categoryId?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workspaceId?: SortOrder
+    uploaderId?: SortOrder
+  }
+
+  export type VideoMetaDataMinOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    fileName?: SortOrder
+    title?: SortOrder
+    privacyStatus?: SortOrder
+    categoryId?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    workspaceId?: SortOrder
+    uploaderId?: SortOrder
+  }
+
   export type WorkspaceMemberCreateNestedManyWithoutWorkspaceInput = {
     create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
@@ -3685,11 +5238,25 @@ export namespace Prisma {
     connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
   }
 
+  export type VideoMetaDataCreateNestedManyWithoutWorkspaceInput = {
+    create?: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput> | VideoMetaDataCreateWithoutWorkspaceInput[] | VideoMetaDataUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
+    createMany?: VideoMetaDataCreateManyWorkspaceInputEnvelope
+    connect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+  }
+
   export type WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput = {
     create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
     createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
     connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+  }
+
+  export type VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput = {
+    create?: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput> | VideoMetaDataCreateWithoutWorkspaceInput[] | VideoMetaDataUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
+    createMany?: VideoMetaDataCreateManyWorkspaceInputEnvelope
+    connect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -3714,6 +5281,20 @@ export namespace Prisma {
     deleteMany?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
   }
 
+  export type VideoMetaDataUpdateManyWithoutWorkspaceNestedInput = {
+    create?: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput> | VideoMetaDataCreateWithoutWorkspaceInput[] | VideoMetaDataUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
+    upsert?: VideoMetaDataUpsertWithWhereUniqueWithoutWorkspaceInput | VideoMetaDataUpsertWithWhereUniqueWithoutWorkspaceInput[]
+    createMany?: VideoMetaDataCreateManyWorkspaceInputEnvelope
+    set?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+    disconnect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+    delete?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+    connect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+    update?: VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput | VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput[]
+    updateMany?: VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput | VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput[]
+    deleteMany?: VideoMetaDataScalarWhereInput | VideoMetaDataScalarWhereInput[]
+  }
+
   export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput = {
     create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
@@ -3726,6 +5307,20 @@ export namespace Prisma {
     update?: WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput[]
     updateMany?: WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput | WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput[]
     deleteMany?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
+  }
+
+  export type VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+    create?: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput> | VideoMetaDataCreateWithoutWorkspaceInput[] | VideoMetaDataUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
+    upsert?: VideoMetaDataUpsertWithWhereUniqueWithoutWorkspaceInput | VideoMetaDataUpsertWithWhereUniqueWithoutWorkspaceInput[]
+    createMany?: VideoMetaDataCreateManyWorkspaceInputEnvelope
+    set?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+    disconnect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+    delete?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+    connect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+    update?: VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput | VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput[]
+    updateMany?: VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput | VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput[]
+    deleteMany?: VideoMetaDataScalarWhereInput | VideoMetaDataScalarWhereInput[]
   }
 
   export type WorkspaceCreateNestedOneWithoutWorkspaceMemberInput = {
@@ -3744,6 +5339,29 @@ export namespace Prisma {
     upsert?: WorkspaceUpsertWithoutWorkspaceMemberInput
     connect?: WorkspaceWhereUniqueInput
     update?: XOR<XOR<WorkspaceUpdateToOneWithWhereWithoutWorkspaceMemberInput, WorkspaceUpdateWithoutWorkspaceMemberInput>, WorkspaceUncheckedUpdateWithoutWorkspaceMemberInput>
+  }
+
+  export type VideoMetaDataCreatetagsInput = {
+    set: string[]
+  }
+
+  export type WorkspaceCreateNestedOneWithoutVideoMetaDataInput = {
+    create?: XOR<WorkspaceCreateWithoutVideoMetaDataInput, WorkspaceUncheckedCreateWithoutVideoMetaDataInput>
+    connectOrCreate?: WorkspaceCreateOrConnectWithoutVideoMetaDataInput
+    connect?: WorkspaceWhereUniqueInput
+  }
+
+  export type VideoMetaDataUpdatetagsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type WorkspaceUpdateOneRequiredWithoutVideoMetaDataNestedInput = {
+    create?: XOR<WorkspaceCreateWithoutVideoMetaDataInput, WorkspaceUncheckedCreateWithoutVideoMetaDataInput>
+    connectOrCreate?: WorkspaceCreateOrConnectWithoutVideoMetaDataInput
+    upsert?: WorkspaceUpsertWithoutVideoMetaDataInput
+    connect?: WorkspaceWhereUniqueInput
+    update?: XOR<XOR<WorkspaceUpdateToOneWithWhereWithoutVideoMetaDataInput, WorkspaceUpdateWithoutVideoMetaDataInput>, WorkspaceUncheckedUpdateWithoutVideoMetaDataInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -3858,6 +5476,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type VideoMetaDataCreateWithoutWorkspaceInput = {
+    id?: string
+    key: string
+    fileName: string
+    title: string
+    tags?: VideoMetaDataCreatetagsInput | string[]
+    privacyStatus: string
+    categoryId: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    uploaderId: string
+  }
+
+  export type VideoMetaDataUncheckedCreateWithoutWorkspaceInput = {
+    id?: string
+    key: string
+    fileName: string
+    title: string
+    tags?: VideoMetaDataCreatetagsInput | string[]
+    privacyStatus: string
+    categoryId: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    uploaderId: string
+  }
+
+  export type VideoMetaDataCreateOrConnectWithoutWorkspaceInput = {
+    where: VideoMetaDataWhereUniqueInput
+    create: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput>
+  }
+
+  export type VideoMetaDataCreateManyWorkspaceInputEnvelope = {
+    data: VideoMetaDataCreateManyWorkspaceInput | VideoMetaDataCreateManyWorkspaceInput[]
+    skipDuplicates?: boolean
+  }
+
   export type WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput = {
     where: WorkspaceMemberWhereUniqueInput
     update: XOR<WorkspaceMemberUpdateWithoutWorkspaceInput, WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
@@ -3887,12 +5543,47 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
   }
 
+  export type VideoMetaDataUpsertWithWhereUniqueWithoutWorkspaceInput = {
+    where: VideoMetaDataWhereUniqueInput
+    update: XOR<VideoMetaDataUpdateWithoutWorkspaceInput, VideoMetaDataUncheckedUpdateWithoutWorkspaceInput>
+    create: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput>
+  }
+
+  export type VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput = {
+    where: VideoMetaDataWhereUniqueInput
+    data: XOR<VideoMetaDataUpdateWithoutWorkspaceInput, VideoMetaDataUncheckedUpdateWithoutWorkspaceInput>
+  }
+
+  export type VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput = {
+    where: VideoMetaDataScalarWhereInput
+    data: XOR<VideoMetaDataUpdateManyMutationInput, VideoMetaDataUncheckedUpdateManyWithoutWorkspaceInput>
+  }
+
+  export type VideoMetaDataScalarWhereInput = {
+    AND?: VideoMetaDataScalarWhereInput | VideoMetaDataScalarWhereInput[]
+    OR?: VideoMetaDataScalarWhereInput[]
+    NOT?: VideoMetaDataScalarWhereInput | VideoMetaDataScalarWhereInput[]
+    id?: StringFilter<"VideoMetaData"> | string
+    key?: StringFilter<"VideoMetaData"> | string
+    fileName?: StringFilter<"VideoMetaData"> | string
+    title?: StringFilter<"VideoMetaData"> | string
+    tags?: StringNullableListFilter<"VideoMetaData">
+    privacyStatus?: StringFilter<"VideoMetaData"> | string
+    categoryId?: StringFilter<"VideoMetaData"> | string
+    description?: StringFilter<"VideoMetaData"> | string
+    createdAt?: DateTimeFilter<"VideoMetaData"> | Date | string
+    updatedAt?: DateTimeFilter<"VideoMetaData"> | Date | string
+    workspaceId?: StringFilter<"VideoMetaData"> | string
+    uploaderId?: StringFilter<"VideoMetaData"> | string
+  }
+
   export type WorkspaceCreateWithoutWorkspaceMemberInput = {
     id?: string
     name: string
     owner_id: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    VideoMetaData?: VideoMetaDataCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUncheckedCreateWithoutWorkspaceMemberInput = {
@@ -3901,6 +5592,7 @@ export namespace Prisma {
     owner_id: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    VideoMetaData?: VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceCreateOrConnectWithoutWorkspaceMemberInput = {
@@ -3925,6 +5617,7 @@ export namespace Prisma {
     owner_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    VideoMetaData?: VideoMetaDataUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceUncheckedUpdateWithoutWorkspaceMemberInput = {
@@ -3933,6 +5626,59 @@ export namespace Prisma {
     owner_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    VideoMetaData?: VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput
+  }
+
+  export type WorkspaceCreateWithoutVideoMetaDataInput = {
+    id?: string
+    name: string
+    owner_id: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  }
+
+  export type WorkspaceUncheckedCreateWithoutVideoMetaDataInput = {
+    id?: string
+    name: string
+    owner_id: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  }
+
+  export type WorkspaceCreateOrConnectWithoutVideoMetaDataInput = {
+    where: WorkspaceWhereUniqueInput
+    create: XOR<WorkspaceCreateWithoutVideoMetaDataInput, WorkspaceUncheckedCreateWithoutVideoMetaDataInput>
+  }
+
+  export type WorkspaceUpsertWithoutVideoMetaDataInput = {
+    update: XOR<WorkspaceUpdateWithoutVideoMetaDataInput, WorkspaceUncheckedUpdateWithoutVideoMetaDataInput>
+    create: XOR<WorkspaceCreateWithoutVideoMetaDataInput, WorkspaceUncheckedCreateWithoutVideoMetaDataInput>
+    where?: WorkspaceWhereInput
+  }
+
+  export type WorkspaceUpdateToOneWithWhereWithoutVideoMetaDataInput = {
+    where?: WorkspaceWhereInput
+    data: XOR<WorkspaceUpdateWithoutVideoMetaDataInput, WorkspaceUncheckedUpdateWithoutVideoMetaDataInput>
+  }
+
+  export type WorkspaceUpdateWithoutVideoMetaDataInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    owner_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  }
+
+  export type WorkspaceUncheckedUpdateWithoutVideoMetaDataInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    owner_id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceMemberCreateManyWorkspaceInput = {
@@ -3942,6 +5688,20 @@ export namespace Prisma {
     status: $Enums.Status
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type VideoMetaDataCreateManyWorkspaceInput = {
+    id?: string
+    key: string
+    fileName: string
+    title: string
+    tags?: VideoMetaDataCreatetagsInput | string[]
+    privacyStatus: string
+    categoryId: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    uploaderId: string
   }
 
   export type WorkspaceMemberUpdateWithoutWorkspaceInput = {
@@ -3969,6 +5729,48 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VideoMetaDataUpdateWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    tags?: VideoMetaDataUpdatetagsInput | string[]
+    privacyStatus?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    uploaderId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type VideoMetaDataUncheckedUpdateWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    tags?: VideoMetaDataUpdatetagsInput | string[]
+    privacyStatus?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    uploaderId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type VideoMetaDataUncheckedUpdateManyWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    tags?: VideoMetaDataUpdatetagsInput | string[]
+    privacyStatus?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    uploaderId?: StringFieldUpdateOperationsInput | string
   }
 
 

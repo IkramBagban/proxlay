@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router";
+import { NavLink, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -72,7 +72,9 @@ const WorkspaceDetails = () => {
       <div className="mt-8">
         <div className="flex justify-between items-center mb-2">
           <h3 className="text-lg font-semibold">Videos</h3>
-          <Button>Upload Video</Button>
+          <NavLink to={`/workspace/${workspaceId}/youtube/upload`} className="text-sm text-blue-500">
+            Upload Video
+          </NavLink>
         </div>
         {/* Video list would go here */}
         <p className="text-sm text-muted-foreground">No videos yet.</p>

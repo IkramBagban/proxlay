@@ -14,6 +14,7 @@ import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 import { clerkClient, requireAuth, getAuth } from "@clerk/express";
 import workspaceRoutes from "./routes/v1/workspace.route";
+import { prismaClient } from "./lib/db";
 
 dotenv.config();
 const app = express();
@@ -55,20 +56,10 @@ app.use("/api/v1/workspace", requireAuth(), workspaceRoutes);
 app.post("/get-presigned-url", requireAuth(), async (req: any, res) => {
   console.log("req.body", req.body);
 
-  // console.log('token,', req?.token)
-  const auth = getAuth(req);
-  console.log("auth ", auth);
-  const userId = auth?.userId;
-  console.log("userId", userId);
-
-  // @ts-ignore
-  const user = await clerkClient.users.getUser(userId);
-  console.log("user", user);
-
-  const { fileName, fileType } = req.body;
+  const { fileName, fileType, workspaceId } = req.body;
 
   const bucketName = process.env.AWS_BUCKET_NAME!;
-  const filePath = `${userId}/youtube/${fileName}`;
+  const filePath = `${workspaceId}/youtube/${fileName}`;
   // const filePath = `${fileName}`;
   const params = {
     Bucket: bucketName,
@@ -76,10 +67,61 @@ app.post("/get-presigned-url", requireAuth(), async (req: any, res) => {
     ContentType: fileType,
   };
 
-  const command = new PutObjectCommand(params);
-  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+    const command = new PutObjectCommand(params);
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
   res.status(200).json({ url, filePath });
 });
+
+const getPresignedUrl = async (params: any) => {  
+ const command = new PutObjectCommand(params);
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+  return url;
+};
+
+app.post("/api/v1/youtube/upload-video", requireAuth(), async (req: any, res: any) => {
+  const { fileName, fileType, workspaceId, title, description, tags, categoryId, privacyStatus } = req.body;
+  const bucketName = process.env.AWS_BUCKET_NAME!;
+  const filePath = `${workspaceId}/youtube/${fileName}`;
+  const params = {
+    Bucket: bucketName,
+    Key: filePath,
+    ContentType: fileType,
+  };
+  const presignedUrl = await getPresignedUrl(params);
+  const { userId } = getAuth(req);
+
+  const payload = {
+    fileName: fileName,
+      key: filePath,
+      title: title,
+      description: description,
+      tags: tags,
+      categoryId: categoryId,
+      privacyStatus: privacyStatus || "private",
+      workspaceId: workspaceId,
+      uploaderId: userId!
+  }
+
+  console.log("payload", payload);
+
+  const metaData = await prismaClient.videoMetaData.create({
+    data: {
+      fileName: fileName,
+      key: filePath,
+      title: title,
+      description: description,
+      tags: tags,
+      categoryId: categoryId,
+      privacyStatus: privacyStatus || "private",
+      workspaceId: workspaceId,
+      uploaderId: userId!
+    },
+
+    })
+    
+
+    res.status(200).json({ url: presignedUrl, key: filePath, metaData });
+  });
 
 app.get("/auth", (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
