@@ -66,11 +66,16 @@ export const getWorkspaces = async (req: Request, res: Response) => {
   }
 
   try {
-    const workspaces = await prismaClient.workspace.findMany({
+    const memberships = await prismaClient.workspaceMember.findMany({
       where: {
-        owner_id: userId,
+        userId: userId,
+      },
+      include: {
+        workspace: true,
       },
     });
+
+    const workspaces = memberships.map((m) => m.workspace);
 
     res.status(200).json(workspaces);
   } catch (error) {

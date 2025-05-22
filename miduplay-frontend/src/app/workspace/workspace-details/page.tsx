@@ -6,32 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Pencil } from "lucide-react";
 import { useFetch } from "@/hooks/useFetch";
 
-const workspaceMembers = [
-  {
-    id: "1",
-    workspaceId: "1",
-    userId: "1",
-    role: "owner",
-    status: "active",
-    joinedAt: new Date(),
-  },
-  {
-    id: "2",
-    workspaceId: "1",
-    userId: "2",
-    role: "manager",
-    status: "invited",
-    joinedAt: new Date(),
-  },
-  {
-    id: "3",
-    workspaceId: "2",
-    userId: "3",
-    role: "editor",
-    status: "active",
-    joinedAt: new Date(),
-  },
-];
 
 const WorkspaceDetails = () => {
   const { workspaceId } = useParams();
