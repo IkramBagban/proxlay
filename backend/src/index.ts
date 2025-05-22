@@ -123,6 +123,46 @@ app.post("/api/v1/youtube/upload-video", requireAuth(), async (req: any, res: an
     res.status(200).json({ url: presignedUrl, key: filePath, metaData });
   });
 
+app.get("/api/v1/youtube/videos/:workspaceId", requireAuth(), async (req: any, res: any) => {
+  const { workspaceId } = req.params;
+  const videos = await prismaClient.videoMetaData.findMany({
+    where: {
+      workspaceId: workspaceId,
+    },
+  });
+
+  if (!videos) {
+    return res.status(404).json({ message: "No videos found" });
+  }
+  
+  const uploaderIds = videos.map((video) => video.uploaderId);
+  const uploaders = await clerkClient.users.getUserList({
+    userId: uploaderIds,
+  });
+  console.log("uploaders", uploaders);
+ const userMap = new Map(
+      // @ts-ignore
+      (uploaders?.data || [])?.map((user) => [
+        user.id,
+        {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.emailAddresses?.[0]?.emailAddress,
+          imageUrl: user.imageUrl,
+        },
+      ])
+    );
+
+    const enrichedVideos = videos.map((video) => ({
+      ...video,
+      uploader: userMap.get(video.uploaderId),
+    }));
+  console.log("enrichedVideos", enrichedVideos);
+  console.log("videos", videos);
+  res.status(200).json(enrichedVideos);
+});
+
 app.get("/auth", (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: "offline",
@@ -143,7 +183,7 @@ app.get("/oauth2callback", async (req: any, res: any) => {
 
   try {
     const { tokens } = await oauth2Client.getToken(code);
-    console.log("Tokens", tokens);
+    // console.log("Tokens", tokens);
     oauth2Client.setCredentials(tokens);
     res.send("Authentication successful! You can now upload videos.");
   } catch (error) {
@@ -179,7 +219,7 @@ app.post("/upload", async (req: any, res: any) => {
         body: fs.createReadStream(filePath),
       },
     });
-    console.log("Upload response:", response.data);
+    // console.log("Upload response:", response.data);
     res.send("Video uploaded successfully! 🎥");
   } catch (error) {
     console.error("Error uploading video:", error);
