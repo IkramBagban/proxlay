@@ -27,9 +27,14 @@ model Workspace {
 }
 
 enum Status {
-  INVITED
-  ACTIVE
+  INVITED     // Owner invited the user, waiting for them to accept
+  PENDING     // User requested to join, waiting for owner's approval
+  ACTIVE      // User accepted invite or was approved
+  REJECTED    // Owner rejected a join request
+  DECLINED    // User declined the invite
+  REMOVED     // User was removed from the workspace
 }
+
 
 model WorkspaceMember {
   id          String   @id @default(cuid())

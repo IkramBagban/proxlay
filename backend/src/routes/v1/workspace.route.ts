@@ -2,13 +2,21 @@ import express, { Request } from "express";
 
 const router = express.Router();
 
-import { createWorkspace, getWorkspaces, getWorkspaceMembers } from "../../controllers/v1/workspace.controller";
-import { requireAuth } from "@clerk/express";
+import { createWorkspace, getWorkspaces, getWorkspaceMembers, requestJoinWorkspace, handleJoinWorkspaceRequest, handleWorkspaceInvitation, inviteUserToWorkspace, handleWorkspaceInvitationRequest, removeUserFromWorkspace } from "../../controllers/v1/workspace.controller";
 
 router.post("/create", createWorkspace);
 router.get("/", getWorkspaces);
 
 router.get("/members/:workspaceId", getWorkspaceMembers);
 
+router.post("/request-join/:workspaceId", requestJoinWorkspace);
+
+router.post("/handle-join-request/:workspaceId", handleJoinWorkspaceRequest);
+
+router.post("/invite/:workspaceId", inviteUserToWorkspace);
+
+// user will accept or decline the invitation
+router.post("/handle-invitation-request/:workspaceId", handleWorkspaceInvitationRequest);
+
+router.post("/remove-user/:workspaceId", removeUserFromWorkspace);
 export default router;
-    

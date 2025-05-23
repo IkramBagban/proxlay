@@ -40,7 +40,11 @@ export type YoutubeLinkedAccount = $Result.DefaultSelection<Prisma.$YoutubeLinke
 export namespace $Enums {
   export const Status: {
   INVITED: 'INVITED',
-  ACTIVE: 'ACTIVE'
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  REJECTED: 'REJECTED',
+  DECLINED: 'DECLINED',
+  REMOVED: 'REMOVED'
 };
 
 export type Status = (typeof Status)[keyof typeof Status]

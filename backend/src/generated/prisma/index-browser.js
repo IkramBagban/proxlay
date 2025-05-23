@@ -175,7 +175,11 @@ exports.Prisma.QueryMode = {
 };
 exports.Status = exports.$Enums.Status = {
   INVITED: 'INVITED',
-  ACTIVE: 'ACTIVE'
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  REJECTED: 'REJECTED',
+  DECLINED: 'DECLINED',
+  REMOVED: 'REMOVED'
 };
 
 exports.Prisma.ModelName = {

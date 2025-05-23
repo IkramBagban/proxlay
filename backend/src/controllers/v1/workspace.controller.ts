@@ -137,3 +137,181 @@ export const getWorkspaceMembers = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+
+export const requestJoinWorkspace = async (req: Request, res: Response) => {
+  const { workspaceId } = req.params;
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  if (!workspaceId) {
+    res.status(400).json({ error: "Workspace ID is required" });
+    return;
+  }
+  try {
+    const existingMembership = await prismaClient.workspaceMember.findFirst({
+      where: {
+        userId: userId,
+        workspaceId: workspaceId,
+      },
+    });
+
+    if (existingMembership) {
+      res.status(400).json({ error: "Already a member of this workspace" });
+      return;
+    }
+
+    const membership = await prismaClient.workspaceMember.create({
+      data: {
+        userId: userId,
+        workspaceId: workspaceId,
+        role: "member",
+        status: Status.PENDING,
+      },
+    });
+
+    res.status(201).json(membership);
+  } catch (error) {
+    console.error("Error joining workspace:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+// #TODO: authorize owner to access this endpoint
+// owner can accept or reject the request
+export const handleJoinWorkspaceRequest = async (req: Request, res: Response) => {
+  const { membershipId } = req.params;
+  const { userId } = getAuth(req);
+  const { action } = req.body;
+  console.log("action", action);
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  if (!membershipId) {
+    res.status(400).json({ error: "Membership ID is required" });
+    return;
+  }
+
+  try {
+    const membership = await prismaClient.workspaceMember.update({
+      where: {
+        id: membershipId,
+      },
+      data: {
+        status : action === "ACCEPT" ? Status.ACTIVE : Status.REJECTED,
+      },
+    });
+
+    res.status(200).json(membership);
+  } catch (error) {
+    console.error("Error accepting join request:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const inviteUserToWorkspace = async (req: Request, res: Response) => {
+
+  const { workspaceId } = req.params;
+  const { userId: ownerId } = getAuth(req);
+  const { userId } = req.body;
+ 
+
+  if (!ownerId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  if (!workspaceId) {
+    res.status(400).json({ error: "Workspace ID is required" });
+    return;
+  }
+
+  if (!userId) {
+    res.status(400).json({ error: "Email is required" });
+    return;
+  }
+
+  try {
+    
+    const membership = await prismaClient.workspaceMember.create({
+      data: {
+        userId: userId,
+        workspaceId: workspaceId,
+        role: "member",
+        status: Status.INVITED,
+      },
+    });
+
+    res.status(201).json(membership);
+  } catch (error) {
+    console.error("Error inviting user to workspace:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+}
+
+export const handleWorkspaceInvitationRequest = async (req: Request, res: Response) => {
+  const { membershipId } = req.params;
+  const { userId } = getAuth(req);
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+  const { action } = req.body; // this can be either "ACCEPT" or "DECLINE"
+  console.log("action", action);
+
+  if (!membershipId) {
+    res.status(400).json({ error: "Membership ID is required" });
+    return;
+  }
+  try {
+    const membership = await prismaClient.workspaceMember.update({
+      where: {
+        id: membershipId,
+      },
+      data: {
+        status: action === "ACCEPT" ? Status.ACTIVE : Status.DECLINED,
+      },
+    });
+
+    res.status(200).json(membership);
+  } catch (error) {
+    console.error("Error declining invitation:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+}
+
+export const removeUserFromWorkspace = async (req: Request, res: Response) => {
+  const { membershipId } = req.params;
+  const { userId } = getAuth(req);
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  if (!membershipId) {
+    res.status(400).json({ error: "Membership ID is required" });
+    return;
+  }
+
+  try {
+    const membership = await prismaClient.workspaceMember.delete({
+      where: {
+        id: membershipId,
+      },
+    });
+
+    res.status(200).json(membership);
+  } catch (error) {
+    console.error("Error removing user from workspace:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
