@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { PlusCircle, FolderKanban } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { NavLink } from "react-router";
 import { CreateWorkspace } from "@/components/workspace/create-workspace";
@@ -8,6 +7,7 @@ import { useAuth } from "@clerk/clerk-react";
 import axiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
 import { useFetch } from "@/hooks/useFetch";
+import JoinWorkspace from "@/components/workspace/join-workspace";
 
 const WorkspacePage = () => {
   const [meta, setMeta] = React.useState<{ name: string }>({ name: "" });
@@ -22,31 +22,24 @@ const WorkspacePage = () => {
 
   const workspaceCreateHandler = async (e: React.FormEvent) => {
     e.preventDefault();
+    const name = meta.name.trim();
 
-    const newWorkspace = {
-      name: meta.name.trim(),
-    };
-
-    if (!newWorkspace.name) {
+    if (!name) {
       toast.error("Workspace name is required");
       return;
     }
 
     try {
       const token = await getToken();
-
-      const response = await axiosClient.post(
+      await axiosClient.post(
         "/workspace/create",
-        newWorkspace,
+        { name },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       toast.success("Workspace created successfully");
-      // setWorkspaces((prev) => [...prev, response.data]);
     } catch (error) {
       console.error("Workspace creation failed:", error);
       toast.error("Failed to create workspace");
@@ -57,9 +50,13 @@ const WorkspacePage = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Workspaces</h1>
+    <div className="p-6 space-y-6">
+      <section className=" ">
+        <JoinWorkspace />
+      </section>
+
+      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-3xl font-semibold tracking-tight">Workspaces</h1>
         <div className="flex items-center gap-2">
           <PlusCircle className="h-5 w-5 text-muted-foreground" />
           <CreateWorkspace
@@ -70,23 +67,41 @@ const WorkspacePage = () => {
             setOpen={setOpen}
           />
         </div>
-      </div>
+      </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {(workspaces || []).map((ws) => (
-          <NavLink key={ws.id} to={`/workspace/${ws.id}`}>
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-lg font-medium">{ws.name}</CardTitle>
-                <FolderKanban className="h-5 w-5 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">ID: {ws.id}</p>
-              </CardContent>
-            </Card>
-          </NavLink>
+          <div key={ws.id}>
+            {ws.status === "ACTIVE" ? (
+              <NavLink to={`/workspace/${ws.id}`}>
+                <Card className="hover:shadow-lg hover:ring-1 hover:ring-primary transition-all cursor-pointer h-full">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                    <CardTitle className="text-lg font-semibold">
+                      {ws.name}
+                    </CardTitle>
+                    <FolderKanban className="h-5 w-5 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">ID: {ws.id}</p>
+                  </CardContent>
+                </Card>
+              </NavLink>
+            ) : (
+              <Card className="h-full bg-muted/50 border border-dashed">
+                <CardHeader>
+                  <CardTitle className="text-base">{ws.name}</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Status: {ws.status}
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">ID: {ws.id}</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         ))}
-      </div>
+      </section>
     </div>
   );
 };

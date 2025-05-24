@@ -32,22 +32,22 @@ export const createWorkspace = async (req: Request, res: Response) => {
         res.status(400).json({ error: "Workspace already exists" });
         return;
       }
-  
-    const workspace = await prismaClient.workspace.create({
-      data: {
-        name,
-        owner_id: userId,
-      },
-    });
-    const workspaceMember = await prismaClient.workspaceMember.create({
-      data: {
-        userId: userId,
-        workspaceId: workspace.id,
-        role: "owner",
-        status: Status.ACTIVE,
-      },
-    });  
+
+      const workspace = await prismaClient.workspace.create({
+        data: {
+          name,
+          owner_id: userId,
+        },
       });
+      const workspaceMember = await prismaClient.workspaceMember.create({
+        data: {
+          userId: userId,
+          workspaceId: workspace.id,
+          role: "owner",
+          status: Status.ACTIVE,
+        },
+      });
+    });
 
     res.status(201).json(workspace);
   } catch (error) {
@@ -70,16 +70,53 @@ export const getWorkspaces = async (req: Request, res: Response) => {
       where: {
         userId: userId,
       },
-      include: {
+      select: {
+        status: true,
         workspace: true,
       },
     });
 
-    const workspaces = memberships.map((m) => m.workspace);
+    const workspaces = memberships.map((m) => ({
+      ...m.workspace,
+      status: m.status,
+    }));
 
     res.status(200).json(workspaces);
   } catch (error) {
     console.error("Error fetching workspaces:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getWorkspace = async (req: Request, res: Response) => {
+  const { workspaceId } = req.params;
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  if (!workspaceId) {
+    res.status(400).json({ error: "Workspace ID is required" });
+    return;
+  }
+
+  try {
+    const workspace = await prismaClient.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+    });
+
+    if (!workspace) {
+      res.status(404).json({ error: "Workspace not found" });
+      return;
+    }
+
+    res.status(200).json(workspace);
+  } catch (error) {
+    console.error("Error fetching workspace:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -138,8 +175,6 @@ export const getWorkspaceMembers = async (req: Request, res: Response) => {
   }
 };
 
-
-
 export const requestJoinWorkspace = async (req: Request, res: Response) => {
   const { workspaceId } = req.params;
   const { userId } = getAuth(req);
@@ -180,11 +215,14 @@ export const requestJoinWorkspace = async (req: Request, res: Response) => {
     console.error("Error joining workspace:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-}
+};
 
 // #TODO: authorize owner to access this endpoint
 // owner can accept or reject the request
-export const handleJoinWorkspaceRequest = async (req: Request, res: Response) => {
+export const handleJoinWorkspaceRequest = async (
+  req: Request,
+  res: Response
+) => {
   const { membershipId } = req.params;
   const { userId } = getAuth(req);
   const { action } = req.body;
@@ -205,7 +243,7 @@ export const handleJoinWorkspaceRequest = async (req: Request, res: Response) =>
         id: membershipId,
       },
       data: {
-        status : action === "ACCEPT" ? Status.ACTIVE : Status.REJECTED,
+        status: action === "ACCEPT" ? Status.ACTIVE : Status.REJECTED,
       },
     });
 
@@ -217,11 +255,9 @@ export const handleJoinWorkspaceRequest = async (req: Request, res: Response) =>
 };
 
 export const inviteUserToWorkspace = async (req: Request, res: Response) => {
-
   const { workspaceId } = req.params;
   const { userId: ownerId } = getAuth(req);
   const { userId } = req.body;
- 
 
   if (!ownerId) {
     res.status(401).json({ error: "Unauthorized" });
@@ -239,7 +275,6 @@ export const inviteUserToWorkspace = async (req: Request, res: Response) => {
   }
 
   try {
-    
     const membership = await prismaClient.workspaceMember.create({
       data: {
         userId: userId,
@@ -254,10 +289,12 @@ export const inviteUserToWorkspace = async (req: Request, res: Response) => {
     console.error("Error inviting user to workspace:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+};
 
-}
-
-export const handleWorkspaceInvitationRequest = async (req: Request, res: Response) => {
+export const handleWorkspaceInvitationRequest = async (
+  req: Request,
+  res: Response
+) => {
   const { membershipId } = req.params;
   const { userId } = getAuth(req);
   if (!userId) {
@@ -286,8 +323,7 @@ export const handleWorkspaceInvitationRequest = async (req: Request, res: Respon
     console.error("Error declining invitation:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-
-}
+};
 
 export const removeUserFromWorkspace = async (req: Request, res: Response) => {
   const { membershipId } = req.params;
@@ -314,4 +350,4 @@ export const removeUserFromWorkspace = async (req: Request, res: Response) => {
     console.error("Error removing user from workspace:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-}
+};
