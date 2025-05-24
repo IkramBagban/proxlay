@@ -19,15 +19,6 @@ const Header = () => {
           <NavLink to="/workspace" className="hover:text-gray-400">
             Workspace
           </NavLink>
-          <NavLink to="/upload" className="hover:text-gray-400">
-            Upload
-          </NavLink>
-          <NavLink to="/videos" className="hover:text-gray-400">
-            Videos
-          </NavLink>
-          <NavLink to="/about" className="hover:text-gray-400">
-            About
-          </NavLink>
         </nav>
 
         <div>

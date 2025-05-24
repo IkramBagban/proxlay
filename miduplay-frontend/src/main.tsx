@@ -18,10 +18,9 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <BrowserRouter>
-        <Header />
+       {/* <Header /> */}
         <RootRouter />
         <Toaster />
-        {/* <App /> */}
       </BrowserRouter>
     </ClerkProvider>
   </StrictMode>

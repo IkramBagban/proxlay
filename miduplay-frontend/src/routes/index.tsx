@@ -1,24 +1,57 @@
+// routes/index.tsx
 import App from "@/App";
 import SpacesPage from "@/app/workspace/page";
-import YoutubeSpace from "@/app/platforms/youtube/page";
-import UploadVideo from "@/app/upload/page";
-import React from "react";
 import { Route, Routes } from "react-router";
-import WorkspaceDetails from "@/app/workspace/workspace-details/page";
+// import WorkspaceLayout from "@/components/workspace/workspace-layout";
+// import WorkspaceDashboard from "@/app/workspace/workspace-details/dashboard";
+import WorkspaceDashboard from "@/app/workspace/workspace-details/dashboard";
+// import WorkspaceMembers from "@/app/workspace/workspace-details/";
+import WorkspaceVideos from "@/app/workspace/workspace-details/videos";
+// import WorkspacePlatforms from "@/app/workspace/workspace-details/platforms";
 import YoutubeVideoUpload from "@/app/platforms/youtube/upload-video/page";
+import WorkspaceLayout from "@/app/workspace/workspace-layout";
+import WorkspaceMembers from "@/app/Members/page";
 
 const RootRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<App />} />
-      {/* <Route path="/upload" element={<UploadVideo />} /> */}
-      <Route path="/workspace">
-        <Route index element={<SpacesPage />} />
-        <Route path="/workspace/:workspaceId" element={<WorkspaceDetails />} />
-        <Route path="/workspace/:workspaceId/youtube/upload" element={<YoutubeVideoUpload />} />
+      <Route path="/workspace" element={<SpacesPage />} />
+      
+      {/* Workspace routes with sidebar layout */}
+      <Route path="/workspace/:workspaceId" element={<WorkspaceLayout />}>
+        <Route index element={<WorkspaceDashboard />} />
+        <Route path="members" element={<WorkspaceMembers />} />
+        <Route path="videos" element={<WorkspaceVideos />} />
+        {/* <Route path="platforms" element={<WorkspacePlatforms />} /> */}
+        <Route path="youtube/upload" element={<YoutubeVideoUpload />} />
       </Route>
     </Routes>
   );
 };
 
 export default RootRouter;
+
+// import App from "@/App";
+// import SpacesPage from "@/app/workspace/page";
+// import { Route, Routes } from "react-router";
+// import WorkspaceDetails from "@/app/workspace/workspace-details/page";
+// import YoutubeVideoUpload from "@/app/platforms/youtube/upload-video/page";
+
+// const RootRouter = () => {
+//   return (
+//     <Routes>
+//       <Route path="/" element={<App />} />
+//       <Route path="/workspace">
+//         <Route index element={<SpacesPage />} />
+//         <Route path="/workspace/:workspaceId" element={<WorkspaceDetails />} />
+//         <Route
+//           path="/workspace/:workspaceId/youtube/upload"
+//           element={<YoutubeVideoUpload />}
+//         />
+//       </Route>
+//     </Routes>
+//   );
+// };
+
+// export default RootRouter;

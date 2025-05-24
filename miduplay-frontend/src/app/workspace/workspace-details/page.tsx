@@ -17,10 +17,7 @@ const WorkspaceDetails = () => {
   const [isYoutubeAuthorizedLoading, setIsYoutubeAuthorizedLoading] =
     React.useState(true);
 
-  const { data: members = [], loading: membersLoading } = useFetch(
-    `/workspace/members/${workspaceId}`,
-    true
-  );
+
   const { data: videos = [], loading: videosLoading } = useFetch(
     `/youtube/videos/${workspaceId}`,
     true
@@ -131,61 +128,7 @@ const WorkspaceDetails = () => {
         </div>
       </div>
 
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Members</h3>
-
-        {membersLoading ? (
-          <p className="text-muted-foreground text-sm">Loading members...</p>
-        ) : members.length === 0 ? (
-          <p className="text-muted-foreground text-sm">No members found.</p>
-        ) : (
-          <div className="space-y-3">
-            {members.map((member) => {
-              const { firstName, lastName, email, imageUrl } = member.user;
-
-              return (
-                <Card key={member.id} className="rounded-2xl shadow-sm">
-                  <CardContent className="p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={imageUrl}
-                        alt={`${firstName} ${lastName}`}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-                      <div>
-                        <h4 className="font-medium">
-                          {firstName} {lastName}
-                        </h4>
-                        <p className="text-sm text-muted-foreground">{email}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline" className="capitalize">
-                            {member.role}
-                          </Badge>
-                          <Badge
-                            variant={
-                              member.status === "active"
-                                ? "default"
-                                : "secondary"
-                            }
-                            className="capitalize"
-                          >
-                            {member.status}
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                    <Button size="icon" variant="outline">
-                      <Pencil className="h-4 w-4" />
-                      <span className="sr-only">Edit {firstName}'s role</span>
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
+     
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-semibold">Videos</h3>

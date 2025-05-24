@@ -12,8 +12,8 @@ export const uploadVideoSchema = z.object({
     .optional(),
 
   tags: z
-    .array(z.string().max(30))
-    .max(10, "You can add up to 10 tags only.")
+    .array(z.string())
+    // .max(10, "You can add up to 10 tags only.")
     .optional(),
 
 privacyStatus: z.enum(["public", "unlisted", "private"]),
