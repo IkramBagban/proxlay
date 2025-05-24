@@ -12,7 +12,7 @@ router.get("/members/:workspaceId", getWorkspaceMembers);
 
 router.post("/request-join/:workspaceId", requestJoinWorkspace);
 
-router.post("/handle-join-request/:workspaceId", handleJoinWorkspaceRequest);
+router.post("/handle-join-request/:membershipId", handleJoinWorkspaceRequest);
 
 router.post("/invite/:workspaceId", inviteUserToWorkspace);
 
