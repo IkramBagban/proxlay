@@ -22,6 +22,7 @@ import axiosClient from "@/lib/axios-client";
 import { useAuth } from "@clerk/clerk-react";
 import { isAxiosError } from "axios";
 import toast from "react-hot-toast";
+import InviteMemberDialog from "@/components/workspace/invite-member-dialog";
 
 const WorkspaceMembers = () => {
   const { workspaceId } = useParams();
@@ -325,10 +326,7 @@ const WorkspaceMembers = () => {
             Manage workspace members and their permissions
           </p>
         </div>
-        <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-          <UserPlus className="h-4 w-4" />
-          Invite Member
-        </Button>
+        <InviteMemberDialog workspaceId={workspaceId} />
       </div>
 
       {/* Stats Cards */}

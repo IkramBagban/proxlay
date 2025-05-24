@@ -11,7 +11,7 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
-import { clerkMiddleware } from "@clerk/express";
+import { clerkMiddleware, ExpressRequestWithAuth } from "@clerk/express";
 import { clerkClient, requireAuth, getAuth } from "@clerk/express";
 import workspaceRoutes from "./routes/v1/workspace.route";
 import { prismaClient } from "./lib/db";
@@ -48,6 +48,72 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/workspace", requireAuth(), workspaceRoutes);
+
+app.get(
+  "/api/v1/workspace/:workspaceId/members/search",
+  async (req: ExpressRequestWithAuth, res: any) => {
+
+    const { workspaceId } = req.params;
+    const { q } = req.query as { q: string };
+    console.log("Searching members with query:", q);
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    if (!workspaceId) {
+      res.status(400).json({ error: "Workspace ID is required" });
+      return;
+    }
+
+    try {
+      const members = await clerkClient.users.getUserList({
+        query: q as string,
+        limit: 10,
+      });
+
+      const areMembersOfWorkspace = await prismaClient.workspaceMember.findMany({
+
+        where: {
+          workspaceId: workspaceId,
+          userId: {
+            in: members.data?.map((member) => member.id),
+          },
+        },
+      });
+     
+
+      const updatedMembers = members.data?.map((member) => {
+        const memberDetails = areMembersOfWorkspace.find(
+          (m) => m.userId === member.id
+        );
+        
+        return {
+          id: member.id,
+          firstName: member.firstName,
+          lastName: member.lastName,
+          email: member.emailAddresses?.[0]?.emailAddress,
+          imageUrl: member.imageUrl,
+          isMember: !!memberDetails,
+          // memberStatusMessage: memberStatusMessage,
+          memberStatus: memberDetails?.status || "NOT_MEMBER",
+        };
+      });
+
+      // @ts-ignore
+      if (!updatedMembers || updatedMembers.length === 0) {
+        res.status(404).json({ error: "No members found" });
+        return;
+      }
+      res.status(200).json(updatedMembers);
+    } catch (error) {
+      console.error("Error searching members:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
 
 app.post("/get-presigned-url", requireAuth(), async (req: any, res) => {
   console.log("req.body", req.body);
@@ -309,7 +375,7 @@ app.post(
             title,
             description,
             tags,
-           categoryId: "24",
+            categoryId: "24",
           },
           status: {
             privacyStatus,
