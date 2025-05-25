@@ -8,10 +8,20 @@ import axiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
 import { useFetch } from "@/hooks/useFetch";
 import JoinWorkspace from "@/components/workspace/join-workspace";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { isAxiosError } from "axios";
 
 const WorkspacePage = () => {
   const [meta, setMeta] = React.useState<{ name: string }>({ name: "" });
   const [open, setOpen] = React.useState(false);
+  const [openInvite, setOpenInvite] = React.useState(false);
 
   const { getToken } = useAuth();
   const { data: workspaces } = useFetch("/workspace", true);
@@ -49,9 +59,114 @@ const WorkspacePage = () => {
     setOpen(false);
   };
 
+  const openInviteDialog = () => {
+    setOpenInvite(true);
+  };
+  const closeInviteDialog = () => {
+    setOpenInvite(false);
+  };
+
+  const handleWorkspaceInvitationAction = async (
+    action: "ACCEPT" | "DECLINE",
+    membershipId: string
+  ) => {
+    const token = await getToken();
+    if (!token) {
+      toast.error("You are not authorized to do this action");
+      return;
+    }
+    try {
+      const response = await axiosClient.post(
+        `/handle-invitation-request/${membershipId}`,
+        {
+          action,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("response", response);
+      closeInviteDialog();
+      if (response.status === 200) {
+        toast.success(`You joined ${response.data.workspace?.name}`);
+      }
+    } catch (error) {
+      console.log("error", error);
+      if(isAxiosError(error)) {
+
+        toast.error(
+          error.response?.data?.error || "Failed to handle invitation request"
+        );
+        return;
+      }
+      toast.error("failed")
+    }
+  };
+
+  const { data: invites, loading } = useFetch("/invites", true);
+  console.log("Invites:", invites);
   return (
     <div className="p-6 space-y-6">
-      <section className=" ">
+      <Button
+        className="cursor-pointer"
+        variant="secondary"
+        onClick={openInviteDialog}
+      >
+        Invites
+      </Button>
+      <Dialog open={openInvite} onOpenChange={closeInviteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Workspace Invites</DialogTitle>
+            <DialogDescription>
+              Here you can manage your workspace invites.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {loading ? (
+              <p>Loading invites...</p>
+            ) : invites?.length > 0 ? (
+              invites.map((invite) => (
+                <div
+                  key={invite?.workspace.id}
+                  className="flex justify-between items-center"
+                >
+                  <div className="flex flex-col ">
+                    <span>{invite.workspace?.name}</span>
+                    <div className="text-[grey]">{invite.workspace.id}</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      className="cursor-pointer"
+                      variant="secondary"
+                      onClick={() =>
+                        handleWorkspaceInvitationAction("DECLINE", invite.id)
+                      }
+                    >
+                      Reject
+                    </Button>
+                    <Button
+                      className="cursor-pointer"
+                      variant="default"
+                      onClick={() => {
+                        handleWorkspaceInvitationAction("ACCEPT", invite.id);
+                      }}
+                    >
+                      Accept
+                    </Button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No invites found.</p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <section className="mt-3">
         <JoinWorkspace />
       </section>
 

@@ -291,39 +291,6 @@ export const inviteUserToWorkspace = async (req: Request, res: Response) => {
   }
 };
 
-export const handleWorkspaceInvitationRequest = async (
-  req: Request,
-  res: Response
-) => {
-  const { membershipId } = req.params;
-  const { userId } = getAuth(req);
-  if (!userId) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-  const { action } = req.body; // this can be either "ACCEPT" or "DECLINE"
-  console.log("action", action);
-
-  if (!membershipId) {
-    res.status(400).json({ error: "Membership ID is required" });
-    return;
-  }
-  try {
-    const membership = await prismaClient.workspaceMember.update({
-      where: {
-        id: membershipId,
-      },
-      data: {
-        status: action === "ACCEPT" ? Status.ACTIVE : Status.DECLINED,
-      },
-    });
-
-    res.status(200).json(membership);
-  } catch (error) {
-    console.error("Error declining invitation:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
 
 export const removeUserFromWorkspace = async (req: Request, res: Response) => {
   const { membershipId } = req.params;
