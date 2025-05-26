@@ -469,32 +469,6 @@ const WorkspaceMembers = () => {
         </CardContent>
       </Card>
 
-      {/* Invite Section */}
-      {activeTab === "members" && activeMembers.length > 0 && (
-        <Card className="border-dashed border-2 border-primary/20 bg-primary/5">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <UserPlus className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">
-                    Invite more members
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Grow your team by inviting more collaborators
-                  </p>
-                </div>
-              </div>
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                <UserPlus className="mr-2 h-4 w-4" />
-                Send Invite
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };
