@@ -16,6 +16,7 @@ import { clerkClient, requireAuth, getAuth } from "@clerk/express";
 import workspaceRoutes from "./routes/v1/workspace.route";
 import { prismaClient } from "./lib/db";
 import { Status } from "./generated/prisma";
+import { checkOwner } from "./middleware/check-owner";
 
 dotenv.config();
 const app = express();
@@ -50,140 +51,80 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/workspace", requireAuth(), workspaceRoutes);
 
-app.get("/api/v1/invites", requireAuth(), async (req: ExpressRequestWithAuth, res: any) => {
-  const { userId } = getAuth(req);
-  const invites = await prismaClient.workspaceMember.findMany({
-    where: {
-      userId: userId!,
-      status: Status.INVITED,
-    },
-    select: {
-      id: true,
-      status: true,
-      workspace: {
-        select: {
-          id: true,
-          name: true,
-          owner_id: true,
-        },
-      },
-    },
-  });
-  if (!invites || invites.length === 0) {
-     res.status(404).json({ message: "No invites found" });
-     return
-  }
-
-  res.status(200).json(invites);
-});
-
-// user will accept or decline the invitation
-app.post("/api/v1/handle-invitation-request/:membershipId",  async (
-  req: ExpressRequestWithAuth,
-  res: any
-) => {
-  const { membershipId } = req.params;
-  const { userId } = getAuth(req);
-  if (!userId) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-  const { action } = req.body; // this can be either "ACCEPT" or "DECLINE"
-  console.log("action", action);
-
-  if (!membershipId) {
-    res.status(400).json({ error: "Membership ID is required" });
-    return;
-  }
-  try {
-    const membership = await prismaClient.workspaceMember.update({
+app.get(
+  "/api/v1/invites",
+  requireAuth(),
+  async (req: ExpressRequestWithAuth, res: any) => {
+    const { userId } = getAuth(req);
+    const invites = await prismaClient.workspaceMember.findMany({
       where: {
-        id: membershipId,
-      },
-      data: {
-        status: action === "ACCEPT" ? Status.ACTIVE : Status.DECLINED,
+        userId: userId!,
+        status: Status.INVITED,
       },
       select: {
+        id: true,
+        status: true,
         workspace: {
           select: {
-            name: true
-          }
-        }
-      }
+            id: true,
+            name: true,
+            owner_id: true,
+          },
+        },
+      },
     });
+    if (!invites || invites.length === 0) {
+      res.status(404).json({ message: "No invites found" });
+      return;
+    }
 
-    res.status(200).json(membership);
-  } catch (error) {
-    console.error("Error declining invitation:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(200).json(invites);
   }
-});
+);
 
-
-app.get(
-  "/api/v1/workspace/:workspaceId/members/search",
+// user will accept or decline the invitation
+app.post(
+  "/api/v1/handle-invitation-request/:membershipId",
   async (req: ExpressRequestWithAuth, res: any) => {
-    const { workspaceId } = req.params;
-    const { q } = req.query as { q: string };
-    console.log("Searching members with query:", q);
+    const { membershipId } = req.params;
     const { userId } = getAuth(req);
-
     if (!userId) {
       res.status(401).json({ error: "Unauthorized" });
       return;
     }
+    const { action } = req.body; // this can be either "ACCEPT" or "DECLINE"
+    console.log("action", action);
 
-    if (!workspaceId) {
-      res.status(400).json({ error: "Workspace ID is required" });
+    if (!membershipId) {
+      res.status(400).json({ error: "Membership ID is required" });
       return;
     }
-
     try {
-      const members = await clerkClient.users.getUserList({
-        query: q as string,
-        limit: 10,
-      });
-
-      const areMembersOfWorkspace = await prismaClient.workspaceMember.findMany(
-        {
-          where: {
-            workspaceId: workspaceId,
-            userId: {
-              in: members.data?.map((member) => member.id),
+      const membership = await prismaClient.workspaceMember.update({
+        where: {
+          id: membershipId,
+        },
+        data: {
+          status: action === "ACCEPT" ? Status.ACTIVE : Status.DECLINED,
+        },
+        select: {
+          workspace: {
+            select: {
+              name: true,
             },
           },
-        }
-      );
-
-      const updatedMembers = members.data?.map((member) => {
-        const memberDetails = areMembersOfWorkspace.find(
-          (m) => m.userId === member.id
-        );
-
-        return {
-          id: member.id,
-          firstName: member.firstName,
-          lastName: member.lastName,
-          email: member.emailAddresses?.[0]?.emailAddress,
-          imageUrl: member.imageUrl,
-          isMember: !!memberDetails,
-          // memberStatusMessage: memberStatusMessage,
-          memberStatus: memberDetails?.status || "NOT_MEMBER",
-        };
+        },
       });
 
-      // @ts-ignore
-      if (!updatedMembers || updatedMembers.length === 0) {
-        res.status(404).json({ error: "No members found" });
-        return;
-      }
-      res.status(200).json(updatedMembers);
+      res.status(200).json(membership);
     } catch (error) {
-      console.error("Error searching members:", error);
+      console.error("Error declining invitation:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   }
 );
+
+
 
 app.post("/get-presigned-url", requireAuth(), async (req: any, res) => {
   console.log("req.body", req.body);
@@ -316,6 +257,7 @@ app.get(
 app.get(
   "/api/v1/youtube/authorize/:workspaceId",
   requireAuth(),
+  checkOwner,
   async (req, res) => {
     const { userId } = await getAuth(req);
     const { workspaceId } = req.params;
@@ -399,7 +341,9 @@ app.get(
 
 app.post(
   "/api/v1/youtube/upload-to-youtube/:workspaceId",
+
   requireAuth(),
+  checkOwner,
   async (req: any, res: any) => {
     const {
       title,
@@ -460,6 +404,73 @@ app.post(
     } catch (error) {
       console.error("Error uploading video:", error);
       res.status(500).send("Failed to upload video");
+    }
+  }
+);
+
+app.get(
+  "/api/v1/workspace/:workspaceId/members/search",
+  requireAuth(),
+  checkOwner,
+  async (req: ExpressRequestWithAuth, res: any) => {
+    const { workspaceId } = req.params;
+    const { q } = req.query as { q: string };
+    console.log("Searching members with query:", q);
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    if (!workspaceId) {
+      res.status(400).json({ error: "Workspace ID is required" });
+      return;
+    }
+
+    try {
+      const members = await clerkClient.users.getUserList({
+        query: q as string,
+        limit: 10,
+      });
+
+      const areMembersOfWorkspace = await prismaClient.workspaceMember.findMany(
+        {
+          where: {
+            workspaceId: workspaceId,
+            userId: {
+              in: members.data?.map((member) => member.id),
+            },
+          },
+        }
+      );
+
+      const updatedMembers = members.data?.map((member) => {
+        const memberDetails = areMembersOfWorkspace.find(
+          (m) => m.userId === member.id
+        );
+
+        return {
+          id: member.id,
+          firstName: member.firstName,
+          lastName: member.lastName,
+          email: member.emailAddresses?.[0]?.emailAddress,
+          imageUrl: member.imageUrl,
+          isMember: !!memberDetails,
+          // memberStatusMessage: memberStatusMessage,
+          memberStatus: memberDetails?.status || "NOT_MEMBER",
+        };
+      });
+
+      // @ts-ignore
+      if (!updatedMembers || updatedMembers.length === 0) {
+        res.status(404).json({ error: "No members found" });
+        return;
+      }
+      res.status(200).json(updatedMembers);
+    } catch (error) {
+      console.error("Error searching members:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 );
