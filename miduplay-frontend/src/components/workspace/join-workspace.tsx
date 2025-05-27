@@ -17,6 +17,7 @@ import { useAuth } from "@clerk/clerk-react";
 import toast from "react-hot-toast";
 import { isAxiosError } from "axios";
 import { UserPlus, Building2 } from "lucide-react";
+import { useWorkspace } from "@/hooks/tanstack/useWorkspace";
 
 const JoinWorkspace = () => {
   const [workspaceId, setWorkspaceId] = useState("");
@@ -27,12 +28,13 @@ const JoinWorkspace = () => {
   const [open, setOpen] = useState(false);
   const { getToken } = useAuth();
 
+  const { joinRequestInWorkspace } = useWorkspace({ workspaceId });
   const handleSearch = async () => {
     if (!workspaceId.trim()) {
       toast.error("Please enter a workspace ID");
       return;
     }
-    
+
     setLoading(true);
     setWorkspaceInfo(null);
     setErrorMessage("");
@@ -57,20 +59,10 @@ const JoinWorkspace = () => {
     }
   };
 
-  const handleJoinRequest = async () => {
+  const onSubmit = async () => {
     setJoining(true);
     try {
-      const token = await getToken();
-      await axiosClient.post(
-        `/workspace/request-join/${workspaceId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      toast.success("Join request sent!");
+      await joinRequestInWorkspace.mutateAsync({ workspaceId });
       setWorkspaceInfo(null);
       setWorkspaceId("");
       setOpen(false);
@@ -80,7 +72,7 @@ const JoinWorkspace = () => {
         setErrorMessage("You are already a member of this workspace");
         toast.error(error.response.data?.error || "Error sending join request");
         return;
-      } 
+      }
       toast.error("Error sending join request");
     } finally {
       setJoining(false);
@@ -109,7 +101,7 @@ const JoinWorkspace = () => {
             </div>
           </div>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="workspaceId">Workspace ID</Label>
@@ -121,8 +113,8 @@ const JoinWorkspace = () => {
                 placeholder="Enter workspace ID..."
                 className="flex-1"
               />
-              <Button 
-                onClick={handleSearch} 
+              <Button
+                onClick={handleSearch}
                 disabled={loading || !workspaceId.trim()}
                 variant="outline"
               >
@@ -142,17 +134,21 @@ const JoinWorkspace = () => {
                   <Building2 className="w-4 h-4 text-blue-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-gray-900">{workspaceInfo.name}</h4>
+                  <h4 className="font-semibold text-gray-900">
+                    {workspaceInfo.name}
+                  </h4>
                   {workspaceInfo.description && (
-                    <p className="text-sm text-gray-600 mt-1">{workspaceInfo.description}</p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {workspaceInfo.description}
+                    </p>
                   )}
                   <p className="text-xs text-gray-500 mt-2 font-mono">
                     {workspaceInfo.id}
                   </p>
                 </div>
               </div>
-              <Button 
-                onClick={handleJoinRequest} 
+              <Button
+                onClick={onSubmit}
                 disabled={joining}
                 className="w-full mt-3"
               >

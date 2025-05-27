@@ -54,6 +54,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { isAxiosError } from "axios";
+import { useWorkspace } from "@/hooks/tanstack/useWorkspace";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 const WorkspacePage = () => {
   const [meta, setMeta] = React.useState<{ name: string }>({ name: "" });
@@ -61,9 +64,14 @@ const WorkspacePage = () => {
   const [openInvite, setOpenInvite] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid");
-
+  
+  const queryClient = useQueryClient();
   const { getToken } = useAuth();
-  const { data: workspaces } = useFetch("/workspace", true);
+  const { queryWorkspaces, createWorkspace, handleInvitationRequest } =
+    useWorkspace({
+      workspaceId: "",
+    });
+  const { data: workspaces } = queryWorkspaces;
 
   const metaChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMeta({ ...meta, [e.target.name]: e.target.value });
@@ -79,16 +87,8 @@ const WorkspacePage = () => {
     }
 
     try {
-      const token = await getToken();
-      await axiosClient.post(
-        "/workspace/create",
-        { name },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      toast.success("Workspace created successfully");
+      const response = await createWorkspace.mutateAsync({ name });
+      console.log("Workspace created:", response);
     } catch (error) {
       console.error("Workspace creation failed:", error);
       toast.error("Failed to create workspace");
@@ -116,22 +116,22 @@ const WorkspacePage = () => {
       return;
     }
     try {
-      const response = await axiosClient.post(
-        `/handle-invitation-request/${membershipId}`,
+      await handleInvitationRequest.mutateAsync(
         {
           action,
+          membershipId,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
+          onSuccess: (response) => {
+            console.log("Invitation handled successfully:", response);
+            toast.success(
+              `You ${action === "ACCEPT" ? "joined" : "declined"} the workspace`
+            );
+            queryClient.invalidateQueries({ queryKey: ["workspaces"] });
           },
         }
       );
-      console.log("response", response);
       closeInviteDialog();
-      if (response.status === 200) {
-        toast.success(`You joined ${response.data.workspace?.name}`);
-      }
     } catch (error) {
       console.log("error", error);
       if (isAxiosError(error)) {

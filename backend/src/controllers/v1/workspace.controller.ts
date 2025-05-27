@@ -123,12 +123,12 @@ export const getWorkspace = async (req: Request, res: Response) => {
 
 export const getWorkspaceMembers = async (req: Request, res: Response) => {
   const { workspaceId } = req.params;
-  const { userId } = getAuth(req);
+  // const { userId } = getAuth(req);
 
-  if (!userId) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
+  // if (!userId) {
+  //   res.status(401).json({ error: "Unauthorized" });
+  //   return;
+  // }
 
   if (!workspaceId) {
     res.status(400).json({ error: "Workspace ID is required" });
@@ -223,7 +223,8 @@ export const handleJoinWorkspaceRequest = async (
   req: Request,
   res: Response
 ) => {
-  const { membershipId } = req.params;
+  const { workspaceId } = req.params;
+  const { membershipId } = req.query as { membershipId: string };
   const { userId } = getAuth(req);
   const { action } = req.body;
   console.log("action", action);
@@ -238,16 +239,29 @@ export const handleJoinWorkspaceRequest = async (
   }
 
   try {
-    const membership = await prismaClient.workspaceMember.update({
-      where: {
-        id: membershipId,
-      },
-      data: {
-        status: action === "ACCEPT" ? Status.ACTIVE : Status.REJECTED,
-      },
-    });
+    if (action === "ACCEPT") {
+      const membership = await prismaClient.workspaceMember.update({
+        where: {
+          id: membershipId,
+        },
+        data: {
+          // status: action === "ACCEPT" ? Status.ACTIVE : Status.REJECTED,
+          status: Status.ACTIVE,
+        },
+      });
+      res.status(200).json(membership);
+      return;
+    } else if (action === "REJECT") {
+      const membership = await prismaClient.workspaceMember.delete({
+        where: {
+          id: membershipId,
+        },
+      });
+      res.status(200).json(membership);
+      return;
+    }
 
-    res.status(200).json(membership);
+    res.status(400).json({ error: "Invalid action" });
   } catch (error) {
     console.error("Error accepting join request:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -290,7 +304,6 @@ export const inviteUserToWorkspace = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 export const removeUserFromWorkspace = async (req: Request, res: Response) => {
   const { membershipId } = req.params;

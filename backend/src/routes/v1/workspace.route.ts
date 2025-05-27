@@ -21,7 +21,8 @@ router.get("/members/:workspaceId", getWorkspaceMembers);
 router.post("/request-join/:workspaceId", requestJoinWorkspace);
 
 // owner only routes
-router.post("/handle-join-request/:membershipId", checkOwner, handleJoinWorkspaceRequest);
+// in this route i have to pass membershipId as a query parameter
+router.post("/handle-join-request/:workspaceId", checkOwner, handleJoinWorkspaceRequest);
 router.post("/invite/:workspaceId", checkOwner, inviteUserToWorkspace);
 router.post("/remove-user/:workspaceId", checkOwner, removeUserFromWorkspace);
 

@@ -33,6 +33,7 @@ export const checkOwner = async (req: any, res: any, next: any) => {
       .status(403)
       .json({ error: "Forbidden: You are not the owner of this workspace" });
   }
+  console.log("passing to next middleware");
 
   next();
 };

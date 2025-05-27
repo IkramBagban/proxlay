@@ -100,31 +100,45 @@ app.post(
       return;
     }
     try {
-      const membership = await prismaClient.workspaceMember.update({
-        where: {
-          id: membershipId,
-        },
-        data: {
-          status: action === "ACCEPT" ? Status.ACTIVE : Status.DECLINED,
-        },
-        select: {
-          workspace: {
-            select: {
-              name: true,
+      if (action === "ACCEPT") {
+        const membership = await prismaClient.workspaceMember.update({
+          where: {
+            id: membershipId,
+          },
+          data: {
+            // status: action === "ACCEPT" ? Status.ACTIVE : Status.DECLINED,
+            status: Status.ACTIVE,
+          },
+          select: {
+            workspace: {
+              select: {
+                name: true,
+              },
             },
           },
-        },
-      });
-
-      res.status(200).json(membership);
+        });
+        return res.status(200).json({
+          message: `You have successfully joined the workspace: ${membership.workspace.name}`,
+          membership,
+        });
+      } else if (action === "DECLINE") {
+        const membership = await prismaClient.workspaceMember.delete({
+          where: {
+            id: membershipId,
+          },
+        });
+        res
+          .status(200)
+          .json({ membership, message: "Invitation declined successfully" });
+        return;
+      }
+      res.status(400).json({ error: "Invalid action" });
     } catch (error) {
       console.error("Error declining invitation:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   }
 );
-
-
 
 app.post("/get-presigned-url", requireAuth(), async (req: any, res) => {
   console.log("req.body", req.body);

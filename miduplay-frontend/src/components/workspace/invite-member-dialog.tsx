@@ -15,6 +15,7 @@ import axiosClient from "@/lib/axios-client";
 import { useAuth } from "@clerk/clerk-react";
 import toast from "react-hot-toast";
 import { isAxiosError } from "axios";
+import { useWorkspace } from "@/hooks/tanstack/useWorkspace";
 
 interface User {
   id: string;
@@ -36,6 +37,8 @@ const InviteMemberDialog: React.FC<Props> = ({ workspaceId }) => {
   const [isSearching, setIsSearching] = useState(false);
   const { getToken } = useAuth();
 
+  const { inviteUserToWorkspace } = useWorkspace({ workspaceId });
+
   // Debounced search function
   const searchUsers = useCallback(
     debounce(async (query: string) => {
@@ -49,7 +52,9 @@ const InviteMemberDialog: React.FC<Props> = ({ workspaceId }) => {
       try {
         const token = await getToken();
         const response = await axiosClient.get(
-          `/workspace/${workspaceId}/members/search?q=${encodeURIComponent(query)}`,
+          `/workspace/${workspaceId}/members/search?q=${encodeURIComponent(
+            query
+          )}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -76,23 +81,37 @@ const InviteMemberDialog: React.FC<Props> = ({ workspaceId }) => {
 
   const handleInvite = async (userId: string) => {
     try {
-      const token = await getToken();
-      const response = await axiosClient.post(
-        `/workspace/invite/${workspaceId}`,
-        { userId },
+      await inviteUserToWorkspace.mutateAsync(
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
+          workspaceId,
+          userId,
+        },
+        {
+          onSuccess: () => {
+            toast.success("Invitation sent successfully===<userId>");
+            setOpen(false);
+            setSearchTerm("");
+            setSearchResults([]);
           },
         }
       );
 
-      if (response.status === 200) {
-        toast.success("Invitation sent successfully");
-        setOpen(false);
-        setSearchTerm("");
-        setSearchResults([]);
-      }
+      // const response = await axiosClient.post(
+      //   `/workspace/invite/${workspaceId}`,
+      //   { userId },
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+
+      // if (response.status === 200) {
+      //   toast.success("Invitation sent successfully");
+      //   setOpen(false);
+      //   setSearchTerm("");
+      //   setSearchResults([]);
+      // }
     } catch (error) {
       if (isAxiosError(error) && error.response) {
         toast.error(error.response.data?.error || "Failed to send invitation");
@@ -180,7 +199,9 @@ const InviteMemberDialog: React.FC<Props> = ({ workspaceId }) => {
                         <p className="text-sm font-medium text-gray-900">
                           {user.firstName} {user.lastName}
                         </p>
-                        <p className="text-xs text-gray-500 truncate max-w-[200px]">{user.email}</p>
+                        <p className="text-xs text-gray-500 truncate max-w-[200px]">
+                          {user.email}
+                        </p>
                       </div>
                     </div>
                     {canInvite ? (

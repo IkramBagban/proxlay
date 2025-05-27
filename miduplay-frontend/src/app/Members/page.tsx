@@ -23,6 +23,8 @@ import { useAuth } from "@clerk/clerk-react";
 import { isAxiosError } from "axios";
 import toast from "react-hot-toast";
 import InviteMemberDialog from "@/components/workspace/invite-member-dialog";
+import { useMember } from "@/hooks/tanstack/useMembers";
+import { useWorkspace } from "@/hooks/tanstack/useWorkspace";
 
 const WorkspaceMembers = () => {
   const { workspaceId } = useParams();
@@ -31,10 +33,21 @@ const WorkspaceMembers = () => {
   const [activeTab, setActiveTab] = useState("members");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: members = [], loading: membersLoading } = useFetch(
-    `/workspace/members/${workspaceId}`,
-    true
-  );
+  // const { data: members = [], loading: membersLoading } = useFetch(
+  //   `/workspace/members/${workspaceId}`,
+  //   true
+  // );
+
+  const { queryWorkspaceMembers } = useMember({
+    workspaceId: workspaceId || "",
+  });
+
+  const { handleJoinRequest } = useWorkspace({
+    workspaceId: workspaceId || "",
+  });
+  const {data: members = [], isLoading: membersLoading} = queryWorkspaceMembers;
+  console.log("queryWorkspaceMembers", queryWorkspaceMembers);
+  console.log("queryWorkspaceMembers2", members);
 
   useEffect(() => {
     if (!workspaceId) {
@@ -117,40 +130,32 @@ const WorkspaceMembers = () => {
     }
   };
 
-  const handleJoinWorkspaceRequest = async (action: "ACCEPT" | "REJECT", membershipId: string) => {
+  const handleJoinWorkspaceRequest = async (
+    action: "ACCEPT" | "REJECT",
+    membershipId: string
+  ) => {
     console.log(`Request to ${action} join workspace`);
     const confirmMessage = `Are you sure you want to ${action.toLowerCase()} this join request?`;
     if (!window.confirm(confirmMessage)) {
       return;
     }
-    const token = await getToken();
     try {
-      const response = await axiosClient.post(
-        `/workspace/handle-join-request/${membershipId}`,
-        { action },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log("Join request handled successfully:", response.data);
-        // Optionally, you can refresh the members list or show a success message
-      } else {
-        console.error("Failed to handle join request:", response.data);
-      }
+      const response = await handleJoinRequest.mutateAsync({
+        action,
+        membershipId,
+        workspaceId
+      });
+      console.log("Join request handled successfully:", response);
     } catch (error) {
-      if(isAxiosError(error) && error.response) {
+      if (isAxiosError(error) && error.response) {
         console.error("Error handling join request:", error.response.data);
         toast.error(
           error.response.data?.error || "Failed to handle join request"
         );
-      console.error("Error joining workspace:", error);
+        console.error("Error joining workspace:", error);
+      }
     }
   };
-}
   const tabs = [
     {
       id: "members",
@@ -295,7 +300,9 @@ const WorkspaceMembers = () => {
                   size="sm"
                   variant="outline"
                   className="hover:bg-green-50 hover:border-green-200 text-green-700"
-                  onClick={() => handleJoinWorkspaceRequest("ACCEPT", member.id)}
+                  onClick={() =>
+                    handleJoinWorkspaceRequest("ACCEPT", member.id)
+                  }
                 >
                   <UserCheck className="h-3 w-3 mr-1" />
                   Accept
@@ -304,7 +311,9 @@ const WorkspaceMembers = () => {
                   size="sm"
                   variant="outline"
                   className="hover:bg-red-50 hover:border-red-200 text-red-700"
-                  onClick={() => handleJoinWorkspaceRequest("REJECT", member.id)}
+                  onClick={() =>
+                    handleJoinWorkspaceRequest("REJECT", member.id)
+                  }
                 >
                   Decline
                 </Button>
@@ -468,7 +477,6 @@ const WorkspaceMembers = () => {
           )}
         </CardContent>
       </Card>
-
     </div>
   );
 };
