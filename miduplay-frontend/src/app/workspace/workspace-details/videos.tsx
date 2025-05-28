@@ -9,7 +9,7 @@ import { useFetch } from "@/hooks/useFetch";
 import { useAuth } from "@clerk/clerk-react";
 import axiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
-import { AxiosError, isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 
 const WorkspaceVideos = () => {
   const { workspaceId } = useParams();
@@ -60,7 +60,7 @@ const WorkspaceVideos = () => {
         toast.error(error?.response?.data?.error || "Failed to upload video to YouTube")
         return
       }
-      if (error instanceof Error) {
+      if (error instanceof  Error) {
         toast.error(error?.message || "Failed to upload video to YouTube");
         return
       }
@@ -117,7 +117,7 @@ const WorkspaceVideos = () => {
           <div className="flex items-center justify-center py-12">
             <p className="text-muted-foreground">Loading videos...</p>
           </div>
-        ) : videos.length === 0 ? (
+        ) : videos?.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <div className="text-center space-y-4">
@@ -141,7 +141,7 @@ const WorkspaceVideos = () => {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {videos.map((video) => (
+            {videos?.map((video) => (
               <Card key={video.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="space-y-4">
