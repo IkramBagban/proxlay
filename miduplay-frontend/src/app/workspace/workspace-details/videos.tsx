@@ -9,6 +9,7 @@ import { useFetch } from "@/hooks/useFetch";
 import { useAuth } from "@clerk/clerk-react";
 import axiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
+import { AxiosError, isAxiosError } from "axios";
 
 const WorkspaceVideos = () => {
   const { workspaceId } = useParams();
@@ -28,7 +29,7 @@ const WorkspaceVideos = () => {
     const prompt = window.confirm(
       `Are you sure you want to upload this video with the title ${payload.title}?`
     );
-    
+
     if (!prompt) {
       toast.error("Upload cancelled");
       return;
@@ -50,12 +51,20 @@ const WorkspaceVideos = () => {
           },
         }
       );
-      
+
       toast.success("Video uploaded to YouTube successfully!");
       console.log("Upload response:", data);
     } catch (error) {
       console.error("Error uploading to YouTube:", error);
-      toast.error("Failed to upload video to YouTube");
+      if (isAxiosError(error)) {
+        toast.error(error?.response?.data?.error || "Failed to upload video to YouTube")
+        return
+      }
+      if (error instanceof Error) {
+        toast.error(error?.message || "Failed to upload video to YouTube");
+        return
+      }
+      toast.error("Failed to upload video to YouTube")
     }
   };
 
@@ -90,8 +99,8 @@ const WorkspaceVideos = () => {
                   Connect your YouTube account to upload videos directly
                 </p>
               </div>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="border-orange-300 text-orange-700 hover:bg-orange-100"
                 onClick={() => window.location.href = `/workspace/${workspaceId}`}
               >
@@ -184,7 +193,7 @@ const WorkspaceVideos = () => {
                           {video.uploader.lastName}
                         </span>
                       </div>
-                      
+
                       <Button
                         variant="outline"
                         onClick={() => uploadToYoutubeHandler({

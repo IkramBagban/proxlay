@@ -23,6 +23,7 @@ export function useFetch<T = any>(url: string, passToken: boolean = false): UseF
 
         if (passToken) {
           const token = await getToken();
+          console.log("token", token)
           if (token) {
             headers["Authorization"] = `Bearer ${token}`;
           }

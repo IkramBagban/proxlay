@@ -157,6 +157,7 @@ const WorkspacePage = () => {
     (ws: { status: string }) => ws.status !== "ACTIVE"
   );
 
+  console.log('invites', invites)
   return (
     <div className=" h-[100%] bg-gray-50 ">
       <div className="bg-white border-b border-gray-200">
@@ -455,7 +456,7 @@ const WorkspacePage = () => {
                 </div>
               </div>
             ) : invites?.length > 0 ? (
-              invites.map((invite) => (
+              invites?.map((invite) => (
                 <Card
                   key={invite?.workspace.id}
                   className="border border-gray-200"
