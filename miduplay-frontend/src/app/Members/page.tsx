@@ -25,6 +25,8 @@ import toast from "react-hot-toast";
 import InviteMemberDialog from "@/components/workspace/invite-member-dialog";
 import { useMember } from "@/hooks/tanstack/useMembers";
 import { useWorkspace } from "@/hooks/tanstack/useWorkspace";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useQueryClient } from "@tanstack/react-query";
 
 const WorkspaceMembers = () => {
   const { workspaceId } = useParams();
@@ -42,10 +44,11 @@ const WorkspaceMembers = () => {
     workspaceId: workspaceId || "",
   });
 
-  const { handleJoinRequest } = useWorkspace({
+  const { handleJoinRequest, removeUserFromWorkspace } = useWorkspace({
     workspaceId: workspaceId || "",
   });
-  const {data: members = [], isLoading: membersLoading} = queryWorkspaceMembers;
+  const queryClient = useQueryClient()
+  const { data: members = [], isLoading: membersLoading } = queryWorkspaceMembers;
   console.log("queryWorkspaceMembers", queryWorkspaceMembers);
   console.log("queryWorkspaceMembers2", members);
 
@@ -204,15 +207,14 @@ const WorkspaceMembers = () => {
                 />
               </div>
               <div
-                className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
-                  member.status === "active"
-                    ? "bg-green-500"
-                    : member.status === "invited"
+                className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${member.status === "active"
+                  ? "bg-green-500"
+                  : member.status === "invited"
                     ? "bg-blue-500"
                     : member.status === "pending"
-                    ? "bg-orange-500"
-                    : "bg-gray-400"
-                }`}
+                      ? "bg-orange-500"
+                      : "bg-gray-400"
+                  }`}
               />
             </div>
             <div>
@@ -264,16 +266,34 @@ const WorkspaceMembers = () => {
           <div className="flex items-center gap-2">
             {activeTab === "members" && (
               <>
-                <Button
+                {/* <Button
                   size="sm"
                   variant="outline"
                   className="hover:bg-blue-50"
                 >
                   <Pencil className="h-3 w-3" />
-                </Button>
-                <Button size="sm" variant="ghost">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
+                </Button>z */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" variant="ghost">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => {
+                      const confirm = window.confirm('Do you want to remove this user?')
+                      if(!confirm) return
+                      removeUserFromWorkspace.mutateAsync({ workspaceId, membershipId: member.id }, {
+                        onSuccess: () => {
+                          queryClient.invalidateQueries({ queryKey: ["members"] })
+                          toast.success('User removed successfully')
+                        }
+                      })
+                    }}>
+                      Remove
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             )}
             {activeTab === "invites" && (
@@ -374,11 +394,10 @@ const WorkspaceMembers = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors ${
-                      activeTab === tab.id
-                        ? "border-blue-500 text-blue-600"
-                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                    }`}
+                    className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors ${activeTab === tab.id
+                      ? "border-blue-500 text-blue-600"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                      }`}
                   >
                     <Icon className="h-4 w-4" />
                     {tab.label}
@@ -461,8 +480,8 @@ const WorkspaceMembers = () => {
                       {activeTab === "members"
                         ? "Joined"
                         : activeTab === "invites"
-                        ? "Invited"
-                        : "Requested"}
+                          ? "Invited"
+                          : "Requested"}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions

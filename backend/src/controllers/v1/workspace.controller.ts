@@ -306,7 +306,8 @@ export const inviteUserToWorkspace = async (req: Request, res: Response) => {
 };
 
 export const removeUserFromWorkspace = async (req: Request, res: Response) => {
-  const { membershipId } = req.params;
+  const { workspaceId } = req.params;
+  const { membershipId } = req.body;
   const { userId } = getAuth(req);
   if (!userId) {
     res.status(401).json({ error: "Unauthorized" });

@@ -9,10 +9,13 @@ import {
   handleInvite,
   handleJoinRequestAPI,
   joinRequestInWorkspaceAPI,
+  removeUserFromWorkspaceAPI,
   type HandleInvitationPayload,
   type HandleInvitePayload,
   type JoinRequestParams,
+  type removeUserFromWorkspacePayload,
 } from "@/services/workspace.service";
+import { isAxiosError } from "axios";
 
 export const useWorkspace = ({ workspaceId }: { workspaceId?: string }) => {
   const queryClient = useQueryClient();
@@ -89,6 +92,16 @@ export const useWorkspace = ({ workspaceId }: { workspaceId?: string }) => {
     },
   });
 
+  const removeUserFromWorkspace = useMutation({
+    mutationFn: async (payload: removeUserFromWorkspacePayload) =>
+      removeUserFromWorkspaceAPI(payload, (await getToken()) as string),
+    onError: (error: string) => {
+      if (isAxiosError(error)) {
+        toast.error(error?.response?.data?.error || "Failed to remove user");
+      }
+    },
+  });
+
   return {
     queryWorkspaces,
     createWorkspace,
@@ -96,5 +109,6 @@ export const useWorkspace = ({ workspaceId }: { workspaceId?: string }) => {
     handleJoinRequest,
     inviteUserToWorkspace,
     handleInvitationRequest,
+    removeUserFromWorkspace,
   };
 };

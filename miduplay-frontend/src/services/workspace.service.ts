@@ -118,3 +118,23 @@ export const handleInvitationRequestAPI = async (
     }
   );
 };
+
+export interface removeUserFromWorkspacePayload {
+  workspaceId: string;
+  membershipId: string;
+}
+export const removeUserFromWorkspaceAPI = async (
+  payload: removeUserFromWorkspacePayload,
+  token: string
+) => {
+  const { workspaceId, membershipId } = payload;
+  return await axiosClient.post(
+    `/workspace/remove-user/${workspaceId}`,
+    { membershipId },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
