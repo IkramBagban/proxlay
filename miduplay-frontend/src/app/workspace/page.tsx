@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   PlusCircle,
   FolderKanban,
@@ -23,7 +23,7 @@ import {
   Plus,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { NavLink } from "react-router";
+import { Navigate, NavLink, useNavigate } from "react-router";
 import { CreateWorkspace } from "@/components/workspace/create-workspace";
 import {
   SignedIn,
@@ -64,14 +64,23 @@ const WorkspacePage = () => {
   const [openInvite, setOpenInvite] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid");
-  
+
+  const navigate = useNavigate()
   const queryClient = useQueryClient();
-  const { getToken } = useAuth();
+  const { getToken, isSignedIn } = useAuth();
+  console.log("isSignedIn", isSignedIn);
   const { queryWorkspaces, createWorkspace, handleInvitationRequest } =
     useWorkspace({
       workspaceId: "",
     });
   const { data: workspaces } = queryWorkspaces;
+
+  useEffect(() => {
+      if (isSignedIn === false) {
+        toast.error("You are not signed in, please sign in to access workspaces.");
+        navigate("/");
+      } 
+  }, [isSignedIn, navigate]);
 
   const metaChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMeta({ ...meta, [e.target.name]: e.target.value });

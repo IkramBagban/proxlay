@@ -1,6 +1,6 @@
 // components/workspace/workspace-layout.tsx
-import React from "react";
-import { Outlet, useParams, NavLink, useLocation } from "react-router";
+import React, { useEffect } from "react";
+import { Outlet, useParams, NavLink, useLocation, useNavigate } from "react-router";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -16,14 +16,25 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { useFetch } from "@/hooks/useFetch";
+import toast from "react-hot-toast";
+import { useAuth } from "@clerk/clerk-react";
 
 const WorkspaceLayout = () => {
   const { workspaceId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isSignedIn } = useAuth();
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
 
   // Fetch workspace details
   const { data: workspace } = useFetch(`/workspace/${workspaceId}`, true);
+
+    useEffect(() => {
+      if (isSignedIn === false) {
+        toast.error("You are not signed in, please sign in");
+        navigate("/");
+      }
+    }, [isSignedIn, navigate]);
 
   const sidebarItems = [
     {
