@@ -75,12 +75,6 @@ const WorkspacePage = () => {
     });
   const { data: workspaces } = queryWorkspaces;
 
-  useEffect(() => {
-      if (isSignedIn === false) {
-        toast.error("You are not signed in, please sign in to access workspaces.");
-        navigate("/");
-      } 
-  }, [isSignedIn, navigate]);
 
   const metaChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMeta({ ...meta, [e.target.name]: e.target.value });

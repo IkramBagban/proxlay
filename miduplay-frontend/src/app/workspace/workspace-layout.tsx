@@ -1,6 +1,6 @@
 // components/workspace/workspace-layout.tsx
 import React, { useEffect } from "react";
-import { Outlet, useParams, NavLink, useLocation, useNavigate } from "react-router";
+import { Outlet, useParams, NavLink, useLocation, useNavigate, useOutletContext } from "react-router";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,23 +18,23 @@ import {
 import { useFetch } from "@/hooks/useFetch";
 import toast from "react-hot-toast";
 import { useAuth } from "@clerk/clerk-react";
+import type { ProtectedRouteOutletContext } from "@/routes/protected-route";
 
 const WorkspaceLayout = () => {
-  const { workspaceId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const outletCtx: ProtectedRouteOutletContext = useOutletContext();
+
   const { isSignedIn } = useAuth();
+  const { workspaceId } = useParams();
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
-
-  // Fetch workspace details
   const { data: workspace } = useFetch(`/workspace/${workspaceId}`, true);
-
-    useEffect(() => {
-      if (isSignedIn === false) {
-        toast.error("You are not signed in, please sign in");
-        navigate("/");
-      }
-    }, [isSignedIn, navigate]);
+  useEffect(() => {
+    if (isSignedIn === false) {
+      toast.error("You are not signed in, please sign in");
+      navigate("/");
+    }
+  }, [isSignedIn, navigate]);
 
   const sidebarItems = [
     {
@@ -197,7 +197,7 @@ const WorkspaceLayout = () => {
 
         {/* Page Content */}
         <main className="flex-1 overflow-auto">
-          <Outlet />
+          <Outlet context={outletCtx} />
         </main>
       </div>
     </div>

@@ -11,20 +11,25 @@ import WorkspaceVideos from "@/app/workspace/workspace-details/videos";
 import YoutubeVideoUpload from "@/app/platforms/youtube/upload-video/page";
 import WorkspaceLayout from "@/app/workspace/workspace-layout";
 import WorkspaceMembers from "@/app/Members/page";
+import ProtectedRoute from "./protected-route";
 
 const RootRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<App />} />
-      <Route path="/workspace" element={<SpacesPage />} />
-      
-      {/* Workspace routes with sidebar layout */}
-      <Route path="/workspace/:workspaceId" element={<WorkspaceLayout />}>
-        <Route index element={<WorkspaceDashboard />} />
-        <Route path="members" element={<WorkspaceMembers />} />
-        <Route path="videos" element={<WorkspaceVideos />} />
-        {/* <Route path="platforms" element={<WorkspacePlatforms />} /> */}
-        <Route path="youtube/upload" element={<YoutubeVideoUpload />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/workspace" element={<SpacesPage />} />
+      </Route>
+
+
+      <Route element={<ProtectedRoute redirectIfNotPartOfWorkspace={true} />}>
+        <Route path="/workspace/:workspaceId" element={<WorkspaceLayout />}>
+          <Route index element={<WorkspaceDashboard />} />
+          <Route path="members" element={<WorkspaceMembers />} />
+          <Route path="videos" element={<WorkspaceVideos />} />
+          {/* <Route path="platforms" element={<WorkspacePlatforms />} /> */}
+          <Route path="youtube/upload" element={<YoutubeVideoUpload />} />
+        </Route>
       </Route>
     </Routes>
   );

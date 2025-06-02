@@ -1,13 +1,12 @@
-// app/workspace/workspace-details/dashboard.tsx
 import React from "react";
-import { useParams } from "react-router";
+import { useOutletContext, useParams } from "react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Video, 
-  Users, 
-  Upload, 
+import {
+  Video,
+  Users,
+  Upload,
   Activity,
   Youtube,
   Play
@@ -15,8 +14,10 @@ import {
 import { useFetch } from "@/hooks/useFetch";
 import { useAuth } from "@clerk/clerk-react";
 import axiosClient from "@/lib/axios-client";
+import type { ProtectedRouteOutletContext } from "@/routes/protected-route";
 
 const WorkspaceDashboard = () => {
+  const outletCtx: ProtectedRouteOutletContext = useOutletContext();
   const { workspaceId } = useParams();
   console.log("Workspace ID:", workspaceId);
   const { getToken } = useAuth();
@@ -96,24 +97,23 @@ const WorkspaceDashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Quick Actions */}
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button 
-              className="w-full justify-start" 
+            <Button
+              className="w-full justify-start"
               variant="outline"
               onClick={() => window.location.href = `/workspace/${workspaceId}/youtube/upload`}
             >
               <Upload className="mr-2 h-4 w-4" />
               Upload New Video
             </Button>
-            
-            {!youtubeAuthData?.isAuthorized && (
-              <Button 
-                className="w-full justify-start" 
+
+            {!youtubeAuthData?.isAuthorized && outletCtx?.isOwner && (
+              <Button
+                className="w-full justify-start"
                 variant="outline"
                 onClick={authorizeYoutubeHandler}
               >
@@ -121,9 +121,9 @@ const WorkspaceDashboard = () => {
                 Connect YouTube
               </Button>
             )}
-            
-            <Button 
-              className="w-full justify-start" 
+
+            <Button
+              className="w-full justify-start"
               variant="outline"
               onClick={() => window.location.href = `/workspace/${workspaceId}/members`}
             >
@@ -137,8 +137,8 @@ const WorkspaceDashboard = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Recent Videos</CardTitle>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               onClick={() => window.location.href = `/workspace/${workspaceId}/videos`}
             >
@@ -153,8 +153,8 @@ const WorkspaceDashboard = () => {
             ) : (
               <div className="space-y-3">
                 {(recentVideos ?? [])?.map((video) => (
-                  <div 
-                    key={video.id} 
+                  <div
+                    key={video.id}
                     className="flex items-center justify-between p-3 rounded-lg border"
                   >
                     <div className="flex-1 min-w-0">

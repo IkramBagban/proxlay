@@ -1,6 +1,6 @@
 // app/workspace/workspace-details/videos.tsx
 import React from "react";
-import { useParams, NavLink } from "react-router";
+import { useParams, NavLink, useOutletContext } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,10 +10,13 @@ import { useAuth } from "@clerk/clerk-react";
 import axiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
 import { isAxiosError } from "axios";
+import type { ProtectedRouteOutletContext } from "@/routes/protected-route";
 
 const WorkspaceVideos = () => {
   const { workspaceId } = useParams();
   const { getToken } = useAuth();
+  const outletCtx: ProtectedRouteOutletContext = useOutletContext();
+  console.log("octx in WorkspaceVideos", outletCtx);
 
   const { data: videos = [], loading: videosLoading } = useFetch(
     `/youtube/videos/${workspaceId}`,
@@ -60,7 +63,7 @@ const WorkspaceVideos = () => {
         toast.error(error?.response?.data?.error || "Failed to upload video to YouTube")
         return
       }
-      if (error instanceof  Error) {
+      if (error instanceof Error) {
         toast.error(error?.message || "Failed to upload video to YouTube");
         return
       }
@@ -86,8 +89,7 @@ const WorkspaceVideos = () => {
         </NavLink>
       </div>
 
-      {/* YouTube Authorization Status */}
-      {!youtubeAuthData?.isAuthorized && (
+      {!youtubeAuthData?.isAuthorized && outletCtx?.isOwner && (
         <Card className="border-orange-200 bg-orange-50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
@@ -194,24 +196,29 @@ const WorkspaceVideos = () => {
                         </span>
                       </div>
 
-                      <Button
-                        variant="outline"
-                        onClick={() => uploadToYoutubeHandler({
-                          videoId: video.id,
-                          title: video.title,
-                          description: video.description,
-                          tags: video.tags,
-                          categoryId: video.categoryId,
-                          privacyStatus: video.privacyStatus,
-                          workspaceId: workspaceId,
-                          key: video.key,
-                        })}
-                        disabled={!youtubeAuthData?.isAuthorized}
-                        className="flex items-center gap-2"
-                      >
-                        <Upload className="h-4 w-4" />
-                        Upload to YouTube
-                      </Button>
+                      {
+                        outletCtx?.isOwner && (
+
+                          <Button
+                            variant="outline"
+                            onClick={() => uploadToYoutubeHandler({
+                              videoId: video.id,
+                              title: video.title,
+                              description: video.description,
+                              tags: video.tags,
+                              categoryId: video.categoryId,
+                              privacyStatus: video.privacyStatus,
+                              workspaceId: workspaceId,
+                              key: video.key,
+                            })}
+                            disabled={!youtubeAuthData?.isAuthorized}
+                            className="flex items-center gap-2"
+                          >
+                            <Upload className="h-4 w-4" />
+                            Upload to YouTube
+                          </Button>
+                        )
+                      }
                     </div>
                   </div>
                 </CardContent>

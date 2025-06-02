@@ -15,7 +15,7 @@ import {
   Search,
   Filter,
 } from "lucide-react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useOutletContext, useParams } from "react-router";
 import { useFetch } from "@/hooks/useFetch";
 import { useEffect, useState } from "react";
 import axiosClient from "@/lib/axios-client";
@@ -27,18 +27,14 @@ import { useMember } from "@/hooks/tanstack/useMembers";
 import { useWorkspace } from "@/hooks/tanstack/useWorkspace";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useQueryClient } from "@tanstack/react-query";
+import type { ProtectedRouteOutletContext } from "@/routes/protected-route";
 
 const WorkspaceMembers = () => {
   const { workspaceId } = useParams();
   const navigate = useNavigate();
-  const { getToken } = useAuth();
   const [activeTab, setActiveTab] = useState("members");
   const [searchTerm, setSearchTerm] = useState("");
-
-  // const { data: members = [], loading: membersLoading } = useFetch(
-  //   `/workspace/members/${workspaceId}`,
-  //   true
-  // );
+  const outletCtx: ProtectedRouteOutletContext = useOutletContext();
 
   const { queryWorkspaceMembers } = useMember({
     workspaceId: workspaceId || "",
@@ -47,10 +43,8 @@ const WorkspaceMembers = () => {
   const { handleJoinRequest, removeUserFromWorkspace } = useWorkspace({
     workspaceId: workspaceId || "",
   });
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const { data: members = [], isLoading: membersLoading } = queryWorkspaceMembers;
-  console.log("queryWorkspaceMembers", queryWorkspaceMembers);
-  console.log("queryWorkspaceMembers2", members);
 
   useEffect(() => {
     if (!workspaceId) {
@@ -262,85 +256,91 @@ const WorkspaceMembers = () => {
         </td>
 
         {/* Actions */}
-        <td className="px-6 py-4">
-          <div className="flex items-center gap-2">
-            {activeTab === "members" && (
-              <>
-                {/* <Button
+        {
+          outletCtx?.isOwner ?
+            <td className="px-6 py-4">
+              <div className="flex items-center gap-2">
+                {activeTab === "members" && (
+                  <>
+                    {/* <Button
                   size="sm"
                   variant="outline"
                   className="hover:bg-blue-50"
                 >
                   <Pencil className="h-3 w-3" />
                 </Button>z */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="sm" variant="ghost">
-                      <MoreVertical className="h-4 w-4" />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button size="sm" variant="ghost">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => {
+                          const confirm = window.confirm('Do you want to remove this user?')
+                          if (!confirm) return
+                          removeUserFromWorkspace.mutateAsync({ workspaceId, membershipId: member.id }, {
+                            onSuccess: () => {
+                              queryClient.invalidateQueries({ queryKey: ["members"] })
+                              toast.success('User removed successfully')
+                            }
+                          })
+                        }}>
+                          Remove
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </>
+                )}
+                {/*  TODO have to make this work */}
+                {activeTab === "invites" && outletCtx?.isOwner && (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-green-50 hover:border-green-200 text-green-700"
+                    >
+                      Resend
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => {
-                      const confirm = window.confirm('Do you want to remove this user?')
-                      if(!confirm) return
-                      removeUserFromWorkspace.mutateAsync({ workspaceId, membershipId: member.id }, {
-                        onSuccess: () => {
-                          queryClient.invalidateQueries({ queryKey: ["members"] })
-                          toast.success('User removed successfully')
-                        }
-                      })
-                    }}>
-                      Remove
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            )}
-            {activeTab === "invites" && (
-              <>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="hover:bg-green-50 hover:border-green-200 text-green-700"
-                >
-                  Resend
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="hover:bg-red-50 hover:border-red-200 text-red-700"
-                >
-                  Cancel
-                </Button>
-              </>
-            )}
-            {activeTab === "requests" && (
-              <>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="hover:bg-green-50 hover:border-green-200 text-green-700"
-                  onClick={() =>
-                    handleJoinWorkspaceRequest("ACCEPT", member.id)
-                  }
-                >
-                  <UserCheck className="h-3 w-3 mr-1" />
-                  Accept
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="hover:bg-red-50 hover:border-red-200 text-red-700"
-                  onClick={() =>
-                    handleJoinWorkspaceRequest("REJECT", member.id)
-                  }
-                >
-                  Decline
-                </Button>
-              </>
-            )}
-          </div>
-        </td>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-red-50 hover:border-red-200 text-red-700"
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                )}
+                {activeTab === "requests" && outletCtx?.isOwner && (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-green-50 hover:border-green-200 text-green-700"
+                      onClick={() =>
+                        handleJoinWorkspaceRequest("ACCEPT", member.id)
+                      }
+                    >
+                      <UserCheck className="h-3 w-3 mr-1" />
+                      Accept
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-red-50 hover:border-red-200 text-red-700"
+                      onClick={() =>
+                        handleJoinWorkspaceRequest("REJECT", member.id)
+                      }
+                    >
+                      Decline
+                    </Button>
+                  </>
+                )}
+              </div>
+            </td> : ''
+
+        }
+
       </tr>
     );
   };
@@ -355,7 +355,10 @@ const WorkspaceMembers = () => {
             Manage workspace members and their permissions
           </p>
         </div>
-        <InviteMemberDialog workspaceId={workspaceId} />
+        {
+          outletCtx?.isOwner && (
+            <InviteMemberDialog workspaceId={workspaceId} />
+          )}
       </div>
 
       {/* Stats Cards */}
@@ -483,9 +486,14 @@ const WorkspaceMembers = () => {
                           ? "Invited"
                           : "Requested"}
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    {
+                      outletCtx?.isOwner && (
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      )
+                    }
+
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">

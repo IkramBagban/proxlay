@@ -45,9 +45,7 @@ export const createOAuth2Client = (tokens?: any) => {
 
 const scopes = ["https://www.googleapis.com/auth/youtube.upload"];
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+
 
 app.use("/api/v1/workspace", requireAuth(), workspaceRoutes);
 
@@ -278,7 +276,7 @@ app.get(
     const oauth2Client = createOAuth2Client();
     const authUrl = oauth2Client.generateAuthUrl({
       access_type: "offline",
-      prompt: "consent", // force consent screen
+      // prompt: "consent", // force consent screen
 
       scope: scopes,
       state: JSON.stringify({ userId: userId, workspaceId: workspaceId }),
@@ -489,6 +487,9 @@ app.get(
   }
 );
 
+app.get("/", (req, res) => {
+  res.send({ message: "Hello Worlddd!" });
+});
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
 });
