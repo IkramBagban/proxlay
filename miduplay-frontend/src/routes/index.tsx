@@ -12,11 +12,13 @@ import YoutubeVideoUpload from "@/app/platforms/youtube/upload-video/page";
 import WorkspaceLayout from "@/app/workspace/workspace-layout";
 import WorkspaceMembers from "@/app/Members/page";
 import ProtectedRoute from "./protected-route";
+import PricingPage from "@/app/pricing";
 
 const RootRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<App />} />
+      <Route path="/pricing" element={<PricingPage/>} />
       <Route element={<ProtectedRoute />}>
         <Route path="/workspace" element={<SpacesPage />} />
       </Route>
