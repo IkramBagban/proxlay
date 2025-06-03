@@ -344,7 +344,6 @@ const YoutubeVideoUpload = () => {
     setIsUploading(false);
     setUploadProgress(0);
     setUploadStage('preparing');
-    // Here you would also cancel the actual upload request if possible
   };
 
   const handleLeaveConfirm = () => {
