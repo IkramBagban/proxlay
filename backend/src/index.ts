@@ -17,6 +17,8 @@ import workspaceRoutes from "./routes/v1/workspace.route";
 import { prismaClient } from "./lib/db";
 import { Status } from "./generated/prisma";
 import { checkOwner } from "./middleware/check-owner";
+import v1Routes from "./routes/v1/index";
+import { Readable } from "stream";
 
 dotenv.config();
 const app = express();
@@ -48,6 +50,7 @@ const scopes = ["https://www.googleapis.com/auth/youtube.upload"];
 
 
 app.use("/api/v1/workspace", requireAuth(), workspaceRoutes);
+app.use("/api/v1",  v1Routes);
 
 app.get(
   "/api/v1/invites",
@@ -408,7 +411,7 @@ app.post(
           },
         },
         media: {
-          body: Body as ReadableStream,
+          body: Body as Readable,
         },
       });
       console.log("Upload response:", response.data);
@@ -488,7 +491,7 @@ app.get(
 );
 
 app.get("/", (req, res) => {
-  res.send({ message: "Hello Worlddd!" });
+  res.send({ message: "Hello World!" });
 });
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
