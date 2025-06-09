@@ -21,6 +21,7 @@ import {
   Globe
 } from 'lucide-react';
 import Header from '@/components/common/Header';
+import { usePayment } from '@/hooks/use-payment';
 
 const PricingPage = () => {
   const [billingCycle, setBillingCycle] = useState('monthly');
@@ -221,6 +222,9 @@ const PricingPage = () => {
     }
   };
 
+
+  const {handlePayment} = usePayment();
+
   return (
     <div className="min-h-screen bg-gray-50">
         <Header />
@@ -388,7 +392,8 @@ const PricingPage = () => {
                     className={`w-full ${
                       plan.popular ? 'bg-purple-600 hover:bg-purple-700' : colors.button
                     }`}
-                    onClick={() => setSelectedPlan(plan.id)}
+                    // onClick={() => setSelectedPlan(plan.id)}
+                    onClick={() => handlePayment(plan.name.toLowerCase() as "basic" | "pro", false, 'false')}
                   >
                     {plan.id === 'enterprise' ? (
                       <>
