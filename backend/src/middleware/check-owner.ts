@@ -3,7 +3,6 @@ import { prismaClient } from "../lib/db";
 import { getWorkspaceMemberInfo } from "../lib/get-workspace-member-info";
 
 export const checkOwner = async (req: any, res: any, next: any) => {
-  console.log("checkOwner middleware called");
   const workspaceId = req.params.workspaceId;
   const { userId } = getAuth(req);
 
@@ -34,12 +33,10 @@ export const checkOwner = async (req: any, res: any, next: any) => {
 export const shouldPartOfWorkspace = async (req: any, res: any, next: any) => {
   const workspaceId = req.params.workspaceId;
   const { userId } = getAuth(req);
-  console.log("shouldPartOfWorkspace middleware called", workspaceId, userId);
   const { isPartOfWorkspace } = await getWorkspaceMemberInfo(
     workspaceId,
     userId!
   );
-  console.log("shouldPartOfWorkspace response", isPartOfWorkspace);
   if (!isPartOfWorkspace) {
     return res
       .status(403)
