@@ -58,6 +58,12 @@ export function usePayment() {
                 razorpay_signature: response.razorpay_signature,
                 plan: plan,
                 amount: String(data.amount),
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                
               }
             );
 

@@ -10,3 +10,14 @@ export const SUBSCRIPTION_PLANS = {
     plan_id: process.env.PRO_PLAN_ID,
   },
 };
+
+export const SUBSCRIPTION_STATUS = {
+  CREATED: "created",
+  AUTHENTICATED: "authenticated",
+  ACTIVE: "active",
+  PENDING: "pending",
+  HALTED: "halted",
+  CANCELLED: "cancelled",
+  COMPLETED: "completed",
+  EXPIRED: "expired",
+};
