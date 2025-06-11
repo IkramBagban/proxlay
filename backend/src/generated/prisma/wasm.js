@@ -164,6 +164,37 @@ exports.Prisma.YoutubeLinkedAccountScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SubscriptionScalarFieldEnum = {
+  id: 'id',
+  razorpaySubscriptionId: 'razorpaySubscriptionId',
+  userId: 'userId',
+  planType: 'planType',
+  status: 'status',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  isTrialSubscription: 'isTrialSubscription',
+  trialStartDate: 'trialStartDate',
+  trialEndDate: 'trialEndDate',
+  hasUsedTrial: 'hasUsedTrial',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  razorpayPaymentId: 'razorpayPaymentId',
+  subscriptionId: 'subscriptionId',
+  userId: 'userId',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  method: 'method',
+  description: 'description',
+  isTrialTransaction: 'isTrialTransaction',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -172,6 +203,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.Status = exports.$Enums.Status = {
   INVITED: 'INVITED',
@@ -182,11 +218,40 @@ exports.Status = exports.$Enums.Status = {
   REMOVED: 'REMOVED'
 };
 
+exports.PlanType = exports.$Enums.PlanType = {
+  BASIC: 'BASIC',
+  PRO: 'PRO',
+  TRIAL_BASIC: 'TRIAL_BASIC'
+};
+
+exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
+  CREATED: 'CREATED',
+  AUTHENTICATED: 'AUTHENTICATED',
+  ACTIVE: 'ACTIVE',
+  PENDING: 'PENDING',
+  HALTED: 'HALTED',
+  CANCELLED: 'CANCELLED',
+  COMPLETED: 'COMPLETED',
+  EXPIRED: 'EXPIRED',
+  TRIAL_ACTIVE: 'TRIAL_ACTIVE',
+  TRIAL_EXPIRED: 'TRIAL_EXPIRED'
+};
+
+exports.TransactionStatus = exports.$Enums.TransactionStatus = {
+  CREATED: 'CREATED',
+  AUTHORIZED: 'AUTHORIZED',
+  CAPTURED: 'CAPTURED',
+  REFUNDED: 'REFUNDED',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   Workspace: 'Workspace',
   WorkspaceMember: 'WorkspaceMember',
   VideoMetaData: 'VideoMetaData',
-  YoutubeLinkedAccount: 'YoutubeLinkedAccount'
+  YoutubeLinkedAccount: 'YoutubeLinkedAccount',
+  Subscription: 'Subscription',
+  Transaction: 'Transaction'
 };
 
 /**

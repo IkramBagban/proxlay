@@ -21,20 +21,19 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  workspaceMember WorkspaceMember[]
-  VideoMetaData   VideoMetaData[]
+  workspaceMember      WorkspaceMember[]
+  VideoMetaData        VideoMetaData[]
   YoutubeLinkedAccount YoutubeLinkedAccount[]
 }
 
 enum Status {
-  INVITED     // Owner invited the user, waiting for them to accept
-  PENDING     // User requested to join, waiting for owner's approval
-  ACTIVE      // User accepted invite or was approved
-  REJECTED    // Owner rejected a join request
-  DECLINED    // User declined the invite
-  REMOVED     // User was removed from the workspace
+  INVITED // Owner invited the user, waiting for them to accept
+  PENDING // User requested to join, waiting for owner's approval
+  ACTIVE // User accepted invite or was approved
+  REJECTED // Owner rejected a join request
+  DECLINED // User declined the invite
+  REMOVED // User was removed from the workspace
 }
-
 
 model WorkspaceMember {
   id          String   @id @default(cuid())
@@ -69,7 +68,6 @@ model VideoMetaData {
   workspaceId String
   uploaderId  String
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
-  
 
   @@index([workspaceId])
   @@index([uploaderId])
@@ -81,12 +79,83 @@ model YoutubeLinkedAccount {
   workspaceId  String
   accessToken  String
   refreshToken String
-  expiryDate    DateTime
+  expiryDate   DateTime
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  workspace Workspace @relation (fields: [workspaceId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
 
   @@unique([userId])
   @@index([workspaceId])
+}
+
+enum SubscriptionStatus {
+  CREATED
+  AUTHENTICATED
+  ACTIVE
+  PENDING
+  HALTED
+  CANCELLED
+  COMPLETED
+  EXPIRED
+  TRIAL_ACTIVE
+  TRIAL_EXPIRED
+}
+
+enum PlanType {
+  BASIC
+  PRO
+  TRIAL_BASIC
+}
+
+model Subscription {
+  id                     String             @id @default(cuid())
+  razorpaySubscriptionId String?            @unique // Made optional for trial subscriptions
+  userId                 String // clerk user id
+  planType               PlanType
+  status                 SubscriptionStatus
+  currentPeriodStart     DateTime
+  currentPeriodEnd       DateTime
+
+  // New fields for trial support
+  isTrialSubscription Boolean   @default(false)
+  trialStartDate      DateTime?
+  trialEndDate        DateTime?
+  hasUsedTrial        Boolean   @default(false) // Track if user has used their free trial
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  transaction Transaction[]
+
+  @@index([userId])
+  @@index([razorpaySubscriptionId])
+  @@index([userId, hasUsedTrial])
+}
+
+enum TransactionStatus {
+  CREATED
+  AUTHORIZED
+  CAPTURED
+  REFUNDED
+  FAILED
+}
+
+model Transaction {
+  id                 String            @id @default(cuid())
+  razorpayPaymentId  String?           @unique // Made optional for trial transactions
+  subscriptionId     String // subscription table id
+  userId             String // clerk user id
+  amount             Int // in paise/cents (0 for trial)
+  currency           String            @default("INR")
+  status             TransactionStatus
+  method             String?
+  description        String?
+  isTrialTransaction Boolean           @default(false)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  @@index([subscriptionId])
+  @@index([razorpayPaymentId])
 }
