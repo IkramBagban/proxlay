@@ -17,9 +17,16 @@ router.post(
   createSubscriptionController
 );
 router.post("/verify", requireAuth(), verifyPaymentController);
-router.post("/razorpay/webhook",  razorpayWebhookHandler);
+router.post(
+  "/razorpay/webhook",
+  express.raw({ type: "application/json" }),
+  razorpayWebhookHandler
+);
 
-
-router.post('/start-trial', requireAuth(), createTrialSubscriptionController);
-router.get('/subscription-status/:userId', requireAuth(), getSubscriptionStatusController);
+router.post("/start-trial", requireAuth(), createTrialSubscriptionController);
+router.get(
+  "/subscription-status/:userId",
+  requireAuth(),
+  getSubscriptionStatusController
+);
 export default router;

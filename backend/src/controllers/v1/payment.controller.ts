@@ -13,15 +13,19 @@ import {
   getUserSubscriptionStatus,
   convertTrialToPaidSubscription,
 } from "../../services/trial";
+import {
+  handleSubscriptionActivated,
+  handleSubscriptionCharged,
+} from "../../services/webhook";
 
 export const createSubscriptionController = async (
   req: Request,
   res: Response
 ) => {
   const { plan } = req.body as { plan: "basic" | "pro"; amount: string };
-  console.log("Creating subscription for plan:", plan);
+  // console.log("Creating subscription for plan:", plan);
   const { plan_id, amount } = SUBSCRIPTION_PLANS[plan];
-  console.log("Plan ID:", plan_id);
+  // console.log("Plan ID:", plan_id);
 
   const { userId } = await getAuth(req);
   if (!plan_id || !amount) {
@@ -32,8 +36,9 @@ export const createSubscriptionController = async (
   try {
     const subscription = await createSubscription({
       plan_id: plan_id,
+      userId: userId!,
     });
-    console.log("Subscription created:", subscription);
+    // console.log("Subscription created:", subscription);
 
     if (!subscription || !subscription.id) {
       res.status(500).json({ error: "Failed to create subscription" });
@@ -50,7 +55,7 @@ export const createSubscriptionController = async (
         currentPeriodEnd: new Date(subscription.current_end!),
       },
     });
-    console.log("Subscription record created in database:", subscriptionRecord);
+    // console.log("Subscription record created in database:", subscriptionRecord);
 
     res.status(201).json({
       ...subscription,
@@ -242,43 +247,56 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
   }
 };
 
-
-
 export const razorpayWebhookHandler = async (req: any, res: any) => {
+  console.log("***** Received Razorpay webhook event *****");
   const signature = req.headers["x-razorpay-signature"];
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET!;
+  console.log("Received webhook with signature:", {
+    event: req.body.event,
+    body: JSON.stringify(req.body, null, 2),
+  });
+  if (!signature) {
+    console.error("Signature is missing in the request headers");
+    return res.status(400).send("Signature is missing");
+  }
+  if (!webhookSecret) {
+    console.error("Webhook secret is not configured");
+    return res.status(500).send({ error: "Webhook secret is not configured" });
+  }
 
-  // Verify the webhook signature
   const isValidSignature = Razorpay.validateWebhookSignature(
-    req.body,
+    JSON.stringify(req.body),
     signature,
     webhookSecret
   );
 
   if (!isValidSignature) {
-    return res.status(400).send("Invalid signature");
+    console.error("Invalid signature for webhook event");
+    return res.status(400).send({ error: "Invalid signature" });
   }
 
   // Handle the event
   const event = req.body.event;
-  console.log("Received event:", event);
+  const { subscription, payment } = req.body.payload;
 
-  // Handle subscription events
-  if (
-    event === "subscription.cancelled" ||
-    event === "subscription.completed"
-  ) {
-    const subscriptionId = req.body.payload.subscription.entity.id;
-
-    // TODO: Update subscription status in your database
-    console.log(`Subscription ${subscriptionId} ${event}`);
+  switch (event) {
+    case "subscription.activated":
+      await handleSubscriptionActivated(
+        subscription.entity,
+        payment.entity,
+        res
+      );
+      break;
+    case "subscription.charged":
+      await handleSubscriptionCharged(subscription.entity, payment.entity, res);
+      break;
   }
-
   res.status(200).send("Webhook received");
+  console.log(
+    "--------------------------- Webhook event processed successfully ---------------------------"
+  );
 };
 
-
-// Get user subscription status
 export const getSubscriptionStatusController = async (
   req: Request,
   res: Response
