@@ -159,9 +159,9 @@ exports.Prisma.YoutubeLinkedAccountScalarFieldEnum = {
   workspaceId: 'workspaceId',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
-  expiryDate: 'expiryDate',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  expiryDate: 'expiryDate'
 };
 
 exports.Prisma.SubscriptionScalarFieldEnum = {
@@ -211,8 +211,8 @@ exports.Prisma.NullsOrder = {
 };
 exports.Status = exports.$Enums.Status = {
   INVITED: 'INVITED',
-  PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
+  PENDING: 'PENDING',
   REJECTED: 'REJECTED',
   DECLINED: 'DECLINED',
   REMOVED: 'REMOVED'

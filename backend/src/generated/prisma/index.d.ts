@@ -50,8 +50,8 @@ export type Transaction = $Result.DefaultSelection<Prisma.$TransactionPayload>
 export namespace $Enums {
   export const Status: {
   INVITED: 'INVITED',
-  PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
+  PENDING: 'PENDING',
   REJECTED: 'REJECTED',
   DECLINED: 'DECLINED',
   REMOVED: 'REMOVED'
@@ -1393,14 +1393,14 @@ export namespace Prisma {
    */
 
   export type WorkspaceCountOutputType = {
-    workspaceMember: number
     VideoMetaData: number
+    workspaceMember: number
     YoutubeLinkedAccount: number
   }
 
   export type WorkspaceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    workspaceMember?: boolean | WorkspaceCountOutputTypeCountWorkspaceMemberArgs
     VideoMetaData?: boolean | WorkspaceCountOutputTypeCountVideoMetaDataArgs
+    workspaceMember?: boolean | WorkspaceCountOutputTypeCountWorkspaceMemberArgs
     YoutubeLinkedAccount?: boolean | WorkspaceCountOutputTypeCountYoutubeLinkedAccountArgs
   }
 
@@ -1418,15 +1418,15 @@ export namespace Prisma {
   /**
    * WorkspaceCountOutputType without action
    */
-  export type WorkspaceCountOutputTypeCountWorkspaceMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: WorkspaceMemberWhereInput
+  export type WorkspaceCountOutputTypeCountVideoMetaDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VideoMetaDataWhereInput
   }
 
   /**
    * WorkspaceCountOutputType without action
    */
-  export type WorkspaceCountOutputTypeCountVideoMetaDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: VideoMetaDataWhereInput
+  export type WorkspaceCountOutputTypeCountWorkspaceMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkspaceMemberWhereInput
   }
 
   /**
@@ -1636,8 +1636,8 @@ export namespace Prisma {
     owner_id?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
     VideoMetaData?: boolean | Workspace$VideoMetaDataArgs<ExtArgs>
+    workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
     YoutubeLinkedAccount?: boolean | Workspace$YoutubeLinkedAccountArgs<ExtArgs>
     _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workspace"]>
@@ -1668,8 +1668,8 @@ export namespace Prisma {
 
   export type WorkspaceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "owner_id" | "createdAt" | "updatedAt", ExtArgs["result"]["workspace"]>
   export type WorkspaceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
     VideoMetaData?: boolean | Workspace$VideoMetaDataArgs<ExtArgs>
+    workspaceMember?: boolean | Workspace$workspaceMemberArgs<ExtArgs>
     YoutubeLinkedAccount?: boolean | Workspace$YoutubeLinkedAccountArgs<ExtArgs>
     _count?: boolean | WorkspaceCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -1679,8 +1679,8 @@ export namespace Prisma {
   export type $WorkspacePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Workspace"
     objects: {
-      workspaceMember: Prisma.$WorkspaceMemberPayload<ExtArgs>[]
       VideoMetaData: Prisma.$VideoMetaDataPayload<ExtArgs>[]
+      workspaceMember: Prisma.$WorkspaceMemberPayload<ExtArgs>[]
       YoutubeLinkedAccount: Prisma.$YoutubeLinkedAccountPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2083,8 +2083,8 @@ export namespace Prisma {
    */
   export interface Prisma__WorkspaceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    workspaceMember<T extends Workspace$workspaceMemberArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$workspaceMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     VideoMetaData<T extends Workspace$VideoMetaDataArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$VideoMetaDataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoMetaDataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workspaceMember<T extends Workspace$workspaceMemberArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$workspaceMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     YoutubeLinkedAccount<T extends Workspace$YoutubeLinkedAccountArgs<ExtArgs> = {}>(args?: Subset<T, Workspace$YoutubeLinkedAccountArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$YoutubeLinkedAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2508,30 +2508,6 @@ export namespace Prisma {
   }
 
   /**
-   * Workspace.workspaceMember
-   */
-  export type Workspace$workspaceMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WorkspaceMember
-     */
-    select?: WorkspaceMemberSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WorkspaceMember
-     */
-    omit?: WorkspaceMemberOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WorkspaceMemberInclude<ExtArgs> | null
-    where?: WorkspaceMemberWhereInput
-    orderBy?: WorkspaceMemberOrderByWithRelationInput | WorkspaceMemberOrderByWithRelationInput[]
-    cursor?: WorkspaceMemberWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: WorkspaceMemberScalarFieldEnum | WorkspaceMemberScalarFieldEnum[]
-  }
-
-  /**
    * Workspace.VideoMetaData
    */
   export type Workspace$VideoMetaDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2553,6 +2529,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: VideoMetaDataScalarFieldEnum | VideoMetaDataScalarFieldEnum[]
+  }
+
+  /**
+   * Workspace.workspaceMember
+   */
+  export type Workspace$workspaceMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkspaceMember
+     */
+    select?: WorkspaceMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkspaceMember
+     */
+    omit?: WorkspaceMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkspaceMemberInclude<ExtArgs> | null
+    where?: WorkspaceMemberWhereInput
+    orderBy?: WorkspaceMemberOrderByWithRelationInput | WorkspaceMemberOrderByWithRelationInput[]
+    cursor?: WorkspaceMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkspaceMemberScalarFieldEnum | WorkspaceMemberScalarFieldEnum[]
   }
 
   /**
@@ -4843,9 +4843,9 @@ export namespace Prisma {
     workspaceId: string | null
     accessToken: string | null
     refreshToken: string | null
-    expiryDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    expiryDate: Date | null
   }
 
   export type YoutubeLinkedAccountMaxAggregateOutputType = {
@@ -4854,9 +4854,9 @@ export namespace Prisma {
     workspaceId: string | null
     accessToken: string | null
     refreshToken: string | null
-    expiryDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    expiryDate: Date | null
   }
 
   export type YoutubeLinkedAccountCountAggregateOutputType = {
@@ -4865,9 +4865,9 @@ export namespace Prisma {
     workspaceId: number
     accessToken: number
     refreshToken: number
-    expiryDate: number
     createdAt: number
     updatedAt: number
+    expiryDate: number
     _all: number
   }
 
@@ -4878,9 +4878,9 @@ export namespace Prisma {
     workspaceId?: true
     accessToken?: true
     refreshToken?: true
-    expiryDate?: true
     createdAt?: true
     updatedAt?: true
+    expiryDate?: true
   }
 
   export type YoutubeLinkedAccountMaxAggregateInputType = {
@@ -4889,9 +4889,9 @@ export namespace Prisma {
     workspaceId?: true
     accessToken?: true
     refreshToken?: true
-    expiryDate?: true
     createdAt?: true
     updatedAt?: true
+    expiryDate?: true
   }
 
   export type YoutubeLinkedAccountCountAggregateInputType = {
@@ -4900,9 +4900,9 @@ export namespace Prisma {
     workspaceId?: true
     accessToken?: true
     refreshToken?: true
-    expiryDate?: true
     createdAt?: true
     updatedAt?: true
+    expiryDate?: true
     _all?: true
   }
 
@@ -4984,9 +4984,9 @@ export namespace Prisma {
     workspaceId: string
     accessToken: string
     refreshToken: string
-    expiryDate: Date
     createdAt: Date
     updatedAt: Date
+    expiryDate: Date
     _count: YoutubeLinkedAccountCountAggregateOutputType | null
     _min: YoutubeLinkedAccountMinAggregateOutputType | null
     _max: YoutubeLinkedAccountMaxAggregateOutputType | null
@@ -5012,9 +5012,9 @@ export namespace Prisma {
     workspaceId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
-    expiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    expiryDate?: boolean
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["youtubeLinkedAccount"]>
 
@@ -5024,9 +5024,9 @@ export namespace Prisma {
     workspaceId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
-    expiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    expiryDate?: boolean
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["youtubeLinkedAccount"]>
 
@@ -5036,9 +5036,9 @@ export namespace Prisma {
     workspaceId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
-    expiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    expiryDate?: boolean
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["youtubeLinkedAccount"]>
 
@@ -5048,12 +5048,12 @@ export namespace Prisma {
     workspaceId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
-    expiryDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    expiryDate?: boolean
   }
 
-  export type YoutubeLinkedAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "workspaceId" | "accessToken" | "refreshToken" | "expiryDate" | "createdAt" | "updatedAt", ExtArgs["result"]["youtubeLinkedAccount"]>
+  export type YoutubeLinkedAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "workspaceId" | "accessToken" | "refreshToken" | "createdAt" | "updatedAt" | "expiryDate", ExtArgs["result"]["youtubeLinkedAccount"]>
   export type YoutubeLinkedAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workspace?: boolean | WorkspaceDefaultArgs<ExtArgs>
   }
@@ -5075,9 +5075,9 @@ export namespace Prisma {
       workspaceId: string
       accessToken: string
       refreshToken: string
-      expiryDate: Date
       createdAt: Date
       updatedAt: Date
+      expiryDate: Date
     }, ExtArgs["result"]["youtubeLinkedAccount"]>
     composites: {}
   }
@@ -5507,9 +5507,9 @@ export namespace Prisma {
     readonly workspaceId: FieldRef<"YoutubeLinkedAccount", 'String'>
     readonly accessToken: FieldRef<"YoutubeLinkedAccount", 'String'>
     readonly refreshToken: FieldRef<"YoutubeLinkedAccount", 'String'>
-    readonly expiryDate: FieldRef<"YoutubeLinkedAccount", 'DateTime'>
     readonly createdAt: FieldRef<"YoutubeLinkedAccount", 'DateTime'>
     readonly updatedAt: FieldRef<"YoutubeLinkedAccount", 'DateTime'>
+    readonly expiryDate: FieldRef<"YoutubeLinkedAccount", 'DateTime'>
   }
     
 
@@ -8343,9 +8343,9 @@ export namespace Prisma {
     workspaceId: 'workspaceId',
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
-    expiryDate: 'expiryDate',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    expiryDate: 'expiryDate'
   };
 
   export type YoutubeLinkedAccountScalarFieldEnum = (typeof YoutubeLinkedAccountScalarFieldEnum)[keyof typeof YoutubeLinkedAccountScalarFieldEnum]
@@ -8548,8 +8548,8 @@ export namespace Prisma {
     owner_id?: StringFilter<"Workspace"> | string
     createdAt?: DateTimeFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
-    workspaceMember?: WorkspaceMemberListRelationFilter
     VideoMetaData?: VideoMetaDataListRelationFilter
+    workspaceMember?: WorkspaceMemberListRelationFilter
     YoutubeLinkedAccount?: YoutubeLinkedAccountListRelationFilter
   }
 
@@ -8559,8 +8559,8 @@ export namespace Prisma {
     owner_id?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    workspaceMember?: WorkspaceMemberOrderByRelationAggregateInput
     VideoMetaData?: VideoMetaDataOrderByRelationAggregateInput
+    workspaceMember?: WorkspaceMemberOrderByRelationAggregateInput
     YoutubeLinkedAccount?: YoutubeLinkedAccountOrderByRelationAggregateInput
   }
 
@@ -8573,8 +8573,8 @@ export namespace Prisma {
     owner_id?: StringFilter<"Workspace"> | string
     createdAt?: DateTimeFilter<"Workspace"> | Date | string
     updatedAt?: DateTimeFilter<"Workspace"> | Date | string
-    workspaceMember?: WorkspaceMemberListRelationFilter
     VideoMetaData?: VideoMetaDataListRelationFilter
+    workspaceMember?: WorkspaceMemberListRelationFilter
     YoutubeLinkedAccount?: YoutubeLinkedAccountListRelationFilter
   }, "id">
 
@@ -8765,9 +8765,9 @@ export namespace Prisma {
     workspaceId?: StringFilter<"YoutubeLinkedAccount"> | string
     accessToken?: StringFilter<"YoutubeLinkedAccount"> | string
     refreshToken?: StringFilter<"YoutubeLinkedAccount"> | string
-    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
     createdAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
     updatedAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
     workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
   }
 
@@ -8777,9 +8777,9 @@ export namespace Prisma {
     workspaceId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
-    expiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    expiryDate?: SortOrder
     workspace?: WorkspaceOrderByWithRelationInput
   }
 
@@ -8792,9 +8792,9 @@ export namespace Prisma {
     workspaceId?: StringFilter<"YoutubeLinkedAccount"> | string
     accessToken?: StringFilter<"YoutubeLinkedAccount"> | string
     refreshToken?: StringFilter<"YoutubeLinkedAccount"> | string
-    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
     createdAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
     updatedAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
     workspace?: XOR<WorkspaceScalarRelationFilter, WorkspaceWhereInput>
   }, "id" | "userId">
 
@@ -8804,9 +8804,9 @@ export namespace Prisma {
     workspaceId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
-    expiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    expiryDate?: SortOrder
     _count?: YoutubeLinkedAccountCountOrderByAggregateInput
     _max?: YoutubeLinkedAccountMaxOrderByAggregateInput
     _min?: YoutubeLinkedAccountMinOrderByAggregateInput
@@ -8821,9 +8821,9 @@ export namespace Prisma {
     workspaceId?: StringWithAggregatesFilter<"YoutubeLinkedAccount"> | string
     accessToken?: StringWithAggregatesFilter<"YoutubeLinkedAccount"> | string
     refreshToken?: StringWithAggregatesFilter<"YoutubeLinkedAccount"> | string
-    expiryDate?: DateTimeWithAggregatesFilter<"YoutubeLinkedAccount"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"YoutubeLinkedAccount"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"YoutubeLinkedAccount"> | Date | string
+    expiryDate?: DateTimeWithAggregatesFilter<"YoutubeLinkedAccount"> | Date | string
   }
 
   export type SubscriptionWhereInput = {
@@ -9019,8 +9019,8 @@ export namespace Prisma {
     owner_id: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
     VideoMetaData?: VideoMetaDataCreateNestedManyWithoutWorkspaceInput
+    workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
     YoutubeLinkedAccount?: YoutubeLinkedAccountCreateNestedManyWithoutWorkspaceInput
   }
 
@@ -9030,8 +9030,8 @@ export namespace Prisma {
     owner_id: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
     VideoMetaData?: VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput
+    workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
     YoutubeLinkedAccount?: YoutubeLinkedAccountUncheckedCreateNestedManyWithoutWorkspaceInput
   }
 
@@ -9041,8 +9041,8 @@ export namespace Prisma {
     owner_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
     VideoMetaData?: VideoMetaDataUpdateManyWithoutWorkspaceNestedInput
+    workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
     YoutubeLinkedAccount?: YoutubeLinkedAccountUpdateManyWithoutWorkspaceNestedInput
   }
 
@@ -9052,8 +9052,8 @@ export namespace Prisma {
     owner_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
     VideoMetaData?: VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput
+    workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
     YoutubeLinkedAccount?: YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
   }
 
@@ -9259,9 +9259,9 @@ export namespace Prisma {
     userId: string
     accessToken: string
     refreshToken: string
-    expiryDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    expiryDate: Date | string
     workspace: WorkspaceCreateNestedOneWithoutYoutubeLinkedAccountInput
   }
 
@@ -9271,9 +9271,9 @@ export namespace Prisma {
     workspaceId: string
     accessToken: string
     refreshToken: string
-    expiryDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    expiryDate: Date | string
   }
 
   export type YoutubeLinkedAccountUpdateInput = {
@@ -9281,9 +9281,9 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     accessToken?: StringFieldUpdateOperationsInput | string
     refreshToken?: StringFieldUpdateOperationsInput | string
-    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     workspace?: WorkspaceUpdateOneRequiredWithoutYoutubeLinkedAccountNestedInput
   }
 
@@ -9293,9 +9293,9 @@ export namespace Prisma {
     workspaceId?: StringFieldUpdateOperationsInput | string
     accessToken?: StringFieldUpdateOperationsInput | string
     refreshToken?: StringFieldUpdateOperationsInput | string
-    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type YoutubeLinkedAccountCreateManyInput = {
@@ -9304,9 +9304,9 @@ export namespace Prisma {
     workspaceId: string
     accessToken: string
     refreshToken: string
-    expiryDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    expiryDate: Date | string
   }
 
   export type YoutubeLinkedAccountUpdateManyMutationInput = {
@@ -9314,9 +9314,9 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     accessToken?: StringFieldUpdateOperationsInput | string
     refreshToken?: StringFieldUpdateOperationsInput | string
-    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type YoutubeLinkedAccountUncheckedUpdateManyInput = {
@@ -9325,9 +9325,9 @@ export namespace Prisma {
     workspaceId?: StringFieldUpdateOperationsInput | string
     accessToken?: StringFieldUpdateOperationsInput | string
     refreshToken?: StringFieldUpdateOperationsInput | string
-    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SubscriptionCreateInput = {
@@ -9576,16 +9576,16 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type WorkspaceMemberListRelationFilter = {
-    every?: WorkspaceMemberWhereInput
-    some?: WorkspaceMemberWhereInput
-    none?: WorkspaceMemberWhereInput
-  }
-
   export type VideoMetaDataListRelationFilter = {
     every?: VideoMetaDataWhereInput
     some?: VideoMetaDataWhereInput
     none?: VideoMetaDataWhereInput
+  }
+
+  export type WorkspaceMemberListRelationFilter = {
+    every?: WorkspaceMemberWhereInput
+    some?: WorkspaceMemberWhereInput
+    none?: WorkspaceMemberWhereInput
   }
 
   export type YoutubeLinkedAccountListRelationFilter = {
@@ -9594,11 +9594,11 @@ export namespace Prisma {
     none?: YoutubeLinkedAccountWhereInput
   }
 
-  export type WorkspaceMemberOrderByRelationAggregateInput = {
+  export type VideoMetaDataOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type VideoMetaDataOrderByRelationAggregateInput = {
+  export type WorkspaceMemberOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -9776,9 +9776,9 @@ export namespace Prisma {
     workspaceId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
-    expiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    expiryDate?: SortOrder
   }
 
   export type YoutubeLinkedAccountMaxOrderByAggregateInput = {
@@ -9787,9 +9787,9 @@ export namespace Prisma {
     workspaceId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
-    expiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    expiryDate?: SortOrder
   }
 
   export type YoutubeLinkedAccountMinOrderByAggregateInput = {
@@ -9798,9 +9798,9 @@ export namespace Prisma {
     workspaceId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
-    expiryDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    expiryDate?: SortOrder
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -10073,18 +10073,18 @@ export namespace Prisma {
     _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
   }
 
-  export type WorkspaceMemberCreateNestedManyWithoutWorkspaceInput = {
-    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
-    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
-    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
-    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-  }
-
   export type VideoMetaDataCreateNestedManyWithoutWorkspaceInput = {
     create?: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput> | VideoMetaDataCreateWithoutWorkspaceInput[] | VideoMetaDataUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
     createMany?: VideoMetaDataCreateManyWorkspaceInputEnvelope
     connect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+  }
+
+  export type WorkspaceMemberCreateNestedManyWithoutWorkspaceInput = {
+    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
+    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
+    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
   }
 
   export type YoutubeLinkedAccountCreateNestedManyWithoutWorkspaceInput = {
@@ -10094,18 +10094,18 @@ export namespace Prisma {
     connect?: YoutubeLinkedAccountWhereUniqueInput | YoutubeLinkedAccountWhereUniqueInput[]
   }
 
-  export type WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput = {
-    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
-    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
-    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
-    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-  }
-
   export type VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput = {
     create?: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput> | VideoMetaDataCreateWithoutWorkspaceInput[] | VideoMetaDataUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
     createMany?: VideoMetaDataCreateManyWorkspaceInputEnvelope
     connect?: VideoMetaDataWhereUniqueInput | VideoMetaDataWhereUniqueInput[]
+  }
+
+  export type WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput = {
+    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
+    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
+    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
   }
 
   export type YoutubeLinkedAccountUncheckedCreateNestedManyWithoutWorkspaceInput = {
@@ -10123,20 +10123,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput = {
-    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
-    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
-    upsert?: WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput[]
-    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
-    set?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-    disconnect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-    delete?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-    update?: WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput[]
-    updateMany?: WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput | WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput[]
-    deleteMany?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
-  }
-
   export type VideoMetaDataUpdateManyWithoutWorkspaceNestedInput = {
     create?: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput> | VideoMetaDataCreateWithoutWorkspaceInput[] | VideoMetaDataUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
@@ -10149,6 +10135,20 @@ export namespace Prisma {
     update?: VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput | VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput[]
     updateMany?: VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput | VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput[]
     deleteMany?: VideoMetaDataScalarWhereInput | VideoMetaDataScalarWhereInput[]
+  }
+
+  export type WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput = {
+    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
+    upsert?: WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput[]
+    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
+    set?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    disconnect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    delete?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    update?: WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput[]
+    updateMany?: WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput | WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput[]
+    deleteMany?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
   }
 
   export type YoutubeLinkedAccountUpdateManyWithoutWorkspaceNestedInput = {
@@ -10165,20 +10165,6 @@ export namespace Prisma {
     deleteMany?: YoutubeLinkedAccountScalarWhereInput | YoutubeLinkedAccountScalarWhereInput[]
   }
 
-  export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput = {
-    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
-    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
-    upsert?: WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput[]
-    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
-    set?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-    disconnect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-    delete?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
-    update?: WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput[]
-    updateMany?: WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput | WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput[]
-    deleteMany?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
-  }
-
   export type VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput = {
     create?: XOR<VideoMetaDataCreateWithoutWorkspaceInput, VideoMetaDataUncheckedCreateWithoutWorkspaceInput> | VideoMetaDataCreateWithoutWorkspaceInput[] | VideoMetaDataUncheckedCreateWithoutWorkspaceInput[]
     connectOrCreate?: VideoMetaDataCreateOrConnectWithoutWorkspaceInput | VideoMetaDataCreateOrConnectWithoutWorkspaceInput[]
@@ -10191,6 +10177,20 @@ export namespace Prisma {
     update?: VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput | VideoMetaDataUpdateWithWhereUniqueWithoutWorkspaceInput[]
     updateMany?: VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput | VideoMetaDataUpdateManyWithWhereWithoutWorkspaceInput[]
     deleteMany?: VideoMetaDataScalarWhereInput | VideoMetaDataScalarWhereInput[]
+  }
+
+  export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+    create?: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput> | WorkspaceMemberCreateWithoutWorkspaceInput[] | WorkspaceMemberUncheckedCreateWithoutWorkspaceInput[]
+    connectOrCreate?: WorkspaceMemberCreateOrConnectWithoutWorkspaceInput | WorkspaceMemberCreateOrConnectWithoutWorkspaceInput[]
+    upsert?: WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput[]
+    createMany?: WorkspaceMemberCreateManyWorkspaceInputEnvelope
+    set?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    disconnect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    delete?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    connect?: WorkspaceMemberWhereUniqueInput | WorkspaceMemberWhereUniqueInput[]
+    update?: WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput | WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput[]
+    updateMany?: WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput | WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput[]
+    deleteMany?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
   }
 
   export type YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceNestedInput = {
@@ -10592,34 +10592,6 @@ export namespace Prisma {
     _max?: NestedEnumTransactionStatusFilter<$PrismaModel>
   }
 
-  export type WorkspaceMemberCreateWithoutWorkspaceInput = {
-    id?: string
-    userId: string
-    role: string
-    status: $Enums.Status
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WorkspaceMemberUncheckedCreateWithoutWorkspaceInput = {
-    id?: string
-    userId: string
-    role: string
-    status: $Enums.Status
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type WorkspaceMemberCreateOrConnectWithoutWorkspaceInput = {
-    where: WorkspaceMemberWhereUniqueInput
-    create: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>
-  }
-
-  export type WorkspaceMemberCreateManyWorkspaceInputEnvelope = {
-    data: WorkspaceMemberCreateManyWorkspaceInput | WorkspaceMemberCreateManyWorkspaceInput[]
-    skipDuplicates?: boolean
-  }
-
   export type VideoMetaDataCreateWithoutWorkspaceInput = {
     id?: string
     key: string
@@ -10658,14 +10630,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type WorkspaceMemberCreateWithoutWorkspaceInput = {
+    id?: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceMemberUncheckedCreateWithoutWorkspaceInput = {
+    id?: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkspaceMemberCreateOrConnectWithoutWorkspaceInput = {
+    where: WorkspaceMemberWhereUniqueInput
+    create: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>
+  }
+
+  export type WorkspaceMemberCreateManyWorkspaceInputEnvelope = {
+    data: WorkspaceMemberCreateManyWorkspaceInput | WorkspaceMemberCreateManyWorkspaceInput[]
+    skipDuplicates?: boolean
+  }
+
   export type YoutubeLinkedAccountCreateWithoutWorkspaceInput = {
     id?: string
     userId: string
     accessToken: string
     refreshToken: string
-    expiryDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    expiryDate: Date | string
   }
 
   export type YoutubeLinkedAccountUncheckedCreateWithoutWorkspaceInput = {
@@ -10673,9 +10673,9 @@ export namespace Prisma {
     userId: string
     accessToken: string
     refreshToken: string
-    expiryDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    expiryDate: Date | string
   }
 
   export type YoutubeLinkedAccountCreateOrConnectWithoutWorkspaceInput = {
@@ -10686,35 +10686,6 @@ export namespace Prisma {
   export type YoutubeLinkedAccountCreateManyWorkspaceInputEnvelope = {
     data: YoutubeLinkedAccountCreateManyWorkspaceInput | YoutubeLinkedAccountCreateManyWorkspaceInput[]
     skipDuplicates?: boolean
-  }
-
-  export type WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput = {
-    where: WorkspaceMemberWhereUniqueInput
-    update: XOR<WorkspaceMemberUpdateWithoutWorkspaceInput, WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
-    create: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>
-  }
-
-  export type WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput = {
-    where: WorkspaceMemberWhereUniqueInput
-    data: XOR<WorkspaceMemberUpdateWithoutWorkspaceInput, WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
-  }
-
-  export type WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput = {
-    where: WorkspaceMemberScalarWhereInput
-    data: XOR<WorkspaceMemberUpdateManyMutationInput, WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput>
-  }
-
-  export type WorkspaceMemberScalarWhereInput = {
-    AND?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
-    OR?: WorkspaceMemberScalarWhereInput[]
-    NOT?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
-    id?: StringFilter<"WorkspaceMember"> | string
-    workspaceId?: StringFilter<"WorkspaceMember"> | string
-    userId?: StringFilter<"WorkspaceMember"> | string
-    role?: StringFilter<"WorkspaceMember"> | string
-    status?: EnumStatusFilter<"WorkspaceMember"> | $Enums.Status
-    createdAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
-    updatedAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
   }
 
   export type VideoMetaDataUpsertWithWhereUniqueWithoutWorkspaceInput = {
@@ -10751,6 +10722,35 @@ export namespace Prisma {
     uploaderId?: StringFilter<"VideoMetaData"> | string
   }
 
+  export type WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput = {
+    where: WorkspaceMemberWhereUniqueInput
+    update: XOR<WorkspaceMemberUpdateWithoutWorkspaceInput, WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
+    create: XOR<WorkspaceMemberCreateWithoutWorkspaceInput, WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>
+  }
+
+  export type WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput = {
+    where: WorkspaceMemberWhereUniqueInput
+    data: XOR<WorkspaceMemberUpdateWithoutWorkspaceInput, WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
+  }
+
+  export type WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput = {
+    where: WorkspaceMemberScalarWhereInput
+    data: XOR<WorkspaceMemberUpdateManyMutationInput, WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput>
+  }
+
+  export type WorkspaceMemberScalarWhereInput = {
+    AND?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
+    OR?: WorkspaceMemberScalarWhereInput[]
+    NOT?: WorkspaceMemberScalarWhereInput | WorkspaceMemberScalarWhereInput[]
+    id?: StringFilter<"WorkspaceMember"> | string
+    workspaceId?: StringFilter<"WorkspaceMember"> | string
+    userId?: StringFilter<"WorkspaceMember"> | string
+    role?: StringFilter<"WorkspaceMember"> | string
+    status?: EnumStatusFilter<"WorkspaceMember"> | $Enums.Status
+    createdAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkspaceMember"> | Date | string
+  }
+
   export type YoutubeLinkedAccountUpsertWithWhereUniqueWithoutWorkspaceInput = {
     where: YoutubeLinkedAccountWhereUniqueInput
     update: XOR<YoutubeLinkedAccountUpdateWithoutWorkspaceInput, YoutubeLinkedAccountUncheckedUpdateWithoutWorkspaceInput>
@@ -10776,9 +10776,9 @@ export namespace Prisma {
     workspaceId?: StringFilter<"YoutubeLinkedAccount"> | string
     accessToken?: StringFilter<"YoutubeLinkedAccount"> | string
     refreshToken?: StringFilter<"YoutubeLinkedAccount"> | string
-    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
     createdAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
     updatedAt?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
+    expiryDate?: DateTimeFilter<"YoutubeLinkedAccount"> | Date | string
   }
 
   export type WorkspaceCreateWithoutWorkspaceMemberInput = {
@@ -10899,8 +10899,8 @@ export namespace Prisma {
     owner_id: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
     VideoMetaData?: VideoMetaDataCreateNestedManyWithoutWorkspaceInput
+    workspaceMember?: WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceUncheckedCreateWithoutYoutubeLinkedAccountInput = {
@@ -10909,8 +10909,8 @@ export namespace Prisma {
     owner_id: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
     VideoMetaData?: VideoMetaDataUncheckedCreateNestedManyWithoutWorkspaceInput
+    workspaceMember?: WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
   }
 
   export type WorkspaceCreateOrConnectWithoutYoutubeLinkedAccountInput = {
@@ -10935,8 +10935,8 @@ export namespace Prisma {
     owner_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
     VideoMetaData?: VideoMetaDataUpdateManyWithoutWorkspaceNestedInput
+    workspaceMember?: WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type WorkspaceUncheckedUpdateWithoutYoutubeLinkedAccountInput = {
@@ -10945,8 +10945,8 @@ export namespace Prisma {
     owner_id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
     VideoMetaData?: VideoMetaDataUncheckedUpdateManyWithoutWorkspaceNestedInput
+    workspaceMember?: WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
   }
 
   export type TransactionCreateWithoutSubscriptionInput = {
@@ -11101,15 +11101,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type WorkspaceMemberCreateManyWorkspaceInput = {
-    id?: string
-    userId: string
-    role: string
-    status: $Enums.Status
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type VideoMetaDataCreateManyWorkspaceInput = {
     id?: string
     key: string
@@ -11124,41 +11115,23 @@ export namespace Prisma {
     uploaderId: string
   }
 
+  export type WorkspaceMemberCreateManyWorkspaceInput = {
+    id?: string
+    userId: string
+    role: string
+    status: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type YoutubeLinkedAccountCreateManyWorkspaceInput = {
     id?: string
     userId: string
     accessToken: string
     refreshToken: string
-    expiryDate: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type WorkspaceMemberUpdateWithoutWorkspaceInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    role?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    role?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    role?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate: Date | string
   }
 
   export type VideoMetaDataUpdateWithoutWorkspaceInput = {
@@ -11203,14 +11176,41 @@ export namespace Prisma {
     uploaderId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type WorkspaceMemberUpdateWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type YoutubeLinkedAccountUpdateWithoutWorkspaceInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     accessToken?: StringFieldUpdateOperationsInput | string
     refreshToken?: StringFieldUpdateOperationsInput | string
-    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type YoutubeLinkedAccountUncheckedUpdateWithoutWorkspaceInput = {
@@ -11218,9 +11218,9 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     accessToken?: StringFieldUpdateOperationsInput | string
     refreshToken?: StringFieldUpdateOperationsInput | string
-    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type YoutubeLinkedAccountUncheckedUpdateManyWithoutWorkspaceInput = {
@@ -11228,9 +11228,9 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     accessToken?: StringFieldUpdateOperationsInput | string
     refreshToken?: StringFieldUpdateOperationsInput | string
-    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiryDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TransactionCreateManySubscriptionInput = {

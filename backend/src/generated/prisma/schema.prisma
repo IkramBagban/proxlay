@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -15,36 +9,25 @@ datasource db {
 }
 
 model Workspace {
-  id        String   @id @default(cuid())
-  name      String
-  owner_id  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  workspaceMember      WorkspaceMember[]
+  id                   String                 @id @default(cuid())
+  name                 String
+  owner_id             String
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
   VideoMetaData        VideoMetaData[]
+  workspaceMember      WorkspaceMember[]
   YoutubeLinkedAccount YoutubeLinkedAccount[]
 }
 
-enum Status {
-  INVITED // Owner invited the user, waiting for them to accept
-  PENDING // User requested to join, waiting for owner's approval
-  ACTIVE // User accepted invite or was approved
-  REJECTED // Owner rejected a join request
-  DECLINED // User declined the invite
-  REMOVED // User was removed from the workspace
-}
-
 model WorkspaceMember {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   workspaceId String
-  userId      String // referenced to clerk user id
+  userId      String
   role        String
   status      Status
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   @@unique([workspaceId, userId])
   @@index([workspaceId])
@@ -61,83 +44,49 @@ model VideoMetaData {
   privacyStatus String
   categoryId    String
   description   String
-  // thumbnail     String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  workspaceId String
-  uploaderId  String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  workspaceId   String
+  uploaderId    String
+  workspace     Workspace @relation(fields: [workspaceId], references: [id])
 
   @@index([workspaceId])
   @@index([uploaderId])
 }
 
 model YoutubeLinkedAccount {
-  id           String   @id @default(cuid())
-  userId       String // referenced to clerk user id
+  id           String    @id @default(cuid())
+  userId       String    @unique
   workspaceId  String
   accessToken  String
   refreshToken String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   expiryDate   DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  workspace    Workspace @relation(fields: [workspaceId], references: [id])
 
-  workspace Workspace @relation(fields: [workspaceId], references: [id])
-
-  @@unique([userId])
   @@index([workspaceId])
-}
-
-enum SubscriptionStatus {
-  CREATED
-  AUTHENTICATED
-  ACTIVE
-  PENDING
-  HALTED
-  CANCELLED
-  COMPLETED
-  EXPIRED
-  TRIAL_ACTIVE
-  TRIAL_EXPIRED
-}
-
-enum PlanType {
-  BASIC
-  PRO
-  TRIAL_BASIC
 }
 
 model Subscription {
   id                     String             @id @default(cuid())
-  razorpaySubscriptionId String?            @unique // Made optional for trial subscriptions
-  userId                 String // clerk user id
+  razorpaySubscriptionId String?            @unique
+  userId                 String
   planType               PlanType
   status                 SubscriptionStatus
   currentPeriodStart     DateTime
   currentPeriodEnd       DateTime
-
-  // New fields for trial support
-  isTrialSubscription Boolean   @default(false)
-  trialStartDate      DateTime?
-  trialEndDate        DateTime?
-  hasUsedTrial        Boolean   @default(false) // Track if user has used their free trial
-
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  transaction Transaction[]
+  isTrialSubscription    Boolean            @default(false)
+  trialStartDate         DateTime?
+  trialEndDate           DateTime?
+  hasUsedTrial           Boolean            @default(false)
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  transaction            Transaction[]
 
   @@index([userId])
   @@index([razorpaySubscriptionId])
   @@index([userId, hasUsedTrial])
-}
-
-enum TransactionStatus {
-  CREATED
-  AUTHORIZED
-  CAPTURED
-  REFUNDED
-  FAILED
 }
 
 model Transaction {
@@ -153,9 +102,44 @@ model Transaction {
   isTrialTransaction Boolean           @default(false)
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
-
-  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  subscription       Subscription      @relation(fields: [subscriptionId], references: [id])
 
   @@index([subscriptionId])
   @@index([razorpayPaymentId])
+}
+
+enum Status {
+  INVITED
+  ACTIVE
+  PENDING
+  REJECTED
+  DECLINED
+  REMOVED
+}
+
+enum SubscriptionStatus {
+  CREATED       @map("created")
+  AUTHENTICATED @map("authenticated")
+  ACTIVE        @map("active")
+  PENDING       @map("pending")
+  HALTED        @map("halted")
+  CANCELLED     @map("cancelled")
+  COMPLETED     @map("completed")
+  EXPIRED       @map("expired")
+  TRIAL_ACTIVE  @map("trial_active")
+  TRIAL_EXPIRED @map("trial_expired")
+}
+
+enum PlanType {
+  BASIC
+  PRO
+  TRIAL_BASIC
+}
+
+enum TransactionStatus {
+  CREATED    @map("created")
+  AUTHORIZED @map("authorized")
+  CAPTURED   @map("captured")
+  REFUNDED   @map("refunded")
+  FAILED     @map("failed")
 }

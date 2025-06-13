@@ -1,5 +1,9 @@
 import { SUBSCRIPTION_PLANS } from "../../lib/constants";
-import { createSubscription } from "../../services/payment";
+import {
+  createSubscription,
+  getPayment,
+  getSubscription,
+} from "../../services/payment";
 import { Request, Response } from "express";
 import { verifyRazorpaySignature } from "../../lib/razorpay";
 import Razorpay from "razorpay";
@@ -17,6 +21,7 @@ import {
   handleSubscriptionActivated,
   handleSubscriptionCharged,
 } from "../../services/webhook";
+import { Subscriptions } from "razorpay/dist/types/subscriptions";
 
 export const createSubscriptionController = async (
   req: Request,
@@ -164,17 +169,51 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
     return;
   }
 
+  const planDetails = SUBSCRIPTION_PLANS[plan];
+  if (!planDetails) {
+    res.status(400).json({ error: "Invalid plan selected" });
+    return;
+  }
+
+  const existingSubscription = await prismaClient.subscription.findFirst({
+    where: {
+      razorpaySubscriptionId: razorpay_subscription_id,
+      status: SubscriptionStatus.ACTIVE,
+    },
+  });
+
+  if (existingSubscription) {
+    console.log("Subscription already active, skipping verification");
+    res.status(200).json({
+      success: true,
+      message:
+        "Subscription already active. if you are upgrading, please contact support.",
+      activePlan: existingSubscription.planType,
+      plan,
+    });
+    return;
+  }
+
   try {
     const isValidSignature = verifyRazorpaySignature({
       paymentId: razorpay_payment_id,
       subscription_id: razorpay_subscription_id,
       signature: razorpay_signature,
-      plan,
     });
 
     if (!isValidSignature) {
       console.error("Payment verification failed for plan:", plan);
       res.status(400).json({ error: "Payment verification failed" });
+      return;
+    }
+
+    const subscription: Subscriptions.RazorpaySubscription =
+      await getSubscription(razorpay_subscription_id);
+    const payment = await getPayment(razorpay_payment_id);
+    console.log("Fetched subscription details:", subscription);
+    if (!subscription) {
+      console.error("Subscription not found for ID:", razorpay_subscription_id);
+      res.status(404).json({ error: "Subscription not found" });
       return;
     }
 
@@ -208,8 +247,8 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
             status: SubscriptionStatus.ACTIVE,
             planType: plan.toUpperCase() as "BASIC" | "PRO",
             userId: userId,
-            currentPeriodStart: new Date(),
-            currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Assuming 30 days for simplicity
+            currentPeriodStart: new Date(subscription.current_start!),
+            currentPeriodEnd: new Date(subscription.current_end!),
           },
         });
         await tx.transaction.create({
@@ -218,10 +257,10 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
             subscriptionId: subscriptionRecord.id, // subscription table id
 
             userId: userId,
-            amount: SUBSCRIPTION_PLANS[plan].amount,
-            currency: "INR",
-            status: TransactionStatus.CAPTURED,
-            method: "RAZORPAY",
+            amount: (payment.amount as number) / 100, // convrt to actual amount
+            currency: payment.currency,
+            status: payment.status as TransactionStatus,
+            method: payment.method,
             description: `Payment for ${plan} plan and user ID ${userId}`,
           },
         });
