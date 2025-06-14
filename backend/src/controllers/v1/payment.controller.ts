@@ -259,7 +259,7 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
             userId: userId,
             amount: (payment.amount as number) / 100, // convrt to actual amount
             currency: payment.currency,
-            status: payment.status as TransactionStatus,
+            status: (payment.status).toUpperCase() as TransactionStatus,
             method: payment.method,
             description: `Payment for ${plan} plan and user ID ${userId}`,
           },
