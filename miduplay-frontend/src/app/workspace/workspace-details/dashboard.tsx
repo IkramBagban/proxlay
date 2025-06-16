@@ -15,6 +15,8 @@ import { useFetch } from "@/hooks/useFetch";
 import { useAuth } from "@clerk/clerk-react";
 import axiosClient from "@/lib/axios-client";
 import type { ProtectedRouteOutletContext } from "@/routes/protected-route";
+import toast from "react-hot-toast";
+import { isAxiosError } from "axios";
 
 const WorkspaceDashboard = () => {
   const outletCtx: ProtectedRouteOutletContext = useOutletContext();
@@ -61,6 +63,16 @@ const WorkspaceDashboard = () => {
       );
       window.location.href = redirectUrl;
     } catch (error) {
+      console.log('error authorizing youtube', error);
+      if(isAxiosError(error) && error.response) {
+        toast.error(error.response.data?.error || "Failed to authorize YouTube account.");
+      }
+      else if (error instanceof Error) {
+        toast.error(error.message || "Failed to authorize YouTube account.");
+      }
+      else {
+        toast.error("Failed to authorize YouTube account.");
+      }
       console.error("Error authorizing YouTube:", error);
     }
   };

@@ -19,6 +19,8 @@ import { Status } from "./generated/prisma";
 import { checkOwner } from "./middleware/check-owner";
 import v1Routes from "./routes/v1/index";
 import { Readable } from "stream";
+import { enforcePermission } from "./middleware/enforcePermssion";
+import { Permissions } from "./lib/rbac/permissions";
 
 dotenv.config();
 const app = express();
@@ -47,10 +49,8 @@ export const createOAuth2Client = (tokens?: any) => {
 
 const scopes = ["https://www.googleapis.com/auth/youtube.upload"];
 
-
-
 app.use("/api/v1/workspace", requireAuth(), workspaceRoutes);
-app.use("/api/v1",  v1Routes);
+app.use("/api/v1", v1Routes);
 
 app.get(
   "/api/v1/invites",
@@ -272,7 +272,8 @@ app.get(
 app.get(
   "/api/v1/youtube/authorize/:workspaceId",
   requireAuth(),
-  checkOwner,
+  // checkOwner,
+  enforcePermission(Permissions.AUTHORIZE_YOUTUBE_ACCOUNT),
   async (req, res) => {
     const { userId } = await getAuth(req);
     const { workspaceId } = req.params;
