@@ -1,3 +1,4 @@
+import { WorkspaceMemberRole } from "../generated/prisma";
 import { prismaClient } from "./db";
 
 export const getWorkspaceMemberInfo = async (
@@ -14,6 +15,6 @@ export const getWorkspaceMemberInfo = async (
   return {
     response: response || null,
     isPartOfWorkspace: response?.status === "ACTIVE" ? true : false,
-    isOwner: response?.role === "owner" ? true : false,
+    isOwner: response?.role === WorkspaceMemberRole.OWNER ? true : false,
   };
 };

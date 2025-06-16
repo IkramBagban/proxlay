@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 // import { prismaClient } from "../../prisma/db"
 import { clerkClient, getAuth } from "@clerk/express";
 import { prismaClient } from "../../lib/db";
-import { Status } from "../../generated/prisma";
+import { Status, WorkspaceMemberRole } from "../../generated/prisma";
 
 export const createWorkspace = async (req: Request, res: Response) => {
   // console.log("req.body", req.body);
@@ -43,7 +43,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
         data: {
           userId: userId,
           workspaceId: workspace.id,
-          role: "owner",
+          role: WorkspaceMemberRole.OWNER,
           status: Status.ACTIVE,
         },
       });
@@ -205,7 +205,7 @@ export const requestJoinWorkspace = async (req: Request, res: Response) => {
       data: {
         userId: userId,
         workspaceId: workspaceId,
-        role: "member",
+        role: WorkspaceMemberRole.MEMBER,
         status: Status.PENDING,
       },
     });
@@ -293,7 +293,7 @@ export const inviteUserToWorkspace = async (req: Request, res: Response) => {
       data: {
         userId: userId,
         workspaceId: workspaceId,
-        role: "member",
+        role: WorkspaceMemberRole.MEMBER,
         status: Status.INVITED,
       },
     });
@@ -329,6 +329,40 @@ export const removeUserFromWorkspace = async (req: Request, res: Response) => {
     res.status(200).json(membership);
   } catch (error) {
     console.error("Error removing user from workspace:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
+export const assignRoleToUser = async (req: Request, res: Response) => {
+  const { workspaceId } = req.params;
+  const { membershipId, role } = req.body as { membershipId: string; role: WorkspaceMemberRole };
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  if (!membershipId || !role) {
+    res.status(400).json({ error: "Membership ID and role are required" });
+    return;
+  }
+
+  try {
+    const membership = await prismaClient.workspaceMember.update({
+      where: {
+        id: membershipId,
+      },
+      data: {
+        role: WorkspaceMemberRole[role?.toUpperCase() as WorkspaceMemberRole] ,
+      },
+    });
+
+    res.status(200).json(membership);
+  } catch (error) {
+    console.error("Error assigning role to user:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -11,6 +11,7 @@ import {
   inviteUserToWorkspace,
   removeUserFromWorkspace,
   getWorkspace,
+  assignRoleToUser
 } from "../../controllers/v1/workspace.controller";
 import { checkOwner } from "../../middleware/check-owner";
 import { getAuth } from "@clerk/express";
@@ -45,5 +46,7 @@ router.post(
 );
 router.post("/invite/:workspaceId", checkOwner, inviteUserToWorkspace);
 router.post("/remove-user/:workspaceId", checkOwner, removeUserFromWorkspace);
+
+router.post("/assign-role/:workspaceId", checkOwner, assignRoleToUser);
 
 export default router;

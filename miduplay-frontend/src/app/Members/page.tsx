@@ -25,7 +25,7 @@ import toast from "react-hot-toast";
 import InviteMemberDialog from "@/components/workspace/invite-member-dialog";
 import { useMember } from "@/hooks/tanstack/useMembers";
 import { useWorkspace } from "@/hooks/tanstack/useWorkspace";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ProtectedRouteOutletContext } from "@/routes/protected-route";
 
@@ -36,7 +36,7 @@ const WorkspaceMembers = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const outletCtx: ProtectedRouteOutletContext = useOutletContext();
 
-  const { queryWorkspaceMembers } = useMember({
+  const { queryWorkspaceMembers, updateMemberRole } = useMember({
     workspaceId: workspaceId || "",
   });
 
@@ -177,6 +177,21 @@ const WorkspaceMembers = () => {
     },
   ];
 
+
+  const assignRole = async (membershipId: string, role: string) => {
+    try {
+      const confirmMessage = window.confirm(`Are you sure you want to assign the role of ${role} to this member?`);
+      if (!confirmMessage) {
+        return console.log('Role assignment cancelled') ;
+      }
+      
+      await updateMemberRole.mutateAsync({ membershipId, role });
+      toast.success('Role updated successfully');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to update role');
+    }
+  };
+
   const renderMemberRow = (member, index) => {
     const { firstName, lastName, email, imageUrl } = member.user || {};
     const RoleIcon = getRoleIcon(member.role);
@@ -270,6 +285,7 @@ const WorkspaceMembers = () => {
                   <Pencil className="h-3 w-3" />
                 </Button>z */}
                     <DropdownMenu>
+
                       <DropdownMenuTrigger asChild>
                         <Button size="sm" variant="ghost">
                           <MoreVertical className="h-4 w-4" />
@@ -288,6 +304,16 @@ const WorkspaceMembers = () => {
                         }}>
                           Remove
                         </DropdownMenuItem>
+
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>Assign Role</DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem onClick={() => assignRole(member.id, 'manager')}>Manager</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => assignRole(member.id, 'editor')}>Editor</DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </>
