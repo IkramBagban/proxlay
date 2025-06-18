@@ -94,7 +94,7 @@ const WorkspacePage = () => {
       console.log("Workspace created:", response);
     } catch (error) {
       console.error("Workspace creation failed:", error);
-      toast.error("Failed to create workspace");
+      // toast.error("Failed to create workspace");
     }
 
     setMeta({ name: "" });

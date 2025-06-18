@@ -88,6 +88,7 @@ export async function handleSubscriptionCharged(
       data: {
         currentPeriodStart: new Date(subscriptionEntity.current_start * 1000),
         currentPeriodEnd: new Date(subscriptionEntity.current_end * 1000),
+        status: SubscriptionStatus.ACTIVE, 
       },
       select: {
         id: true,

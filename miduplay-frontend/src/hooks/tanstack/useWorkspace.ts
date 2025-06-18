@@ -37,6 +37,14 @@ export const useWorkspace = ({ workspaceId }: { workspaceId?: string }) => {
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       toast.success("Workspace created successfully!");
     },
+    onError: (error: string) => {
+      console.error("on workspace create error:", error);
+      if (isAxiosError(error)) {
+        toast.error(error?.response?.data?.error || "Failed to create workspace.");
+      } else {
+        toast.error("Failed to create workspace.");
+      }
+    }
   });
 
   const joinRequestInWorkspace = useMutation({

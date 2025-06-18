@@ -11,13 +11,19 @@ import {
   inviteUserToWorkspace,
   removeUserFromWorkspace,
   getWorkspace,
-  assignRoleToUser
+  assignRoleToUser,
 } from "../../controllers/v1/workspace.controller";
 import { checkOwner } from "../../middleware/check-owner";
 import { getAuth } from "@clerk/express";
 import { getWorkspaceMemberInfo } from "../../lib/get-workspace-member-info";
+import { enforcePlanLimit } from "../../middleware/enforePlanLimit";
+import { FeatureUsagePermissions } from "../../lib/plans";
 
-router.post("/create", createWorkspace);
+router.post(
+  "/create",
+  enforcePlanLimit(FeatureUsagePermissions.CAN_CREATE_WORKSPACE),
+  createWorkspace
+);
 router.get("/", getWorkspaces);
 router.get("/:workspaceId", getWorkspace);
 router.get("/members/:workspaceId", getWorkspaceMembers);
@@ -27,14 +33,15 @@ router.get("/check-role/:workspaceId", async (req: Request, res) => {
   console.log("check-role route called");
   const { userId } = getAuth(req);
   const { workspaceId } = req.params;
-  const { isOwner, isPartOfWorkspace } = await getWorkspaceMemberInfo(workspaceId, userId!);
-  res
-    .status(200)
-    .json({
-      message: "Role check successful",
-      isOwner,
-      isPartOfWorkspace
-    });
+  const { isOwner, isPartOfWorkspace } = await getWorkspaceMemberInfo(
+    workspaceId,
+    userId!
+  );
+  res.status(200).json({
+    message: "Role check successful",
+    isOwner,
+    isPartOfWorkspace,
+  });
 });
 
 // owner only routes

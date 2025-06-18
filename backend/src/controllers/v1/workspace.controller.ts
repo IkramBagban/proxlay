@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { clerkClient, getAuth } from "@clerk/express";
 import { prismaClient } from "../../lib/db";
 import { Status, WorkspaceMemberRole } from "../../generated/prisma";
+import { plan } from "../../lib/plans";
 
 export const createWorkspace = async (req: Request, res: Response) => {
   // console.log("req.body", req.body);
@@ -20,6 +21,9 @@ export const createWorkspace = async (req: Request, res: Response) => {
   }
 
   try {
+
+    
+
     const workspace = await prismaClient.$transaction(async (prisma) => {
       const existingWorkspace = await prisma.workspace.findFirst({
         where: {
@@ -33,6 +37,8 @@ export const createWorkspace = async (req: Request, res: Response) => {
         return;
       }
 
+      
+      
       const workspace = await prismaClient.workspace.create({
         data: {
           name,
@@ -47,6 +53,9 @@ export const createWorkspace = async (req: Request, res: Response) => {
           status: Status.ACTIVE,
         },
       });
+
+      const planUsageResponse = await plan.updateWorkspaceCount(userId);
+
     });
 
     res.status(201).json(workspace);
