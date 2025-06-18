@@ -117,66 +117,6 @@ const PricingPage = () => {
     }
   ];
 
-  const allFeatures = [
-    {
-      category: 'Channel & Workspace Management',
-      features: [
-        { name: 'YouTube Workspaces', basic: '1', pro: '3', enterprise: 'Unlimited' },
-        { name: 'Team Members per Workspace', basic: '3', pro: '10', enterprise: 'Unlimited' },
-        { name: 'YouTube Channels', basic: '1', pro: '3', enterprise: 'Unlimited' },
-        { name: 'Channel Authorization', basic: true, pro: true, enterprise: true },
-        { name: 'Multi-Channel Dashboard', basic: false, pro: true, enterprise: true },
-        { name: 'White-label Interface', basic: false, pro: false, enterprise: true }
-      ]
-    },
-    {
-      category: 'Video Upload & Management',
-      features: [
-        { name: 'Video Uploads per Month', basic: '20', pro: '75', enterprise: 'Unlimited' },
-        { name: 'Storage Limit', basic: '50 GB', pro: '250 GB', enterprise: 'Unlimited' },
-        { name: 'HD Video Upload (1080p)', basic: true, pro: true, enterprise: true },
-        { name: '4K Video Upload', basic: false, pro: true, enterprise: true },
-        { name: 'Bulk Video Operations', basic: false, pro: true, enterprise: true },
-        { name: 'Video Scheduling', basic: true, pro: true, enterprise: true },
-        { name: 'Custom Thumbnails', basic: true, pro: true, enterprise: true }
-      ]
-    },
-    {
-      category: 'Approval & Security',
-      features: [
-        { name: 'Basic Approval Workflow', basic: true, pro: true, enterprise: true },
-        { name: 'Multi-level Approval', basic: false, pro: true, enterprise: true },
-        { name: 'Custom Approval Rules', basic: false, pro: false, enterprise: true },
-        { name: 'Secure Credential Storage', basic: true, pro: true, enterprise: true },
-        { name: 'Team Role Management', basic: true, pro: true, enterprise: true },
-        { name: 'Audit Logs', basic: false, pro: true, enterprise: true },
-        { name: 'Advanced Security Controls', basic: false, pro: false, enterprise: true }
-      ]
-    },
-    {
-      category: 'Collaboration & Analytics',
-      features: [
-        { name: 'Team Comments & Feedback', basic: true, pro: true, enterprise: true },
-        { name: 'Video Preview & Review', basic: true, pro: true, enterprise: true },
-        { name: 'Upload Analytics', basic: 'Basic', pro: 'Advanced', enterprise: 'Custom' },
-        { name: 'Team Performance Insights', basic: false, pro: true, enterprise: true },
-        { name: 'Custom Reports', basic: false, pro: false, enterprise: true },
-        { name: 'API Access', basic: false, pro: true, enterprise: true }
-      ]
-    },
-    {
-      category: 'Support & Integration',
-      features: [
-        { name: 'Email Support', basic: true, pro: true, enterprise: true },
-        { name: 'Priority Support', basic: false, pro: true, enterprise: true },
-        { name: '24/7 Dedicated Support', basic: false, pro: false, enterprise: true },
-        { name: 'Onboarding Assistance', basic: false, pro: true, enterprise: true },
-        { name: 'Custom Integrations', basic: false, pro: false, enterprise: true },
-        { name: 'Dedicated Account Manager', basic: false, pro: false, enterprise: true }
-      ]
-    }
-  ];
-
   const getDiscountPercentage = (plan) => {
     if (plan.price.monthly === 'Custom') return 0;
     const monthlyTotal = plan.price.monthly * 12;
@@ -223,11 +163,11 @@ const PricingPage = () => {
   };
 
 
-  const {handlePayment} = usePayment();
+  const { handlePayment } = usePayment();
 
   return (
     <div className="min-h-screen bg-gray-50">
-        <Header />
+      <Header />
 
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-6 py-16">
@@ -240,7 +180,7 @@ const PricingPage = () => {
               Secure YouTube Collaboration
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Let your team upload videos to your YouTube channel without sharing credentials. 
+              Let your team upload videos to your YouTube channel without sharing credentials.
               Maintain full control with approval workflows.
             </p>
             <div className="flex items-center justify-center space-x-8 mt-8 text-sm text-gray-600">
@@ -264,21 +204,19 @@ const PricingPage = () => {
             <div className="flex items-center space-x-4 bg-gray-100 p-1 rounded-lg">
               <button
                 onClick={() => setBillingCycle('monthly')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  billingCycle === 'monthly'
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${billingCycle === 'monthly'
                     ? 'bg-white text-gray-900 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
-                }`}
+                  }`}
               >
                 Monthly
               </button>
               <button
                 onClick={() => setBillingCycle('annual')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  billingCycle === 'annual'
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${billingCycle === 'annual'
                     ? 'bg-white text-gray-900 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
-                }`}
+                  }`}
               >
                 Annual
                 <Badge variant="secondary" className="ml-2">
@@ -301,13 +239,12 @@ const PricingPage = () => {
             return (
               <Card
                 key={plan.id}
-                className={`relative transition-all duration-200 hover:shadow-lg ${
-                  plan.popular
+                className={`relative transition-all duration-200 hover:shadow-lg ${plan.popular
                     ? 'ring-2 ring-purple-500 shadow-lg scale-105'
                     : selectedPlan === plan.id
-                    ? `ring-2 ${colors.border} shadow-md`
-                    : 'hover:shadow-md'
-                }`}
+                      ? `ring-2 ${colors.border} shadow-md`
+                      : 'hover:shadow-md'
+                  }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -389,9 +326,8 @@ const PricingPage = () => {
 
                   {/* CTA Button */}
                   <Button
-                    className={`w-full ${
-                      plan.popular ? 'bg-purple-600 hover:bg-purple-700' : colors.button
-                    }`}
+                    className={`w-full ${plan.popular ? 'bg-purple-600 hover:bg-purple-700' : colors.button
+                      }`}
                     // onClick={() => setSelectedPlan(plan.id)}
                     onClick={() => handlePayment(plan.name.toLowerCase() as "basic" | "pro", false, 'false')}
                   >
@@ -478,94 +414,6 @@ const PricingPage = () => {
         </div>
       </div>
 
-      {/* Feature Comparison Table */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="text-center space-y-4 mb-12">
-          <h2 className="text-3xl font-bold tracking-tight">
-            Compare All Features
-          </h2>
-          <p className="text-lg text-gray-600">
-            Everything you need for secure YouTube collaboration
-          </p>
-        </div>
-
-        <Card className="overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-medium text-gray-900">
-                    Features
-                  </th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-900">
-                    Basic
-                  </th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-900">
-                    <div className="flex items-center justify-center space-x-2">
-                      <span>Pro</span>
-                      <Badge variant="secondary">Popular</Badge>
-                    </div>
-                  </th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-900">
-                    Enterprise
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {allFeatures.map((category) => (
-                  <React.Fragment key={category.category}>
-                    <tr className="bg-gray-50">
-                      <td colSpan={4} className="px-6 py-3 text-sm font-semibold text-gray-900">
-                        {category.category}
-                      </td>
-                    </tr>
-                    {category.features.map((feature) => (
-                      <tr key={feature.name} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 text-sm text-gray-900">
-                          {feature.name}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {typeof feature.basic === 'boolean' ? (
-                            feature.basic ? (
-                              <Check className="h-5 w-5 text-green-500 mx-auto" />
-                            ) : (
-                              <X className="h-5 w-5 text-gray-300 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-sm text-gray-600">{feature.basic}</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {typeof feature.pro === 'boolean' ? (
-                            feature.pro ? (
-                              <Check className="h-5 w-5 text-green-500 mx-auto" />
-                            ) : (
-                              <X className="h-5 w-5 text-gray-300 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-sm text-gray-600">{feature.pro}</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {typeof feature.enterprise === 'boolean' ? (
-                            feature.enterprise ? (
-                              <Check className="h-5 w-5 text-green-500 mx-auto" />
-                            ) : (
-                              <X className="h-5 w-5 text-gray-300 mx-auto" />
-                            )
-                          ) : (
-                            <span className="text-sm text-gray-600">{feature.enterprise}</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-      </div>
 
       {/* FAQ Section */}
       <div className="bg-white">
