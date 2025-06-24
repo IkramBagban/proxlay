@@ -37,6 +37,16 @@ export const useWorkspace = ({ workspaceId }: { workspaceId?: string }) => {
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       toast.success("Workspace created successfully!");
     },
+    onError: (error: string) => {
+      console.error("on workspace create error:", error);
+      if (isAxiosError(error)) {
+        toast.error(
+          error?.response?.data?.error || "Failed to create workspace."
+        );
+      } else {
+        toast.error("Failed to create workspace.");
+      }
+    },
   });
 
   const joinRequestInWorkspace = useMutation({
@@ -54,7 +64,6 @@ export const useWorkspace = ({ workspaceId }: { workspaceId?: string }) => {
 
     onError: (error: string) => {
       console.error("Join request failed:", error);
-      toast.error("Failed to send join request.");
     },
   });
 
@@ -76,20 +85,12 @@ export const useWorkspace = ({ workspaceId }: { workspaceId?: string }) => {
 
   const inviteUserToWorkspace = useMutation({
     mutationFn: async (payload: HandleInvitePayload) =>
-      handleInvite(payload, (await getToken()) as string),
-    onError: (error: string) => {
-      console.error("Invite user failed:", error);
-      toast.error("Failed to invite user to workspace.");
-    },
+      handleInvite(payload, (await getToken()) as string)
   });
 
   const handleInvitationRequest = useMutation({
     mutationFn: async (payload: HandleInvitationPayload) =>
-      await handleInvitationRequestAPI(payload, (await getToken()) as string),
-    onError: (error: string) => {
-      console.error("Invitation request failed:", error);
-      toast.error("Failed to handle invitation request.");
-    },
+      await handleInvitationRequestAPI(payload, (await getToken()) as string)
   });
 
   const removeUserFromWorkspace = useMutation({

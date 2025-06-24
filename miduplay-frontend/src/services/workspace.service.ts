@@ -98,18 +98,20 @@ export const handleInvite = async (
 export interface HandleInvitationPayload {
   action: "ACCEPT" | "DECLINE";
   membershipId: string;
+  workspaceId: string;
 }
 
 export const handleInvitationRequestAPI = async (
   payload: HandleInvitationPayload,
   token: string
 ) => {
-  const { action, membershipId } = payload;
+  const { action, membershipId, workspaceId } = payload;
 
   return await axiosClient.post(
     `/handle-invitation-request/${membershipId}`,
     {
       action,
+      workspaceId,
     },
     {
       headers: {

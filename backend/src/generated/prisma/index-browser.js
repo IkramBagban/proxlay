@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.9.0
- * Query Engine version: 81e4af48011447c3cc503a190e86995b66d2a28e
+ * Prisma Client JS version: 6.8.2
+ * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
  */
 Prisma.prismaVersion = {
-  client: "6.9.0",
-  engine: "81e4af48011447c3cc503a190e86995b66d2a28e"
+  client: "6.8.2",
+  engine: "2060c79ba17c6bb9f5823312b6f6b7f4a845738e"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -195,6 +195,19 @@ exports.Prisma.TransactionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PlanUsageScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  status: 'status',
+  planType: 'planType',
+  totalVideoUploads: 'totalVideoUploads',
+  totalWorkspaces: 'totalWorkspaces',
+  totalStorageUsed: 'totalStorageUsed',
+  subscriptionId: 'subscriptionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -257,7 +270,8 @@ exports.Prisma.ModelName = {
   VideoMetaData: 'VideoMetaData',
   YoutubeLinkedAccount: 'YoutubeLinkedAccount',
   Subscription: 'Subscription',
-  Transaction: 'Transaction'
+  Transaction: 'Transaction',
+  PlanUsage: 'PlanUsage'
 };
 
 /**

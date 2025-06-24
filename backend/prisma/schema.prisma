@@ -20,14 +20,14 @@ model Workspace {
 }
 
 model WorkspaceMember {
-  id          String    @id @default(cuid())
+  id          String              @id @default(cuid())
   workspaceId String
   userId      String
   role        WorkspaceMemberRole
   status      Status
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  workspace   Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   @@unique([workspaceId, userId])
   @@index([workspaceId])
@@ -83,6 +83,7 @@ model Subscription {
   createdAt              DateTime           @default(now())
   updatedAt              DateTime           @updatedAt
   transaction            Transaction[]
+  PlanUsage              PlanUsage[]
 
   @@index([userId])
   @@index([razorpaySubscriptionId])
@@ -106,6 +107,30 @@ model Transaction {
 
   @@index([subscriptionId])
   @@index([razorpayPaymentId])
+}
+
+model PlanUsage {
+  id                String   @id @default(cuid())
+  ownerId           String
+  status            Status   @default(ACTIVE)
+  planType          PlanType
+  totalVideoUploads Int      @default(0)
+  totalWorkspaces   Int      @default(0)
+  totalStorageUsed  Int      @default(0)
+  subscriptionId    String
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([ownerId])
+  @@index([planType])
+  @@index([subscriptionId])
+}
+
+enum planUsageStatus {
+  ACTIVE
+  INACTIVE
 }
 
 enum Status {
@@ -145,7 +170,7 @@ enum TransactionStatus {
 }
 
 enum WorkspaceMemberRole {
-  OWNER @map("owner")
+  OWNER   @map("owner")
   MANAGER @map("manager")
-  MEMBER @map("member")
+  MEMBER  @map("member")
 }

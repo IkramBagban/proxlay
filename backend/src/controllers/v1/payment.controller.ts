@@ -22,6 +22,8 @@ import {
   handleSubscriptionCharged,
 } from "../../services/webhook";
 import { Subscriptions } from "razorpay/dist/types/subscriptions";
+import { createplanUsage } from "../../services/plan-usage";
+import { IPlans } from "../../lib/plans";
 
 export const createSubscriptionController = async (
   req: Request,
@@ -251,6 +253,14 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
             currentPeriodEnd: new Date(subscription.current_end!),
           },
         });
+
+        const planUsageResponse = await createplanUsage(
+          plan?.toUpperCase() as IPlans,
+          userId,
+          subscriptionRecord.id
+        );
+        console.log("planUsageResponse", planUsageResponse);
+
         await tx.transaction.create({
           data: {
             razorpayPaymentId: razorpay_payment_id,
@@ -259,7 +269,7 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
             userId: userId,
             amount: (payment.amount as number) / 100, // convrt to actual amount
             currency: payment.currency,
-            status: (payment.status).toUpperCase() as TransactionStatus,
+            status: payment.status.toUpperCase() as TransactionStatus,
             method: payment.method,
             description: `Payment for ${plan} plan and user ID ${userId}`,
           },
@@ -314,7 +324,6 @@ export const razorpayWebhookHandler = async (req: any, res: any) => {
     return res.status(400).send({ error: "Invalid signature" });
   }
 
-  // Handle the event
   const event = req.body.event;
   const { subscription, payment } = req.body.payload;
 

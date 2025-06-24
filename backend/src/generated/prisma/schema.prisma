@@ -83,6 +83,7 @@ model Subscription {
   createdAt              DateTime           @default(now())
   updatedAt              DateTime           @updatedAt
   transaction            Transaction[]
+  PlanUsage              PlanUsage[]
 
   @@index([userId])
   @@index([razorpaySubscriptionId])
@@ -106,6 +107,30 @@ model Transaction {
 
   @@index([subscriptionId])
   @@index([razorpayPaymentId])
+}
+
+model PlanUsage {
+  id                String   @id @default(cuid())
+  ownerId           String
+  status            Status   @default(ACTIVE)
+  planType          PlanType
+  totalVideoUploads Int      @default(0)
+  totalWorkspaces   Int      @default(0)
+  totalStorageUsed  Int      @default(0)
+  subscriptionId    String
+
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([ownerId])
+  @@index([planType])
+  @@index([subscriptionId])
+}
+
+enum planUsageStatus {
+  ACTIVE
+  INACTIVE
 }
 
 enum Status {
@@ -145,7 +170,7 @@ enum TransactionStatus {
 }
 
 enum WorkspaceMemberRole {
-  OWNER  @map("owner")
-  ADMIN  @map("admin")
-  MEMBER @map("member")
+  OWNER   @map("owner")
+  MANAGER @map("manager")
+  MEMBER  @map("member")
 }

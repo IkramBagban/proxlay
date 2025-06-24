@@ -68,12 +68,17 @@ const JoinWorkspace = () => {
       setOpen(false);
     } catch (error) {
       console.error(error);
-      if (isAxiosError(error) && error.response?.status === 400) {
-        setErrorMessage("You are already a member of this workspace");
+      if (isAxiosError(error) && error.response) {
+        setErrorMessage(error.response.data?.error || "Error sending join request");
         toast.error(error.response.data?.error || "Error sending join request");
         return;
+      }else if(error instanceof Error) {
+        setErrorMessage(error.message);
+        toast.error(error.message);
       }
-      toast.error("Error sending join request");
+      else {
+        toast.error("Error sending join request");
+      }
     } finally {
       setJoining(false);
     }

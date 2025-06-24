@@ -94,7 +94,7 @@ const WorkspacePage = () => {
       console.log("Workspace created:", response);
     } catch (error) {
       console.error("Workspace creation failed:", error);
-      toast.error("Failed to create workspace");
+      // toast.error("Failed to create workspace");
     }
 
     setMeta({ name: "" });
@@ -111,7 +111,8 @@ const WorkspacePage = () => {
 
   const handleWorkspaceInvitationAction = async (
     action: "ACCEPT" | "DECLINE",
-    membershipId: string
+    membershipId: string,
+    workspaceId: string
   ) => {
     const token = await getToken();
     if (!token) {
@@ -123,6 +124,7 @@ const WorkspacePage = () => {
         {
           action,
           membershipId,
+          workspaceId,
         },
         {
           onSuccess: (response) => {
@@ -486,7 +488,8 @@ const WorkspacePage = () => {
                             onClick={() =>
                               handleWorkspaceInvitationAction(
                                 "DECLINE",
-                                invite.id
+                                invite.id,
+                                invite.workspace.id
                               )
                             }
                             className="flex-1 border-red-200 text-red-700 hover:bg-red-50"
@@ -499,7 +502,8 @@ const WorkspacePage = () => {
                             onClick={() => {
                               handleWorkspaceInvitationAction(
                                 "ACCEPT",
-                                invite.id
+                                invite.id,
+                                invite.workspace.id
                               );
                             }}
                             className="flex-1 bg-blue-600 hover:bg-blue-700"

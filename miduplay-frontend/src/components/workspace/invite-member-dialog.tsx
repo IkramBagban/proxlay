@@ -88,12 +88,27 @@ const InviteMemberDialog: React.FC<Props> = ({ workspaceId }) => {
         },
         {
           onSuccess: () => {
-            toast.success("Invitation sent successfully===<userId>");
+            toast.success("Invitation sent successfully");
             setOpen(false);
             setSearchTerm("");
             setSearchResults([]);
           },
-        }
+          onError: (error) => {
+            let errorMessage: string | null = null;
+            if (isAxiosError(error) && error.response) {
+              errorMessage = error.response.data?.error || "Failed to send invitation";
+            }
+            else if (error instanceof Error) {
+
+              errorMessage = error.message;
+            }
+
+            console.log('errorMessage', errorMessage);
+            toast.error(errorMessage || "Failed to send invitation");
+
+          },
+        },
+
       );
 
       // const response = await axiosClient.post(
@@ -113,9 +128,9 @@ const InviteMemberDialog: React.FC<Props> = ({ workspaceId }) => {
       //   setSearchResults([]);
       // }
     } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        toast.error(error.response.data?.error || "Failed to send invitation");
-      }
+      // if (isAxiosError(error) && error.response) {
+      //   toast.error(error.response.data?.error || "Failed to send invitation");
+      // }
       console.error("Error sending invitation:", error);
     }
   };
