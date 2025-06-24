@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { google } from "googleapis";
 import path from "path";
 import fs from "fs";
@@ -21,6 +21,8 @@ import v1Routes from "./routes/v1/index";
 import { Readable } from "stream";
 import { enforcePermission } from "./middleware/enforcePermssion";
 import { Permissions } from "./lib/rbac/permissions";
+import { enforcePlanLimit } from "./middleware/enforePlanLimit";
+import { FeatureUsagePermissions } from "./lib/plans";
 
 dotenv.config();
 const app = express();
@@ -86,6 +88,14 @@ app.get(
 // user will accept or decline the invitation
 app.post(
   "/api/v1/handle-invitation-request/:membershipId",
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.body?.action === "ACCEPT") {
+      enforcePlanLimit(
+        FeatureUsagePermissions.CAN_ADD_USER,
+        "The workspace is already full. Cannot accept more members."
+      )(req, res, next);
+    } else next();
+  },
   async (req: ExpressRequestWithAuth, res: any) => {
     const { membershipId } = req.params;
     const { userId } = getAuth(req);
@@ -171,6 +181,7 @@ const getPresignedUrl = async (params: any, method: "PUT" | "GET") => {
 
 app.post(
   "/api/v1/youtube/upload-video",
+  enforcePlanLimit(FeatureUsagePermissions.CAN_UPLOAD_VIDEO),
   requireAuth(),
   async (req: any, res: any) => {
     const {

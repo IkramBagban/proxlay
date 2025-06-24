@@ -13,18 +13,18 @@ const getCurrentUsageStats = async (
   workspaceId: string
 ): Promise<CurrentUsageStatsReturnType> => {
   try {
-    const { owner_id } = (await prismaClient.workspace.findUnique({
+    const workspace = (await prismaClient.workspace.findUnique({
       where: { id: workspaceId },
       select: { owner_id: true },
     })) as { owner_id: string | null };
 
-    if (!owner_id) {
-      throw new Error("Workspace not found");
+    if (!workspace?.owner_id) {
+      throw new Error("Workspace not found or missing owner.");
     }
 
-    const response = (await prismaClient.planUsage.findFirst({
+    const planUsage = (await prismaClient.planUsage.findFirst({
       where: {
-        ownerId: owner_id as string,
+        ownerId: workspace?.owner_id as string,
         status: "ACTIVE",
       },
       select: {
@@ -35,15 +35,13 @@ const getCurrentUsageStats = async (
       },
     })) as CurrentUsageStatsReturnType;
 
-    return (
-      response || {
-        totalVideoUploads: 0,
-        totalWorkspaces: 0,
-        totalStorageUsed: 0,
-        subscriptionId: null,
-        planType: null,
-      }
-    );
+    return {
+      totalVideoUploads: planUsage?.totalVideoUploads || 0,
+      totalWorkspaces: planUsage?.totalWorkspaces || 0,
+      totalStorageUsed: planUsage?.totalStorageUsed || 0,
+      subscriptionId: null,
+      planType: planUsage?.planType || null,
+    };
   } catch (error) {
     console.error("Error fetching current usage stats:", error);
     throw new Error("Failed to fetch current usage stats");
@@ -51,7 +49,8 @@ const getCurrentUsageStats = async (
 };
 
 export const enforcePlanLimit = (
-  featurePermission: FeatureUsagePermissions
+  featurePermission: FeatureUsagePermissions,
+  errorMessage?: string
 ) => {
   return async (req: any, res: any, next: any) => {
     console.log("Enforcing plan limit for feature:", featurePermission);
@@ -89,6 +88,7 @@ export const enforcePlanLimit = (
         if (!canCreate) {
           res.status(403).json({
             error:
+              errorMessage ||
               "Limit reached: You cannot create more workspaces with your current plan.",
           });
           return;
@@ -128,6 +128,7 @@ export const enforcePlanLimit = (
           if (!canUpload) {
             res.status(403).json({
               error:
+                errorMessage ||
                 "Limit reached: You cannot upload more videos with your current plan.",
             });
             return;
@@ -150,7 +151,8 @@ export const enforcePlanLimit = (
           if (!canAddUser) {
             res.status(403).json({
               error:
-                "Limit reached: You cannot add more users with your current plan.",
+                errorMessage ||
+                "Limit reached: You cannot add more members with your current plan.",
             });
             return;
           }

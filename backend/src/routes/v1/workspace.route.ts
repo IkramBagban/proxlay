@@ -27,7 +27,14 @@ router.post(
 router.get("/", getWorkspaces);
 router.get("/:workspaceId", getWorkspace);
 router.get("/members/:workspaceId", getWorkspaceMembers);
-router.post("/request-join/:workspaceId", requestJoinWorkspace);
+router.post(
+  "/request-join/:workspaceId",
+  enforcePlanLimit(
+    FeatureUsagePermissions.CAN_ADD_USER,
+    "The workspace is already full  ."
+  ),
+  requestJoinWorkspace
+);
 
 router.get("/check-role/:workspaceId", async (req: Request, res) => {
   console.log("check-role route called");
@@ -49,9 +56,24 @@ router.get("/check-role/:workspaceId", async (req: Request, res) => {
 router.post(
   "/handle-join-request/:workspaceId",
   checkOwner,
+  (req, res, next) => {
+    if (req.body?.action === "ACCEPT") {
+      enforcePlanLimit(FeatureUsagePermissions.CAN_ADD_USER)(req, res, next);
+    } else next();
+  },
   handleJoinWorkspaceRequest
 );
-router.post("/invite/:workspaceId", checkOwner, inviteUserToWorkspace);
+router.post(
+  "/invite/:workspaceId",
+  checkOwner,
+  (req, res, next) => {
+    enforcePlanLimit(
+      FeatureUsagePermissions.CAN_ADD_USER,
+      "The workspace is already full. Cannot invite more members."
+    )(req, res, next);
+  },
+  inviteUserToWorkspace
+);
 router.post("/remove-user/:workspaceId", checkOwner, removeUserFromWorkspace);
 
 router.post("/assign-role/:workspaceId", checkOwner, assignRoleToUser);
