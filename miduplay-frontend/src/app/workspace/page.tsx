@@ -1,29 +1,25 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
-  PlusCircle,
   FolderKanban,
-  Users,
   Mail,
   Check,
   X,
-  Calendar,
   Building2,
-  Settings,
   Crown,
-  UserPlus,
   Bell,
   ChevronRight,
   Sparkles,
   Clock,
   AlertCircle,
   Search,
-  Filter,
   Grid3X3,
   List,
   Plus,
+  Copy,
+  Check as CheckIcon,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Navigate, NavLink, useNavigate } from "react-router";
+import {  NavLink } from "react-router";
 import { CreateWorkspace } from "@/components/workspace/create-workspace";
 import {
   SignedIn,
@@ -32,7 +28,6 @@ import {
   useAuth,
   UserButton,
 } from "@clerk/clerk-react";
-import axiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
 import { useFetch } from "@/hooks/useFetch";
 import JoinWorkspace from "@/components/workspace/join-workspace";
@@ -46,12 +41,6 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { isAxiosError } from "axios";
 import { useWorkspace } from "@/hooks/tanstack/useWorkspace";
@@ -64,8 +53,8 @@ const WorkspacePage = () => {
   const [openInvite, setOpenInvite] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid");
+  const [copiedId, setCopiedId] = React.useState<string | null>(null);
 
-  const navigate = useNavigate()
   const queryClient = useQueryClient();
   const { getToken, isSignedIn } = useAuth();
   console.log("isSignedIn", isSignedIn);
@@ -163,6 +152,16 @@ const WorkspacePage = () => {
   );
 
   console.log('invites', invites)
+
+  const handleCopyId = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(id);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+    toast.success("Workspace ID copied to clipboard!");
+  };
+
   return (
     <div className=" h-[100%] bg-gray-50 ">
       <div className="bg-white border-b border-gray-200">
@@ -326,21 +325,23 @@ const WorkspacePage = () => {
                         </CardHeader>
                         <CardContent>
                           <div className="space-y-3">
-                            {/* <div className="flex items-center gap-2 text-sm text-gray-500">
-                              <Users className="w-4 h-4" />
-                              <span>Team workspace</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                              <Calendar className="w-4 h-4" />
-                              <span>Created recently</span>
-                            </div> */}
                             <div className="pt-2 border-t">
-                              <div className="flex items-center justify-between">
-                                <span className="text-xs text-gray-400 font-mono">
+                              <div className="flex items-center justify-between bg-gray-50 rounded-lg p-2 group/id">
+                                <span className="text-xs text-gray-500 font-mono flex-1 truncate mr-2">
                                   {ws.id}
-                                  {/* ID: {ws.id.slice(0, 8)}... */}
                                 </span>
-                                <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-6 w-6 p-0 hover:bg-gray-200"
+                                  onClick={(e) => handleCopyId(e, ws.id)}
+                                >
+                                  {copiedId === ws.id ? (
+                                    <CheckIcon className="h-3 w-3 text-green-600" />
+                                  ) : (
+                                    <Copy className="h-3 w-3 text-gray-400 group-hover/id:text-gray-600" />
+                                  )}
+                                </Button>
                               </div>
                             </div>
                           </div>
@@ -357,9 +358,23 @@ const WorkspacePage = () => {
                               <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                                 {ws.name}
                               </h3>
-                              <p className="text-xs sm:text-sm text-gray-500 truncate">
-                                ID: {ws.id}
-                              </p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="text-xs sm:text-sm text-gray-500 font-mono truncate flex-1">
+                                  {ws.id}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-6 w-6 p-0 hover:bg-gray-100"
+                                  onClick={(e) => handleCopyId(e, ws.id)}
+                                >
+                                  {copiedId === ws.id ? (
+                                    <CheckIcon className="h-3 w-3 text-green-600" />
+                                  ) : (
+                                    <Copy className="h-3 w-3 text-gray-400 hover:text-gray-600" />
+                                  )}
+                                </Button>
+                              </div>
                             </div>
                             <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                               <Badge

@@ -4,16 +4,13 @@ import { Outlet, useParams, NavLink, useLocation, useNavigate, useOutletContext 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import {
   Home,
   Users,
   Video,
-  Settings,
-  Youtube,
-  Upload,
-  BarChart3,
   ChevronLeft,
+  Copy,
+  Check,
 } from "lucide-react";
 import { useFetch } from "@/hooks/useFetch";
 import toast from "react-hot-toast";
@@ -27,6 +24,7 @@ const WorkspaceLayout = () => {
 
   const { isSignedIn } = useAuth();
   const { workspaceId } = useParams();
+  const [copiedId, setCopiedId] = React.useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const { data: workspace } = useFetch(`/workspace/${workspaceId}`, true);
   useEffect(() => {
@@ -79,6 +77,15 @@ const WorkspaceLayout = () => {
     return location.pathname.startsWith(href);
   };
 
+  const handleCopyId = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(id);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+    toast.success("Workspace ID copied to clipboard!");
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
@@ -96,9 +103,6 @@ const WorkspaceLayout = () => {
                 <h2 className="text-lg font-semibold text-gray-900 truncate">
                   {workspace?.name || "Workspace"}
                 </h2>
-                <p className="text-xs text-gray-500 font-mono">
-                  {workspaceId}
-                </p>
               </div>
             )}
             <Button
@@ -188,9 +192,17 @@ const WorkspaceLayout = () => {
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="font-mono text-xs">
-                {workspaceId}
-              </Badge>
+              <div 
+                className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors group"
+                onClick={(e) => handleCopyId(e, workspaceId || "")}
+              >
+                <span className="font-mono text-xs text-gray-600">{workspaceId}</span>
+                {copiedId === workspaceId ? (
+                  <Check className="h-3.5 w-3.5 text-green-600" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5 text-gray-400 group-hover:text-gray-600" />
+                )}
+              </div>
             </div>
           </div>
         </div>
