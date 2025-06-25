@@ -3,7 +3,7 @@ name: Backned-Deployment
 on:
   push: 
     branches: 
-      - main
+      - prod
     paths: 
       - 'backend/**'
       - '.github/workflows/deploy-backend.yml'
