@@ -370,7 +370,7 @@ app.post(
   "/api/v1/youtube/upload-to-youtube/:workspaceId",
 
   requireAuth(),
-  checkOwner,
+  enforcePermission(Permissions.UPLOAD_VIDEO_TO_YOUTUBE),
   async (req: any, res: any) => {
     const {
       title,
@@ -438,7 +438,6 @@ app.post(
 app.get(
   "/api/v1/workspace/:workspaceId/members/search",
   requireAuth(),
-  checkOwner,
   async (req: ExpressRequestWithAuth, res: any) => {
     const { workspaceId } = req.params;
     const { q } = req.query as { q: string };

@@ -18,6 +18,8 @@ import { getAuth } from "@clerk/express";
 import { getWorkspaceMemberInfo } from "../../lib/get-workspace-member-info";
 import { enforcePlanLimit } from "../../middleware/enforePlanLimit";
 import { FeatureUsagePermissions } from "../../lib/plans";
+import { Permissions } from "../../lib/rbac/permissions";
+import { enforcePermission } from "../../middleware/enforcePermssion";
 
 router.post(
   "/create",
@@ -55,7 +57,7 @@ router.get("/check-role/:workspaceId", async (req: Request, res) => {
 // in this route i have to pass membershipId as a query parameter
 router.post(
   "/handle-join-request/:workspaceId",
-  checkOwner,
+  enforcePermission(Permissions.HANDLE_JOIN_REQUEST),
   (req, res, next) => {
     if (req.body?.action === "ACCEPT") {
       enforcePlanLimit(FeatureUsagePermissions.CAN_ADD_USER)(req, res, next);
@@ -65,7 +67,8 @@ router.post(
 );
 router.post(
   "/invite/:workspaceId",
-  checkOwner,
+  enforcePermission(Permissions.INVITE_USER),
+
   (req, res, next) => {
     enforcePlanLimit(
       FeatureUsagePermissions.CAN_ADD_USER,
@@ -74,8 +77,16 @@ router.post(
   },
   inviteUserToWorkspace
 );
-router.post("/remove-user/:workspaceId", checkOwner, removeUserFromWorkspace);
+router.post(
+  "/remove-user/:workspaceId",
+  enforcePermission(Permissions.REMOVE_USER_FROM_WORKSPACE),
+  removeUserFromWorkspace
+);
 
-router.post("/assign-role/:workspaceId", checkOwner, assignRoleToUser);
+router.post(
+  "/assign-role/:workspaceId",
+  enforcePermission(Permissions.ASSIGN_ROLE_TO_USER),
+  assignRoleToUser
+);
 
 export default router;

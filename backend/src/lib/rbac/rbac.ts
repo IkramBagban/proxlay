@@ -24,7 +24,6 @@ const RolePermissions: Record<Roles, Permissions[]> = {
     Permissions.EDIT_VIDEO_ON_YOUTUBE,
     Permissions.VIEW_INVITES_AND_JOIN_REQUESTS,
     Permissions.VIEW_WORKSPACE_MEMBERS,
-    Permissions.ASSIGN_ROLE_TO_USER,
     Permissions.REMOVE_USER_FROM_WORKSPACE,
   ],
   [Roles.MEMBER]: [

@@ -9,49 +9,29 @@ export const enforcePermission = (requiredPermission: Permissions) => {
     try {
       const { userId } = getAuth(req);
 
-      const membershipId =
-        req.body?.membershipId ||
-        req.query?.membershipId ||
-        req.params?.membershipId;
-
       let role: string | null = null;
 
-      if (membershipId) {
-        const member = await prismaClient.workspaceMember.findUnique({
-          where: { id: membershipId },
-          select: { role: true },
-        });
+      const workspaceId = req.params.workspaceId;
 
-        if (!member) {
-          res.status(404).json({ error: "Membership not found." });
-          return;
-        }
-
-        role = member.role;
-      } else {
-        // fllback to workspaceId + userId
-        const workspaceId = req.params.workspaceId;
-
-        if (!workspaceId || !userId) {
-          res.status(400).json({ error: "Missing workspace or user ID." });
-          return;
-        }
-
-        const member = await prismaClient.workspaceMember.findFirst({
-          where: {
-            workspaceId,
-            userId,
-          },
-          select: { role: true },
-        });
-
-        if (!member) {
-          res.status(404).json({ error: "Workspace membership not found." });
-          return;
-        }
-
-        role = member.role;
+      if (!workspaceId || !userId) {
+        res.status(400).json({ error: "Missing workspace or user ID." });
+        return;
       }
+
+      const member = await prismaClient.workspaceMember.findFirst({
+        where: {
+          workspaceId,
+          userId,
+        },
+        select: { role: true },
+      });
+
+      if (!member) {
+        res.status(404).json({ error: "Workspace membership not found." });
+        return;
+      }
+
+      role = member.role;
 
       console.log(`Role detected: ${role}`);
       console.log(`Required permission: ${requiredPermission}`);
