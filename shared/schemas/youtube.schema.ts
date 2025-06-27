@@ -19,4 +19,16 @@ export const uploadVideoSchema = z.object({
 privacyStatus: z.enum(["public", "unlisted", "private"]),
 
   categoryId: z.string().min(1, "Category is required.").optional(),
+
+  madeForKids: z.boolean(),
+
+  ageRestriction: z.boolean(),
+
+  currentStep: z.number().min(1).max(4),
+
+  thumbnail: z.object({
+    file: z.any()
+  }).optional()
 });
+
+export type UploadVideoFormData = z.infer<typeof uploadVideoSchema>;

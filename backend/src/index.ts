@@ -193,15 +193,32 @@ app.post(
       tags,
       categoryId,
       privacyStatus,
+      thumbnail,
+      madeForKids,
+      ageRestriction
     } = req.body;
     const bucketName = process.env.AWS_BUCKET_NAME!;
     const filePath = `${workspaceId}/youtube/${fileName}`;
+    const thumbnailPath = thumbnail?.file ? `${workspaceId}/youtube/thumbnails/${fileName}-thumb` : null;
+    
     const params = {
       Bucket: bucketName,
       Key: filePath,
       ContentType: fileType,
     };
+    
     const presignedUrl = await getPresignedUrl(params, "PUT");
+    let thumbnailUrl = null;
+    
+    if (thumbnail?.file) {
+      const thumbnailParams = {
+        Bucket: bucketName,
+        Key: thumbnailPath,
+        ContentType: thumbnail.file.type || 'image/jpeg', // Default to JPEG if type not provided
+      };
+      thumbnailUrl = await getPresignedUrl(thumbnailParams, "PUT");
+    }
+    
     const { userId } = getAuth(req);
 
     const payload = {
@@ -214,6 +231,9 @@ app.post(
       privacyStatus: privacyStatus || "private",
       workspaceId: workspaceId,
       uploaderId: userId!,
+      thumbnailKey: thumbnailPath,
+      madeForKids,
+      ageRestriction
     };
 
     console.log("payload", payload);
@@ -229,10 +249,19 @@ app.post(
         privacyStatus: privacyStatus || "private",
         workspaceId: workspaceId,
         uploaderId: userId!,
+        thumbnailKey: thumbnailPath,
+        madeForKids,
+        ageRestriction
       },
     });
 
-    res.status(200).json({ url: presignedUrl, key: filePath, metaData });
+    res.status(200).json({ 
+      url: presignedUrl, 
+      thumbnailUrl,
+      key: filePath, 
+      thumbnailKey: thumbnailPath,
+      metaData 
+    });
   }
 );
 
