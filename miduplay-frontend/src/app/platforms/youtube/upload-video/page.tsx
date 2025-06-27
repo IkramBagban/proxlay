@@ -1,4 +1,3 @@
-// import axios from "axios";
 import React from "react";
 import { useAuth } from "@clerk/clerk-react";
 
@@ -15,9 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 
-import { uploadVideoSchema } from "@shared/schemas/youtube.schema";
+import { uploadVideoSchema, type UploadVideoFormData } from "@shared/schemas/youtube.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   Select,
   SelectContent,
@@ -26,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { useParams } from "react-router";
 import axiosClient from "@/lib/axios-client";
 import { 
@@ -34,23 +32,19 @@ import {
   Video, 
   X, 
   FileVideo, 
-  Play,
   Eye,
   EyeOff,
-  Hash,
-  Type,
-  AlignLeft,
-  Save,
   Cloud,
-  Plus,
   Check,
   AlertTriangle,
   Loader2,
   CheckCircle,
-  XCircle
+  XCircle,
+  ArrowLeft,
+  ArrowRight,
+  Image as ImageIcon,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useFormContext } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
@@ -61,6 +55,8 @@ import {
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import TagsInput from "@/components/tags-input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { categories } from "@/lib/categories";
 
 
 // Upload Progress Modal Component
@@ -123,7 +119,7 @@ const UploadProgressModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-md" hideCloseButton>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
             {stageInfo.icon}
@@ -245,6 +241,14 @@ const LeavePageDialog = ({
   </Dialog>
   );
   
+
+const UPLOAD_STEPS = {
+  DETAILS: 1,
+  ELEMENTS: 2,
+  CHECKS: 3,
+  VISIBILITY: 4,
+};
+  
 const YoutubeVideoUpload = () => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [isDragOver, setIsDragOver] = React.useState(false);
@@ -253,8 +257,10 @@ const YoutubeVideoUpload = () => {
   const [uploadStage, setUploadStage] = useState<'preparing' | 'uploading' | 'processing' | 'complete' | 'error'>('preparing');
   const [showLeaveDialog, setShowLeaveDialog] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
+  const [currentStep, setCurrentStep] = useState(UPLOAD_STEPS.DETAILS);
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
   
-  const form = useForm<z.infer<typeof uploadVideoSchema>>({
+  const form = useForm<UploadVideoFormData>({
     resolver: zodResolver(uploadVideoSchema),
     defaultValues: {
       title: "",
@@ -262,8 +268,268 @@ const YoutubeVideoUpload = () => {
       tags: [],
       privacyStatus: "private",
       categoryId: "",
-    },
+      madeForKids: false,
+      ageRestriction: false,
+      currentStep: UPLOAD_STEPS.DETAILS,
+    }
   });
+
+  const nextStep = () => {
+    if (currentStep < UPLOAD_STEPS.VISIBILITY) {
+       setCurrentStep(prev => prev + 1);
+    }
+  }
+
+  const prevStep = () => {
+    if(currentStep > UPLOAD_STEPS.DETAILS) {
+      setCurrentStep(prev => prev - 1);
+    }
+  }
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case UPLOAD_STEPS.DETAILS:
+        return (
+          <div className="space-y-6">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">Title</FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="Enter your video title" 
+                      className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base"
+                      disabled={isUploading}
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    A good title helps people discover your video
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">Description</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Tell viewers about your video" 
+                      className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 min-h-[120px] text-base"
+                      disabled={isUploading}
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Help viewers understand what your video is about
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )
+      case UPLOAD_STEPS.ELEMENTS:
+        return (
+          <div className="space-y-6">
+            {/* Thumbnail Upload */}
+            <FormField
+              control={form.control}
+              name="thumbnail"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">Thumbnail <p className="text-sm text-gray-400 font-medium">(Optional)</p></FormLabel>
+                  <FormControl>
+                    <div className="border-2 border-dashed rounded-lg p-4 hover:border-red-500 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setThumbnail(file);
+                            field.onChange({ file });
+                          }
+                        }}
+                        className="hidden"
+                        id="thumbnail-upload"
+                      />
+                      <label
+                        htmlFor="thumbnail-upload"
+                        className="flex flex-col items-center justify-center cursor-pointer"
+                      >
+                        <ImageIcon className="w-8 h-8 text-gray-400 mb-2" />
+                        <span className="text-sm text-gray-600">
+                          {thumbnail ? thumbnail.name : "Upload thumbnail"}
+                        </span>
+                      </label>
+                    </div>
+                  </FormControl>
+                  <FormDescription>
+                    Select or upload a custom thumbnail
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tags"
+              render={() => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">Tags</FormLabel>
+                  <FormControl>
+                    <TagsInput name="tags" />
+                  </FormControl>
+                  <FormDescription>
+                    Tags help people discover your video
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )
+      case UPLOAD_STEPS.CHECKS:
+        return (
+          <div className="space-y-6">
+            <FormField
+              control={form.control}
+              name="madeForKids"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      This content is made for kids
+                    </FormLabel>
+                    <FormDescription>
+                      Regardless of your location, you're legally required to comply with COPPA and/or other laws. You're required to tell us if your content is made for kids.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="ageRestriction"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Age restriction (18+ only)
+                    </FormLabel>
+                    <FormDescription>
+                      Age-restricted videos are not shown in certain areas of YouTube.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+          </div>
+        )
+      case UPLOAD_STEPS.VISIBILITY:
+        return (
+          <div className="space-y-6">
+            <FormField
+              control={form.control}
+              name="privacyStatus"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">Visibility</FormLabel>
+                  <FormControl>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      value={field.value || "private"}
+                      defaultValue="private"
+                      disabled={isUploading}
+                    >
+                      <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="public">
+                          <div className="flex items-center gap-2">
+                            <Eye className="w-4 h-4" />
+                            Public
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="unlisted">
+                          <div className="flex items-center gap-2">
+                            <EyeOff className="w-4 h-4" />
+                            Unlisted
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="private">
+                          <div className="flex items-center gap-2">
+                            <EyeOff className="w-4 h-4" />
+                            Private
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>
+                    Choose who can watch your video
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">Category</FormLabel>
+                  <FormControl>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                      disabled={isUploading}
+                    >
+                      <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category.value} value={category.value}>
+                            {category.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>
+                    Help people find your content
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+          </div>
+        )
+    }
+  }
   
   const { getToken } = useAuth();
   const { workspaceId } = useParams();
@@ -378,10 +644,10 @@ const YoutubeVideoUpload = () => {
     }, 500);
   };
 
-  const onSubmit = async (data: z.infer<typeof uploadVideoSchema>) => {
-    console.log("form values", data);
+  const onSubmit = async (data: UploadVideoFormData) => {
+    console.log("form values", data)
 
-    const { title, description, tags, privacyStatus, categoryId } = data;
+    const { title, description, tags, privacyStatus, categoryId, thumbnail, madeForKids, ageRestriction } = data;
 
     if (!selectedFile) {
       console.error("No file selected");
@@ -402,6 +668,9 @@ const YoutubeVideoUpload = () => {
         tags,
         categoryId,
         privacyStatus,
+        thumbnail: thumbnail?.file || null,
+        madeForKids,
+        ageRestriction
       };
 
       const token = await getToken();
@@ -420,12 +689,14 @@ const YoutubeVideoUpload = () => {
 
       console.log("response", response);
       if (response.status === 200) {
-        const { url } = response.data;
+        const { url, thumbnailUrl } = response.data;
         
+        console.log(url)
+        console.log(thumbnailUrl)
         // Start progress simulation
         simulateUploadProgress();
         
-        // Uncomment and modify this for actual upload
+       // Uncomment and modify this for actual upload
         // const uploadResponse = await axios.put(url, selectedFile, {
         //   headers: {
         //     "Content-Type": selectedFile.type,
@@ -435,8 +706,21 @@ const YoutubeVideoUpload = () => {
         //     setUploadProgress(percentCompleted);
         //   },
         // });
+
+        // If there's a thumbnail, upload it
+
+        // if (thumbnail?.file && thumbnailUrl) {
+        //   await fetch(thumbnailUrl, {
+        //     method: 'PUT',
+        //     body: thumbnail.file,
+        //     headers: {
+        //       'Content-Type': thumbnail.file.type || 'image/jpeg',
+        //       'x-amz-acl': 'public-read'
+        //     },
+        //   });
+        // }
         
-        console.log("File upload would be processed here");
+        console.log("File upload completed");
       } else {
         setUploadStage('error');
         setIsUploading(false);
@@ -449,22 +733,7 @@ const YoutubeVideoUpload = () => {
     }
   };
 
-  const categories = [
-    { value: "1", label: "Film & Animation" },
-    { value: "2", label: "Autos & Vehicles" },
-    { value: "10", label: "Music" },
-    { value: "15", label: "Pets & Animals" },
-    { value: "17", label: "Sports" },
-    { value: "19", label: "Travel & Events" },
-    { value: "20", label: "Gaming" },
-    { value: "22", label: "People & Blogs" },
-    { value: "23", label: "Comedy" },
-    { value: "24", label: "Entertainment" },
-    { value: "25", label: "News & Politics" },
-    { value: "26", label: "Howto & Style" },
-    { value: "27", label: "Education" },
-    { value: "28", label: "Science & Technology" },
-  ];
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -557,170 +826,79 @@ const YoutubeVideoUpload = () => {
               )}
             </div>
 
-            {/* Form Section */}
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                {/* Title */}
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-semibold">Title</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Enter your video title" 
-                          className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base"
-                          disabled={isUploading}
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        A good title helps people discover your video
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+            {/* Step Progress */}
+            <div className="my-8">
+              <div className="flex justify-between mb-2">
+                {Object.entries(UPLOAD_STEPS).map(([key, value]) => (
+                  <div
+                    key={key}
+                    className={`flex items-center ${
+                      currentStep >= value ? 'text-red-600' : 'text-gray-400'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
+                      currentStep >= value ? 'border-red-600 bg-red-50' : 'border-gray-300'
+                    }`}>
+                      {value}
+                                </div>
+                    <span className="ml-2 text-sm hidden sm:inline">{key}</span>
+                                </div>
+                ))}
+                                </div>
+              <div className="h-1 bg-gray-200 rounded">
+                <div
+                  className="h-1 bg-red-600 rounded transition-all"
+                  style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
                 />
-
-                {/* Description */}
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-semibold">Description</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Tell viewers about your video (optional)" 
-                          className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 min-h-[120px] text-base"
-                          disabled={isUploading}
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Help viewers understand what your video is about
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Privacy and Category */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="privacyStatus"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-semibold">Visibility</FormLabel>
-                        <FormControl>
-                          <Select 
-                            onValueChange={field.onChange} 
-                            defaultValue={field.value}
-                            disabled={isUploading}
-                          >
-                            <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
-                              <SelectValue placeholder="Select privacy" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="public">
-                                <div className="flex items-center gap-2">
-                                  <Eye className="w-4 h-4" />
-                                  Public
-                                </div>
-                              </SelectItem>
-                              <SelectItem value="unlisted">
-                                <div className="flex items-center gap-2">
-                                  <EyeOff className="w-4 h-4" />
-                                  Unlisted
-                                </div>
-                              </SelectItem>
-                              <SelectItem value="private">
-                                <div className="flex items-center gap-2">
-                                  <EyeOff className="w-4 h-4" />
-                                  Private
-                                </div>
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormDescription>
-                          Choose who can watch your video
-                        </FormDescription>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="categoryId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-semibold">Category</FormLabel>
-                        <FormControl>
-                          <Select 
-                            onValueChange={field.onChange} 
-                            defaultValue={field.value}
-                            disabled={isUploading}
-                          >
-                            <SelectTrigger className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
-                              <SelectValue placeholder="Select category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {categories.map((category) => (
-                                <SelectItem key={category.value} value={category.value}>
-                                  {category.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormDescription>
-                          Help people find your content
-                        </FormDescription>
-                      </FormItem>
-                    )}
-                  />
+              </div>
                 </div>
 
-                {/* Tags */}
-                <FormField
-                  control={form.control}
-                  name="tags"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel className="text-base font-semibold">Tags</FormLabel>
-                      <FormControl>
-                        <TagsInput name="tags" />
-                      </FormControl>
-                      <FormDescription>
-                        Tags help people discover your video when they search for related topics
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            {/* Form */}
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {renderStep()}
 
-                {/* Submit Button */}
-                <div className="pt-6 border-t border-gray-200">
+                {/* Navigation Buttons */}
+                <div className="flex justify-between pt-6 border-t border-gray-200">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevStep}
+                    disabled={currentStep === UPLOAD_STEPS.DETAILS || isUploading}
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Previous
+                  </Button>
+
+                  {currentStep === UPLOAD_STEPS.VISIBILITY ? (
                   <Button 
                     type="submit" 
                     disabled={!selectedFile || isUploading}
-                    className="w-full bg-red-600 hover:bg-red-700 text-white py-3 text-base font-medium disabled:opacity-50"
+                      className="bg-red-600 hover:bg-red-700"
                   >
                     {isUploading ? (
                       <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Publishing Video...
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Publishing...
                       </>
                     ) : (
                       <>
-                        <Save className="w-5 h-5 mr-2" />
-                        Publish Video
+                          <Upload className="w-4 h-4 mr-2" />
+                          Publish
                       </>
                     )}
                   </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      onClick={nextStep}
+                      disabled={isUploading}
+                      className="bg-red-600 hover:bg-red-700"
+                    >
+                      Next
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  )}
                 </div>
               </form>
             </Form>
@@ -749,221 +927,3 @@ const YoutubeVideoUpload = () => {
 
 export default YoutubeVideoUpload;
 
-// import axios from "axios";
-// import React from "react";
-// import { useAuth } from "@clerk/clerk-react";
-
-// import { Button } from "@/components/ui/button";
-// import {
-//   Form,
-//   FormControl,
-//   FormDescription,
-//   FormField,
-//   FormItem,
-//   FormLabel,
-//   FormMessage,
-// } from "@/components/ui/form";
-// import { Input } from "@/components/ui/input";
-// import { useForm } from "react-hook-form";
-
-// import { uploadVideoSchema } from "@shared/schemas/youtube.schema";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { z } from "zod";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import TagsInput from "@/components/tags-input";
-// import { Textarea } from "@/components/ui/textarea";
-// import { useParams } from "react-router";
-// import axiosClient from "@/lib/axios-client";
-
-// const YoutubeVideoUpload = () => {
-//   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
-//   const form = useForm<z.infer<typeof uploadVideoSchema>>({
-//     resolver: zodResolver(uploadVideoSchema),
-//     defaultValues: {
-//       title: "",
-//       description: "",
-//       tags: [],
-//       privacyStatus: "private",
-//       categoryId: "",
-//     },
-//   });
-//   const { getToken } = useAuth();
-//   const { workspaceId } = useParams();
-
-//   const fileChangeHandler = async (file: File) => {
-//     console.log("file", file);
-//     setSelectedFile(file);
-//   };
-
-//   const onSubmit = async (data: z.infer<typeof uploadVideoSchema>) => {
-//     console.log("form values", data);
-
-//     const { title, description, tags, privacyStatus, categoryId } = data;
-
-//     if (!selectedFile) {
-//       console.error("No file selected");
-//       return;
-//     }
-
-//     const uploadData = {
-//       fileName: selectedFile.name,
-//       fileType: selectedFile.type,
-//       workspaceId,
-//       title,
-//       description,
-//       tags,
-//       categoryId,
-//       privacyStatus,
-//     };
-
-//     const token = await getToken();
-//     const response = await axiosClient.post("/youtube/upload-video", uploadData, {
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-
-//     console.log("response", response);
-//     if (response.status === 200) {
-//       const { url } = response.data;
-//       const uploadResponse = await axios.put(url, selectedFile, {
-//         headers: {
-//           "Content-Type": selectedFile.type,
-//         },
-//         onUploadProgress: (progress) => {
-//           console.log("progress", progress);
-//         },
-//       });
-//       console.log("File uploaded successfully", uploadResponse);
-//     } else {
-//       console.error("File upload failed");
-//     }
-//   };
-//   return (
-//     <div className="flex flex-col items-center mt-3 h-screen">
-//       <div className="flex flex-col  mt-5">
-//         <h2 className="text-2xl font-semibold">Upload video</h2>
-//         <Form {...form}>
-//           <form onSubmit={form.handleSubmit(onSubmit)}>
-//             <FormField
-//               control={form.control}
-//               name="title"
-//               render={({ field }) => (
-//                 <FormItem>
-//                   <FormLabel>Title</FormLabel>
-//                   <FormControl>
-//                     <Input placeholder="Video Title" {...field} />
-//                   </FormControl>
-//                   <FormMessage />
-//                 </FormItem>
-//               )}
-//             />
-//             <FormField
-//               control={form.control}
-//               name="description"
-//               render={({ field }) => (
-//                 <FormItem>
-//                   <FormLabel>Description</FormLabel>
-//                   <FormControl>
-//                     <Textarea placeholder="Video Description" {...field} />
-//                   </FormControl>
-
-//                   <FormMessage />
-//                 </FormItem>
-//               )}
-//             />
-
-//             <FormField
-//               control={form.control}
-//               name="privacyStatus"
-//               render={({ field }) => (
-//                 <FormItem>
-//                   <FormLabel>Privacy Status</FormLabel>
-//                   <FormControl>
-//                     <Select
-//                       onValueChange={field.onChange}
-//                       defaultValue={field.value}
-//                     >
-//                       <SelectTrigger className="w-[180px]">
-//                         <SelectValue placeholder="Theme" />
-//                       </SelectTrigger>
-//                       <SelectContent>
-//                         <SelectItem value="public">Public</SelectItem>
-//                         <SelectItem value="unlisted">Unlisted</SelectItem>
-//                         <SelectItem value="private">Private</SelectItem>
-//                       </SelectContent>
-//                     </Select>
-//                   </FormControl>
-//                 </FormItem>
-//               )}
-//             />
-//             <FormField
-//               control={form.control}
-//               name="categoryId"
-//               render={({ field }) => (
-//                 <FormItem>
-//                   <FormLabel>Category</FormLabel>
-//                   <FormControl>
-//                     <Select
-//                       onValueChange={field.onChange}
-//                       defaultValue={field.value}
-//                     >
-//                       <SelectTrigger className="w-[180px]">
-//                         <SelectValue placeholder="Select Category" />
-//                       </SelectTrigger>
-//                       <SelectContent>
-//                         <SelectItem value="1">Film and Animation</SelectItem>
-//                         <SelectItem value="2">Autos and Vehicles</SelectItem>
-//                         <SelectItem value="3">Music</SelectItem>
-//                       </SelectContent>
-//                     </Select>
-//                   </FormControl>
-//                 </FormItem>
-//               )}
-//             />
-
-//             <FormField
-//               control={form.control}
-//               name="tags"
-//               render={() => (
-//                 <FormItem>
-//                   <FormLabel>Tags</FormLabel>
-//                   <FormControl>
-//                     <TagsInput name="tags" />
-//                   </FormControl>
-//                   <FormDescription>
-//                     Up to 10 tags, press Enter or click Add
-//                   </FormDescription>
-//                   <FormMessage />
-//                 </FormItem>
-//               )}
-//             />
-//             <div className="flex ">
-//               <input
-//                 type="file"
-//                 value=""
-//                 className="mt-2 p-2 border-t-3"
-//                 onChange={(e) => {
-//                   const file = e.target.files?.[0];
-//                   if (file) {
-//                     fileChangeHandler(file);
-//                   }
-//                 }}
-//               />
-//             </div>
-//             <Button type="submit">Save</Button>
-//           </form>
-//         </Form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default YoutubeVideoUpload;

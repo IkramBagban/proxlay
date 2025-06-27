@@ -44,6 +44,9 @@ model VideoMetaData {
   privacyStatus String
   categoryId    String
   description   String
+  thumbnailKey  String?   
+  madeForKids   Boolean  @default(false)
+  ageRestriction Boolean @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   workspaceId   String
