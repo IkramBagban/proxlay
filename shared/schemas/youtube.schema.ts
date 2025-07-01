@@ -26,9 +26,14 @@ privacyStatus: z.enum(["public", "unlisted", "private"]),
 
   currentStep: z.number().min(1).max(4),
 
-  thumbnail: z.object({
-    file: z.any()
-  }).optional()
+  thumbnail: z.union([
+    z.object({
+      file: z.any()
+    }),
+    z.object({
+      url: z.string().url("Please enter a valid URL")
+    }).optional()
+  ]).optional()
 });
 
 export type UploadVideoFormData = z.infer<typeof uploadVideoSchema>;

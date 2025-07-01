@@ -197,9 +197,11 @@ app.post(
       madeForKids,
       ageRestriction
     } = req.body;
+    
+    console.log('Received thumbnail data:', thumbnail);
+    
     const bucketName = process.env.AWS_BUCKET_NAME!;
     const filePath = `${workspaceId}/youtube/${fileName}`;
-    const thumbnailPath = thumbnail?.file ? `${workspaceId}/youtube/thumbnails/${fileName}-thumb` : null;
     
     const params = {
       Bucket: bucketName,
@@ -209,17 +211,40 @@ app.post(
     
     const presignedUrl = await getPresignedUrl(params, "PUT");
     let thumbnailUrl = null;
+    let thumbnailPath = null;
     
-    if (thumbnail?.file) {
-      const thumbnailParams = {
-        Bucket: bucketName,
-        Key: thumbnailPath,
-        ContentType: thumbnail.file.type || 'image/jpeg', // Default to JPEG if type not provided
-      };
-      thumbnailUrl = await getPresignedUrl(thumbnailParams, "PUT");
+    // Handle thumbnail based on type (file or URL)
+    if (thumbnail) {
+      if (thumbnail.url) {
+        // If it's a URL, use it directly
+        thumbnailUrl = thumbnail.url;
+        console.log('Using thumbnail URL:', thumbnailUrl);
+      } else if (thumbnail.file) {
+        // If it's a file, generate presigned URL for upload
+        thumbnailPath = `${workspaceId}/youtube/thumbnails/${fileName}-thumb`;
+        const thumbnailParams = {
+          Bucket: bucketName,
+          Key: thumbnailPath,
+          ContentType: thumbnail.file.type || 'image/jpeg',
+        };
+        thumbnailUrl = await getPresignedUrl(thumbnailParams, "PUT");
+        console.log('Generated presigned URL for thumbnail file:', thumbnailUrl);
+      }
     }
     
     const { userId } = getAuth(req);
+
+    // Determine what to store as thumbnailKey
+    let thumbnailKeyToStore = null;
+    if (thumbnail) {
+      if (thumbnail.url) {
+        // Store the URL directly
+        thumbnailKeyToStore = thumbnail.url;
+      } else if (thumbnail.file) {
+        // Store the S3 path for uploaded files
+        thumbnailKeyToStore = thumbnailPath;
+      }
+    }
 
     const payload = {
       fileName: fileName,
@@ -231,7 +256,7 @@ app.post(
       privacyStatus: privacyStatus || "private",
       workspaceId: workspaceId,
       uploaderId: userId!,
-      thumbnailKey: thumbnailPath,
+      thumbnailKey: thumbnailKeyToStore,
       madeForKids,
       ageRestriction
     };
@@ -249,7 +274,7 @@ app.post(
         privacyStatus: privacyStatus || "private",
         workspaceId: workspaceId,
         uploaderId: userId!,
-        thumbnailKey: thumbnailPath,
+        thumbnailKey: thumbnailKeyToStore,
         madeForKids,
         ageRestriction
       },

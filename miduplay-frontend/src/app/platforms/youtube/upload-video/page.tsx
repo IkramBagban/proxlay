@@ -259,6 +259,8 @@ const YoutubeVideoUpload = () => {
   const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
   const [currentStep, setCurrentStep] = useState(UPLOAD_STEPS.DETAILS);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnailType, setThumbnailType] = useState<'file' | 'url'>('url');
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>('https://ideogram.ai/assets/progressive-image/fast/response/rhCzptn7SlKqrER-87MHPg');
   
   const form = useForm<UploadVideoFormData>({
     resolver: zodResolver(uploadVideoSchema),
@@ -271,6 +273,7 @@ const YoutubeVideoUpload = () => {
       madeForKids: false,
       ageRestriction: false,
       currentStep: UPLOAD_STEPS.DETAILS,
+      thumbnail: { url: 'https://ideogram.ai/assets/progressive-image/fast/response/rhCzptn7SlKqrER-87MHPg' }
     }
   });
 
@@ -339,41 +342,108 @@ const YoutubeVideoUpload = () => {
       case UPLOAD_STEPS.ELEMENTS:
         return (
           <div className="space-y-6">
-            {/* Thumbnail Upload */}
+            {/* Thumbnail Selection */}
             <FormField
               control={form.control}
               name="thumbnail"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-semibold">Thumbnail <p className="text-sm text-gray-400 font-medium">(Optional)</p></FormLabel>
+                  <FormLabel className="text-base font-semibold">Thumbnail <span className="text-sm text-gray-400 font-medium">(Optional)</span></FormLabel>
+                  
+                  {/* Thumbnail Type Toggle */}
+                  <div className="flex gap-4 mb-4">
+                    <Button
+                      type="button"
+                      variant={thumbnailType === 'url' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => {
+                        setThumbnailType('url');
+                        setThumbnail(null);
+                      }}
+                      className={thumbnailType === 'url' ? 'bg-red-600 hover:bg-red-700' : ''}
+                    >
+                      Image URL
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={thumbnailType === 'file' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => {
+                        setThumbnailType('file');
+                        setThumbnailUrl('');
+                      }}
+                      className={thumbnailType === 'file' ? 'bg-red-600 hover:bg-red-700' : ''}
+                    >
+                      Upload File
+                    </Button>
+                  </div>
+
                   <FormControl>
-                    <div className="border-2 border-dashed rounded-lg p-4 hover:border-red-500 transition-colors">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            setThumbnail(file);
-                            field.onChange({ file });
-                          }
-                        }}
-                        className="hidden"
-                        id="thumbnail-upload"
-                      />
-                      <label
-                        htmlFor="thumbnail-upload"
-                        className="flex flex-col items-center justify-center cursor-pointer"
-                      >
-                        <ImageIcon className="w-8 h-8 text-gray-400 mb-2" />
-                        <span className="text-sm text-gray-600">
-                          {thumbnail ? thumbnail.name : "Upload thumbnail"}
-                        </span>
-                      </label>
-                    </div>
+                    {thumbnailType === 'url' ? (
+                      <div className="space-y-3">
+                        <Input
+                          placeholder="https://example.com/image.jpg"
+                          value={thumbnailUrl}
+                          onChange={(e) => {
+                            const url = e.target.value;
+                            setThumbnailUrl(url);
+                            console.log('Thumbnail URL:', url); // Console log the URL
+                            if (url) {
+                              field.onChange({ url });
+                            } else {
+                              field.onChange(undefined);
+                            }
+                          }}
+                          className="border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+                        />
+                        {thumbnailUrl && (
+                          <div className="mt-3 p-3 border rounded-lg bg-gray-50">
+                            <img
+                              src={thumbnailUrl}
+                              alt="Thumbnail preview"
+                              className="w-full h-32 object-cover rounded"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                              }}
+                              onLoad={() => {
+                                console.log('Thumbnail image loaded successfully:', thumbnailUrl);
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="border-2 border-dashed rounded-lg p-4 hover:border-red-500 transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setThumbnail(file);
+                              console.log('Thumbnail file selected:', file.name); // Console log the file
+                              field.onChange({ file });
+                            }
+                          }}
+                          className="hidden"
+                          id="thumbnail-upload"
+                        />
+                        <label
+                          htmlFor="thumbnail-upload"
+                          className="flex flex-col items-center justify-center cursor-pointer"
+                        >
+                          <ImageIcon className="w-8 h-8 text-gray-400 mb-2" />
+                          <span className="text-sm text-gray-600">
+                            {thumbnail ? thumbnail.name : "Upload thumbnail"}
+                          </span>
+                        </label>
+                      </div>
+                    )}
                   </FormControl>
                   <FormDescription>
-                    Select or upload a custom thumbnail
+                    {thumbnailType === 'url' 
+                      ? 'Enter a direct image URL for your thumbnail' 
+                      : 'Select or upload a custom thumbnail file'}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -534,6 +604,13 @@ const YoutubeVideoUpload = () => {
   const { getToken } = useAuth();
   const { workspaceId } = useParams();
 
+  // Set initial thumbnail URL in form
+  useEffect(() => {
+    const initialUrl = 'https://ideogram.ai/assets/progressive-image/fast/response/rhCzptn7SlKqrER-87MHPg';
+    form.setValue('thumbnail', { url: initialUrl });
+    console.log('Initial thumbnail URL set:', initialUrl);
+  }, [form]);
+
   // Prevent page unload during upload
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -659,6 +736,18 @@ const YoutubeVideoUpload = () => {
     setUploadStage('preparing');
 
     try {
+      // Handle thumbnail data based on type
+      let thumbnailData = null;
+      if (thumbnail) {
+        if ('url' in thumbnail) {
+          thumbnailData = { url: thumbnail.url };
+          console.log('Sending thumbnail URL to backend:', thumbnail.url);
+        } else if ('file' in thumbnail) {
+          thumbnailData = { file: thumbnail.file };
+          console.log('Sending thumbnail file to backend:', thumbnail.file);
+        }
+      }
+
       const uploadData = {
         fileName: selectedFile.name,
         fileType: selectedFile.type,
@@ -668,7 +757,7 @@ const YoutubeVideoUpload = () => {
         tags,
         categoryId,
         privacyStatus,
-        thumbnail: thumbnail?.file || null,
+        thumbnail: thumbnailData,
         madeForKids,
         ageRestriction
       };
