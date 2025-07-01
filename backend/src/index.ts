@@ -193,16 +193,58 @@ app.post(
       tags,
       categoryId,
       privacyStatus,
+      thumbnail,
+      madeForKids,
+      ageRestriction
     } = req.body;
+    
+    console.log('Received thumbnail data:', thumbnail);
+    
     const bucketName = process.env.AWS_BUCKET_NAME!;
     const filePath = `${workspaceId}/youtube/${fileName}`;
+    
     const params = {
       Bucket: bucketName,
       Key: filePath,
       ContentType: fileType,
     };
+    
     const presignedUrl = await getPresignedUrl(params, "PUT");
+    let thumbnailUrl = null;
+    let thumbnailPath = null;
+    
+    // Handle thumbnail based on type (file or URL)
+    if (thumbnail) {
+      if (thumbnail.url) {
+        // If it's a URL, use it directly
+        thumbnailUrl = thumbnail.url;
+        console.log('Using thumbnail URL:', thumbnailUrl);
+      } else if (thumbnail.file) {
+        // If it's a file, generate presigned URL for upload
+        thumbnailPath = `${workspaceId}/youtube/thumbnails/${fileName}-thumb`;
+        const thumbnailParams = {
+          Bucket: bucketName,
+          Key: thumbnailPath,
+          ContentType: thumbnail.file.type || 'image/jpeg',
+        };
+        thumbnailUrl = await getPresignedUrl(thumbnailParams, "PUT");
+        console.log('Generated presigned URL for thumbnail file:', thumbnailUrl);
+      }
+    }
+    
     const { userId } = getAuth(req);
+
+    // Determine what to store as thumbnailKey
+    let thumbnailKeyToStore = null;
+    if (thumbnail) {
+      if (thumbnail.url) {
+        // Store the URL directly
+        thumbnailKeyToStore = thumbnail.url;
+      } else if (thumbnail.file) {
+        // Store the S3 path for uploaded files
+        thumbnailKeyToStore = thumbnailPath;
+      }
+    }
 
     const payload = {
       fileName: fileName,
@@ -214,6 +256,9 @@ app.post(
       privacyStatus: privacyStatus || "private",
       workspaceId: workspaceId,
       uploaderId: userId!,
+      thumbnailKey: thumbnailKeyToStore,
+      madeForKids,
+      ageRestriction
     };
 
     console.log("payload", payload);
@@ -229,10 +274,19 @@ app.post(
         privacyStatus: privacyStatus || "private",
         workspaceId: workspaceId,
         uploaderId: userId!,
+        thumbnailKey: thumbnailKeyToStore,
+        madeForKids,
+        ageRestriction
       },
     });
 
-    res.status(200).json({ url: presignedUrl, key: filePath, metaData });
+    res.status(200).json({ 
+      url: presignedUrl, 
+      thumbnailUrl,
+      key: filePath, 
+      thumbnailKey: thumbnailPath,
+      metaData 
+    });
   }
 );
 
