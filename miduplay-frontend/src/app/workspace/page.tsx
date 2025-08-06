@@ -140,8 +140,9 @@ const WorkspacePage = () => {
 
   const { data: invites, loading } = useFetch("/invites", true);
 
-  const filteredWorkspaces = (workspaces || []).filter((ws) =>
-    ws.name.toLowerCase().includes(searchQuery.toLowerCase())
+  console.log("workspaces", workspaces)
+  const filteredWorkspaces = ((Array.isArray(workspaces) && workspaces) || [])?.filter((ws) =>
+    ws.name.toLowerCase().includes(searchQuery.toLowerCase()) || []
   );
 
   const activeWorkspaces = filteredWorkspaces.filter(
